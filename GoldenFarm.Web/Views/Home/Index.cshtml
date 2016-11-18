@@ -1,0 +1,152 @@
+﻿@{ 
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    @*<meta name="viewport" content="width=device-width, initial-scale=1.0">*@
+    <meta name="viewport" content="width=device-width,inital-scale=1.0,minimum-scale=0.5,maximum-scale=2.0,user-scalable=no">
+
+    <title>@ViewBag.Title - 淘金果园</title>
+    @Styles.Render("~/Content/sitecss")
+    @Scripts.Render("~/bundles/sitejs")
+    @*@Scripts.Render("~/bundles/modernizr")*@
+    <script type="text/javascript">
+        var Host = "";
+    </script>
+
+</head>
+<body>
+
+    @Html.Partial("_Header")
+    <div class="banner" style="position: relative; z-index: 0; background: none;">
+        <div class="backstretch" style="left: 0px; top: 0px; overflow: hidden; margin: 0px; padding: 0px; height: 161px; width: 1423px; z-index: -999998; position: absolute;">
+            <img src="/content/images/banner02.jpg" style="position: absolute; margin: 0px; padding: 0px; border: none; width: 1423px; height: 472.851px; max-height: none; max-width: none; z-index: -999999; left: 0px; top: -155.926px;">
+        </div>
+    </div>
+
+    <section class="newsblock">
+        <div class="container clear">
+            <div class="news fadeInLeft  wow animated" style="visibility: visible; animation-name: fadeInLeft;">
+                <h2><a href="News_Detail1.html">【公告】蓝朝农场周末活动公告</a></h2>
+                <div class="summary">
+                    石购买大回馈。活动时间内，每个周末，凡玩家购买对应钻石数量就赠送相应钻石： 1.购买20,000钻石，赠送400钻石。 2.购买200,000钻石，赠送10,000钻石。
+                </div>
+                <div class="more clear">
+                    <div class="datetime">
+                        蓝朝信息科技<span>2016年10月29日</span>
+                    </div>
+                    <div class="morebutton">
+                        <a class="button button-color-1" href="News_Notice.html">查看更多</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="news news-right fadeInRight  wow animated" style="visibility: visible; animation-name: fadeInRight;">
+                <h2><a href="News_Information.html">【新闻】开心网“偷菜”游戏，那个最初的回忆将会被蓝朝农场替代</a></h2>
+                <div class="summary">
+                    导读：神奇的网络，让人们能够实现很多特殊的梦想，拥有一块自己的菜地，在都市的喧嚣之余修身养性一番，惬意的不得了。曾经开心网“偷菜”游戏，将人们带入到了这样的境界，如今蓝朝农场让人们从中得到了升华，让人们的兴致从开心网“偷菜”游戏转入到了蓝朝农场。
+                </div>
+                <div class="more clear">
+                    <div class="datetime">
+                        蓝朝信息科技<span>2016年10月25日</span>
+                    </div>
+                    <div class="morebutton">
+                        <a class="button button-color-1" href="News_Information.html">查看更多</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="otherblock">
+        <dl class="container clear fadeInDown  wow animated" style="visibility: visible; animation-name: fadeInDown;">
+            <dd onclick="window.location.href='Reg.html'">
+                <div class="img">
+                    <img src="/content/images/passport.jpg">
+                </div>
+                <b>蓝朝通行证</b>
+                <span>一键注册,多点登录,方便快捷</span>
+            </dd>
+            <dd onclick="window.location.href='About_us.html'">
+                <div class="img">
+                    <img src="/content/images/garden.jpg">
+                </div>
+                <b>蓝朝果园</b>
+                <span>安全可靠,专注专业,用户至上</span>
+            </dd>
+            <dd onclick="window.open('#')">
+                <div class="img">
+                    <img src="/content/images/farm.jpg">
+                </div>
+                <b>蓝朝农场</b>
+                <span>不一样的农场，不一样的玩法</span>
+            </dd>
+        </dl>
+    </section>
+
+    <section class="choose">
+        <dl class="container clear fadeInDown  wow animated" style="visibility: visible; animation-name: fadeInDown;">
+            <dd>
+                <div class="i"><i class="icon i1"></i></div>
+                <div class="h">安全可靠</div>
+                <div class="t">用户数据加密，动态身份验证，多级风险识别控制，确保商品交易安全。</div>
+            </dd>
+            <dd>
+                <div class="i"><i class="icon i2"></i></div>
+                <div class="h">专注专业</div>
+                <div class="t">专业让你的商品交易更简单更快捷，我们拥有业内先进的分析引擎，为你准备了明了的数据，让你轻松的完成各种数据的分析。</div>
+            </dd>
+            <dd>
+                <div class="i"><i class="icon i3"></i></div>
+                <div class="h">用户至上</div>
+                <div class="t">我们会为你配备专业的顾问，完善你的商品交易，7x24小时在线客服</div>
+            </dd>
+        </dl>
+    </section>
+
+    <section class="guide">
+        <div class="spline-yellow"></div>
+        <div class="spline-blue"></div>
+        <div class="spline-orange"></div>
+        <div class="container clear">
+            <div class="item clear fadeInDown  wow animated" style="visibility: visible; animation-name: fadeInDown;">
+                <div class="step">1</div>
+                <div class="text">
+                    <h2>注册账号</h2>
+                    <h4>拥有您的第一个蓝朝果园账户。</h4>
+                </div>
+            </div>
+            <div class="item clear fadeInDown  wow animated" style="visibility: visible; animation-name: fadeInDown;">
+                <div class="step">2</div>
+                <div class="text">
+                    <h2>账户充值</h2>
+                    <h4>为账户注入金币</h4>
+                </div>
+            </div>
+            <div class="item clear fadeInDown  wow animated" style="visibility: visible; animation-name: fadeInDown;">
+                <div class="step">3</div>
+                <div class="text">
+                    <h2>实名认证</h2>
+                    <h4>绑定银行卡，保障资金安全。</h4>
+                </div>
+            </div>
+            <div class="item clear wow fadeInDown  wow animated" style="visibility: visible; animation-name: fadeInDown;">
+                <div class="step">4</div>
+                <div class="text">
+                    <h2>交易</h2>
+                    <h4>用智慧开启财富</h4>
+                </div>
+            </div>
+        </div>
+    </section>
+    @Html.Partial("_Footer")
+
+
+    @*@Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)*@
+</body>
+</html>
+

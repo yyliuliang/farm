@@ -1,0 +1,110 @@
+﻿@{
+    ViewBag.Title = "加入我们";
+}
+<div class="subbanner subbanner-about" style="position: relative; z-index: 0; background: none;">
+    <div class="subbanner-inner">
+        <div class="container">
+            <h1>加入我们</h1>
+            <h2>Join Us</h2>
+        </div>
+    </div>
+    <div class="backstretch" style="left: 0px; top: 0px; overflow: hidden; margin: 0px; padding: 0px; height: 195px; width: 1862px; z-index: -999998; position: absolute;">
+        <img style="position: absolute; margin: 0px; padding: 0px; border: none; width: 1862px; height: 349.125px; max-height: none; max-width: none; z-index: -999999; left: 0px; top: -77.0625px;" src="/content/images/banner-market01.png">
+    </div>
+</div>
+
+<div class="container clear">
+    @Html.Partial("_AboutSideMenu")
+    <div class="main">
+        <div class="main-head">加入我们</div>
+
+        <div class="main-banner">
+            <img src="/content/images/join.png">
+        </div>
+
+        <div class="main-text">
+            <b>人才理念</b>
+            <p>　　我们衡量人才的标准是知识、能力和业绩，而不仅仅是学历、资历、职称。象所有正在逐渐壮大的企业一样，我们希望拥有那些有多种专业知识、思想活跃、富有逻辑，具有良好人品和职业道德，又有一定管理经验和协调能力的复合型高素质人才。为了逐步提高员工的知识水平和业务能力，我们定期对各级人员进行全面培训，全面优化人才架构。我们坚持以发展的眼光培养所需要的人才，鼓励员工不断学习和进步，并积极为那些具有专业知识的人才提供全方位发展的机会。企业成功的关键在于知人善用，最大限度地发挥人才的主观能动性，用人所长，避其所短，力求保证人尽其才。我们认为每个人都有其长处，人才应放在最能发挥他们才能的地方，在善用人才的同时做到用人不疑，疑人不用，不避身份、资历、学历，以贤能举之。人才是企业最珍贵的财富，留住人才的最佳方法就是提供给他们施展才华的舞台，给他们配备先进的设备设施，关心他们的疾苦，体谅他们的难处，以人性化去真心的关心他们、让他们感到自己是有用的人，给他们成就感。我们相信，一个擅长自我审视的团队通过坚持创新和长期奋斗，可以持续创造出让这个世界更美好的产品。</p>
+            <b>招聘信息</b>
+        </div>
+
+        <div class="tablebox">
+            <table>
+                <tbody>
+                    <tr>
+                        <th>职位名称</th>
+                        <th>工作地点</th>
+                        <th>职位类别</th>
+                        <th>招聘人数</th>
+                    </tr>
+                    <tr>
+                        <td style="cursor:pointer; color:#3165d1;" onclick="$('#job1').toggle()">数据挖掘工程师</td>
+                        <td>成都</td>
+                        <td>技术类</td>
+                        <td>2</td>
+                    </tr>
+                    <tr>
+                        <td colspan="4" style="line-height:25px; display:none;" id="job1">
+                            <span class="color-1">工作职责：</span><br>
+                            负责海量用户体验数据的统计、分析、挖掘工作；<br>
+                            负责数据清洗和过滤、特征抽取、参数选择、算法实验、效果分析；<br>
+                            参与各算法和模型的分布式实现，丰富算法库，并协助开发算法平台。<br>
+                            <span class="color-1">工作要求：</span><br>
+                            硕士或博士学历，计算机、数学、人工智能、等专业；<br>
+                            3年以上互联网行业数据分析挖掘经验，有扎实的数据结构及算法功底；<br>
+                            有丰富的算法应用经验，熟悉分类、聚类、回归、关联性分析等算法；<br>
+                            熟练使用R、SAS、SPSS、Matlab等至少一种数据挖掘工具；<br>
+                            熟练使用Java、R、Python等至少一种编程语言；<br>
+                            熟悉数据仓库的ETL流程和数据建模，有开源数据分析工具使用经验者优先；<br>
+                            能够运用Hadoop、 Spark等大数据计算平台进行数据分析挖掘者优先；<br>
+                            具有良好的数据敏感度，对数据分析及挖掘有浓厚兴趣；<br>
+                            具有高度的责任心和团队合作精神。
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="cursor:pointer; color:#3165d1;" onclick="$('#job2').toggle()">移动终端游戏开发工程师</td>
+                        <td>成都</td>
+                        <td>技术类</td>
+                        <td>2</td>
+                    </tr>
+                    <tr>
+                        <td colspan="4" style="line-height:25px; display:none;" id="job2">
+                            <span class="color-1">工作职责：</span><br>
+                            研发跨平台（iOS和Android）移动终端网络游戏产品；<br>
+                            持续优化游戏引擎，改善性能、表现和兼容性；<br>
+                            优化工作流程，优化编辑器等开发工具，实现新特性，改善易用性，提高研发效率。<br>
+                            <span class="color-1">工作要求：</span><br>
+                            精通C++或Java，懂Objective-C和脚本语言；<br>
+                            有优秀的学习能力，善于沟通，热爱游戏事业；<br>
+                            五年以上游戏相关开发经验；<br>
+                            有网络游戏或者移动平台游戏完整研发经验者优先考虑；<br>
+                            具备良好的分析解决问题能力，能独立承担任务和有系统进度把控能力；<br>
+                            高度的责任心、良好的沟通技巧和团队合作精神，正直进取，有上进心，热爱开发事业。
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="cursor:pointer; color:#3165d1;" onclick="$('#job3').toggle()">创意主管</td>
+                        <td>成都</td>
+                        <td>市场类</td>
+                        <td>1</td>
+                    </tr>
+                    <tr>
+                        <td colspan="4" style="line-height:25px; display:none;" id="job3">
+                            <span class="color-1">工作职责：</span><br>
+                            负责金融相关业务如理财通提供品牌营销以及创意制作支持；<br>
+                            响应各类业务创意类需求（包括品牌设计、线上线下创意执行、大型活动等）；<br>
+                            协调内外部创意资源，确保按时完成创意需求。<br>
+                            <span class="color-1">工作要求：</span><br>
+                            5-8年以上创意相关从业经验，具备互联网和广告公司行业背景优先；<br>
+                            对创意表达所牵扯的技巧和方法有较深理解；<br>
+                            对市场敏感、具备较强的用户洞察能力和创意思维；<br>
+                            深谙运作大型品牌创意工作的流程和方式，对互联网深刻的认识，能够提供不限于媒体和方式的创意解决方案；<br>
+                            有4A公司创意总监背景经验优先；<br>
+                            2年以上带领创意团队经验。
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

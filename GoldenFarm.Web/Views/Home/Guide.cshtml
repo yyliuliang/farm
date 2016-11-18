@@ -1,0 +1,81 @@
+﻿@{
+    ViewBag.Title = "新手指南";
+}
+<div class="subbanner subbanner-help" style="position: relative; z-index: 0; background: none;">
+    <div class="subbanner-inner">
+        <div class="container">
+            <h1>新手指南</h1>
+            <h2>User Guide</h2>
+        </div>
+    </div>
+    <div class="backstretch" style="left: 0px; top: 0px; overflow: hidden; margin: 0px; padding: 0px; height: 195px; width: 1862px; z-index: -999998; position: absolute;">
+
+        <img src="/content/images/banner-about01.png" style="position: absolute; margin: 0px; padding: 0px; border: none; width: 1862px; height: 349.125px; max-height: none; max-width: none; z-index: -999999; left: 0px; top: -77.0625px;">
+    </div>
+</div>
+
+
+<div class="container clear">
+    @Html.Partial("_HelpSideMenu")
+
+    <div class="main">
+        <div class="main-head">新手指南</div>
+        <div class="main-guide clear">
+            <div class="step"><b class="color-2">账户注册</b></div>
+            <div class="text">
+                <p>
+                    1.直接点击页面右上角的<a href="Reg.html" class="color-2">[注册]</a>按钮进入注册页面。<br>
+                    2.确保您的手机号码真实有效、确保您已认真阅读并同意相关协议。<br>
+                    3.如果您是好友推荐注册，请点击注册界面上的<span class="color-1">[好友推荐]</span>来输入您的注册邀请码。
+                </p>
+            </div>
+
+            <div class="step"><b class="color-3">账户充值</b></div>
+            <div class="text">
+                <p>
+                    1.成功登录网站后您将进入<a href="user_center.html" class="color-2">[用户中心]</a>页面。<br>
+                    2.点击页面上的<a href="User_Center.html" class="color-2">[充值]</a>页面后选择充值方式并填入充值金额进行充值。<br>
+                    3.充值成功后您将回到<a href="User_Center.html" class="color-2">[用户中心]</a>页面，同时可以查看账户金币数量。
+                </p>
+            </div>
+
+            <div class="step"><b class="color-1">买入卖出</b></div>
+            <div class="text">
+                <p>
+                    1.点击网站主菜单<a href="Market.html" class="color-2">[交易中心]</a>链接可以进入交易中心页面。<br>
+                    2.如果您已成功登录网站，您将看到各种产品的行情，然后点击产品进入交易页面。<br>
+                    3.进入交易页面后你可以看到产品的分时图与K线图，你可以在分时图下的限价买入，限价卖出表单处进行产品交易，同时你还可以看到<span class="color-1">[委托信息]</span>和<span class="color-1">[我的委托]</span>表格。
+                </p>
+            </div>
+
+            <div class="step"><b class="color-4">实名认证</b></div>
+            <div class="text no-bottom-border">
+                <p>
+                    1.点击用户中心左侧菜单[用户中心]/[安全设置]进入安全设置设置页面<br>
+                    2.点击<a href="User_Safe_Certificated.html" class="color-2">[实名认证]</a>进入实名认证页面，提交有效的真实姓名、身份证号码、身份证正反面照片进行认证。<br>
+                    3.我们会在3个工作日之内对您提交的资料进行审核。
+                </p>
+            </div>
+
+            <!--
+            <div class="step"><b class="color-1">绑定提现账户</b></div>
+            <div class="text">
+                <p>
+                    1.如果您已经通过实名认证，点击用户中心左侧菜单[用户中心]/[安全设置]进入安全设置设置页面<br />
+                    2.点击<a href="/User/BindBankCard" class="color-2">[绑定提现账户]</a>进入实名认证页面<br />
+                    3.选择银行或者支付平台，输入真实有效的卡号或者支付账号提交即绑定成功。
+                </p>
+            </div>
+
+            <div class="step"><b class="color-3">余额提现</b></div>
+            <div class="text no-bottom-border">
+                <p>
+                    1.您只有<a href="/User/Certificated" class="color-2">[实名认证]</a>成功后才能够<a href="/User/BindBankCard" class="color-2">[绑定提现账户]</a><br />
+                    2.成功的绑定提现账户后您才能够进行<a href="/User/Withdraw" class="color-2">[余额提现]</a>操作。<br />
+                    3.完成以上两步，您就可以进行提现操作。把可用金额提现到您绑定的账户。
+                </p>
+            </div>
+            -->
+        </div>
+    </div>
+</div>
