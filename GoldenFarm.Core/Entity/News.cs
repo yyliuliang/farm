@@ -9,8 +9,16 @@ namespace GoldenFarm.Entity
     [Serializable]
     public class News : EntityBase
     {
-        public int Id { get; set; }
+        public string Title  { get; set; }
 
+        public string Source { get; set; }
 
+        public string Author { get; set; }
+
+        public int ReadCount { get; set; }
+
+        public string Content { get; set; }
+
+        public DateTime Create { get; set; }
     }
 }

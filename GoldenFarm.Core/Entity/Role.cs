@@ -6,7 +6,11 @@ using System.Threading.Tasks;
 
 namespace GoldenFarm.Entity
 {
-    public class SiteConfig : EntityBase
+    [Serializable]
+    public class Role : EntityBase
     {
+        public string RoleName { get; set; }
+
+        public DateTime CreateTime { get; set; }
     }
 }
