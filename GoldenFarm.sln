@@ -7,8 +7,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GoldenFarm.Core", "GoldenFa
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GoldenFarm.Web", "GoldenFarm.Web\GoldenFarm.Web.csproj", "{8127E19D-4676-4AF8-8FF6-99176F2E22FE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GoldenFarm.Repository", "GoldenFarm.Repository\GoldenFarm.Repository.csproj", "{DD3E0FE4-AB38-48A9-B6C3-D0D68DB9A721}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -23,10 +21,6 @@ Global
 		{8127E19D-4676-4AF8-8FF6-99176F2E22FE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8127E19D-4676-4AF8-8FF6-99176F2E22FE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8127E19D-4676-4AF8-8FF6-99176F2E22FE}.Release|Any CPU.Build.0 = Release|Any CPU
-		{DD3E0FE4-AB38-48A9-B6C3-D0D68DB9A721}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{DD3E0FE4-AB38-48A9-B6C3-D0D68DB9A721}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{DD3E0FE4-AB38-48A9-B6C3-D0D68DB9A721}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{DD3E0FE4-AB38-48A9-B6C3-D0D68DB9A721}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -3,16 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Dapper.Contrib.Extensions;
 
 namespace GoldenFarm.Entity
 {
+    [Table("Market")]
     [Serializable]
-    public class ProductMarket : EntityBase
+    public class Market : EntityBase
     {
         public int ProductId { get; set; }
 
-        public string ProductName { get; set; }
-
+        public virtual Product Product { get; set; }
+        
         public decimal CurrentPrice { get; set; }
 
         public decimal PrevDayPrice { get; set; }

@@ -1,9 +1,10 @@
-﻿using GoldenFarm.Entity;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using GoldenFarm.Entity;
+using GoldenFarm.Repository;
 
 namespace GoldenFarm.Web.Controllers
 {
@@ -12,8 +13,11 @@ namespace GoldenFarm.Web.Controllers
         // GET: Market
         public ActionResult Index()
         {
-            var markets = new List<ProductMarket>();
-            return View(markets);
+            using (var r = new MarketRepository())
+            {
+                var markets = r.GetAll();
+                return View(markets);
+            }
         }
 
         public ActionResult Detail()
