@@ -6,7 +6,7 @@ using System.Web.Mvc;
 
 namespace GoldenFarm.Web.Controllers
 {
-    public class GuideController : Controller
+    public class GuideController : BaseController
     {
         // GET: Guide
         public ActionResult Index()

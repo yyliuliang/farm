@@ -1,4 +1,130 @@
 ﻿@{
-    ViewBag.Title = "Home Page";
+    ViewBag.Title = "交易中心";
 }
-market
+@model IEnumerable<ProductMarket>
+
+<div class="subbanner-small subbanner-user" style="position: relative; z-index: 0; background: none;">
+    <div class="subbanner-inner">
+        <div class="container">
+            <h1>蓝朝市场</h1>
+            <h2>Lanchao Market</h2>
+        </div>
+    </div>
+    <div class="backstretch" style="left: 0px; top: 0px; overflow: hidden; margin: 0px; padding: 0px; height: 153px; width: 1862px; z-index: -999998; position: absolute;">
+
+
+        <img style="position: absolute; margin: 0px; padding: 0px; border: none; width: 1862px; height: 232.75px; max-height: none; max-width: none; z-index: -999999; left: 0px; top: -39.875px;" src="/content/images/banner-user02.png">
+    </div>
+</div>
+
+<div class="container">
+    <div class="market">
+        <div class="tablebox">
+            <table>
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>名称</th>
+                        <th>现价</th>
+                        <th>涨幅</th>
+                        <th>涨跌</th>
+                        <th>今开</th>
+                        <th>最高</th>
+                        <th>最低</th>
+                        <th>成交量</th>
+                    </tr>
+                </thead>
+                <tbody id="MarketList">
+                    @*<tr isopen="true" onclick="window.location.href='MarketDetail.html'" style="cursor:pointer;">
+                        <td><a href="MarketDetail.html"><img src="/content/images/800001.png" width="30"></a></td>
+                        <td><a href="MarketDetail.html">种子</a></td>
+                        <td class="color-1">0.01540</td>
+                        <td class="color-1">1.99%</td>
+                        <td class="color-1">0.00030</td>
+                        <td>0.01510</td>
+                        <td class="color-1">0.01540</td>
+                        <td class="color-4">0.01484</td>
+                        <td>171800</td>
+                    </tr>
+                    <tr isopen="true" onclick="window.location.href='MarketDetail.html'" style="cursor:pointer;" class="">
+                        <td><a href="MarketDetail.html"><img src="/content/images/800002.png" width="30"></a></td>
+                        <td><a href="MarketDetail.html">萝卜</a></td>
+                        <td class="color-1">0.0133</td>
+                        <td class="color-1">1.53%</td>
+                        <td class="color-1">0.0002</td>
+                        <td>0.0131</td>
+                        <td class="color-1">0.0134</td>
+                        <td>0.0131</td>
+                        <td>5167200</td>
+                    </tr>
+                    <tr isopen="true" onclick="window.location.href='MarketDetail.html'" style="cursor:pointer;" class="">
+                        <td><a href="MarketDetail.html"><img src="/content/images/800003.png" width="30"></a></td>
+                        <td><a href="MarketDetail.html">苹果</a></td>
+                        <td class="color-1">0.0134</td>
+                        <td class="color-1">1.52%</td>
+                        <td class="color-1">0.0002</td>
+                        <td>0.0132</td>
+                        <td class="color-1">0.0135</td>
+                        <td class="color-4">0.0131</td>
+                        <td>4800400</td>
+                    </tr>
+                    <tr isopen="true" onclick="window.location.href='MarketDetail.html'" style="cursor:pointer;" class="">
+                        <td><a href="MarketDetail.html"><img src="/content/images/800004.png" width="30"></a></td>
+                        <td><a href="MarketDetail.html">辣椒</a></td>
+                        <td class="color-1">0.0199</td>
+                        <td class="color-1">1.02%</td>
+                        <td class="color-1">0.0002</td>
+                        <td>0.0197</td>
+                        <td class="color-1">0.0202</td>
+                        <td class="color-4">0.0196</td>
+                        <td>773400</td>
+                    </tr>
+                    <tr isopen="true" onclick="window.location.href='MarketDetail.html'" style="cursor:pointer;">
+                        <td><a href="MarketDetail.html"><img src="/content/images/800005.png" width="30"></a></td>
+                        <td><a href="MarketDetail.html">西瓜</a></td>
+                        <td class="color-1">0.1002</td>
+                        <td class="color-1">0.10%</td>
+                        <td class="color-1">0.0001</td>
+                        <td>0.1001</td>
+                        <td class="color-1">0.1012</td>
+                        <td class="color-4">0.1000</td>
+                        <td>501500</td>
+                    </tr>
+                    <tr isopen="true" onclick="window.location.href='MarketDetail.html'" style="cursor:pointer;">
+                        <td><a href="MarketDetail.html"><img src="/content/images/800006.png" width="30"></a></td>
+                        <td><a href="MarketDetail.html">南瓜</a></td>
+                        <td class="color-4">0.0730</td>
+                        <td class="color-4">-0.27%</td>
+                        <td class="color-4">-0.0002</td>
+                        <td>0.0732</td>
+                        <td class="color-1">0.0736</td>
+                        <td class="color-4">0.0730</td>
+                        <td>514200</td>
+                    </tr>
+                    <tr isopen="true" onclick="window.location.href='MarketDetail.html'" style="cursor:pointer;">
+                        <td><a href="MarketDetail.html"><img src="/content/images/800007.png" width="30"></a></td>
+                        <td><a href="MarketDetail.html">草莓</a></td>
+                        <td>0.3250</td>
+                        <td>0.00%</td>
+                        <td>0.0000</td>
+                        <td>0.3250</td>
+                        <td class="color-1">0.3467</td>
+                        <td>0.3250</td>
+                        <td>63500</td>
+                    </tr>
+                    <tr isopen="true" onclick="window.location.href='MarketDetail.html'" style="cursor:pointer;">
+                        <td><a href="MarketDetail.html"><img src="/content/images/800008.png" width="30"></a></td>
+                        <td><a href="MarketDetail.html">玫瑰</a></td>
+                        <td class="color-1">35.88</td>
+                        <td class="color-1">0.22%</td>
+                        <td class="color-1">0.08</td>
+                        <td>35.80</td>
+                        <td class="color-1">35.88</td>
+                        <td>35.80</td>
+                        <td>30</td>
+                    </tr>*@
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

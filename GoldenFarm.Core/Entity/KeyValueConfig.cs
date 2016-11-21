@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace GoldenFarm.Entity
 {
-    public class ResourceKeyValue : EntityBase
+    public class KeyValueConfig : EntityBase
     {
         public string Key { get; set; }
 

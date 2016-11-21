@@ -6,12 +6,8 @@ using System.Web.Mvc;
 
 namespace GoldenFarm.Web.Controllers
 {
-    public class NewsController : BaseController
+    public abstract class BaseController : Controller
     {
-        // GET: News
-        public ActionResult Index()
-        {
-            return View();
-        }
+       
     }
 }
