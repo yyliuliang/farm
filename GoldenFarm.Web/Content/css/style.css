@@ -904,7 +904,7 @@ a.button-stretch { display:block; width:100%; }
 .product-switch li { float:left; font-weight:bold; padding:20px 10px; border-top:1px solid #DDD; border-bottom:1px solid #DDD; border-left:1px solid #DDD; /* width:11.11%; */ width:12.5%; text-align:center; }
 .product-switch li:first-child { -webkit-border-radius: 3px 0 0 3px; -moz-border-radius: 3px 0 0 3px; border-radius: 3px 0 0 3px; }
 .product-switch li:last-child { border-right:1px solid #DDD; -webkit-border-radius: 0 3px 3px 0; -moz-border-radius: 0 3px 3px 0; border-radius: 0 3px 3px 0; }
-.product-switch .select { background:url(..//content/images/check-03.png) center bottom no-repeat; border-bottom:1px solid #FF6600; }
+.product-switch .select { background:url(/content/images/check-03.png) center bottom no-repeat; border-bottom:1px solid #FF6600; }
 .product-switch .select a {  color:#FF6600; }
 
 /*

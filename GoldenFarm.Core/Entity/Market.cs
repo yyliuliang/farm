@@ -32,5 +32,25 @@ namespace GoldenFarm.Entity
         public DateTime Date { get; set; }
 
         public DateTime CreateTime { get; set; }
+
+        [Write(false)]
+        public decimal Raised
+        {
+            get
+            {
+                return CurrentPrice - OpenPrice;
+            }
+        }
+
+        [Write(false)]
+        public string RaisedRate
+        {
+            get
+            {
+                if (OpenPrice == 0) return "100";
+                return ((Raised / OpenPrice) * 100).ToString("f2");
+            }
+        }
+
     }
 }

@@ -1,0 +1,181 @@
+﻿@model MarketDetailViewModel
+<div class="container clear">
+
+    <div class="trade-form">
+        <dl class="headbox clear">
+
+            <dd><span>产品：</span><em class="color-4">种子</em></dd>
+            <dd><span>现价：</span><em class="color-4" id="FlushPrice2">0.01590</em></dd>
+            <dd><span>涨停：</span><em id="limitUp">0.01648</em></dd>
+            <dd><span>跌停：</span><em id="limitDown">0.01588</em></dd>
+        </dl>
+        <div class="formbox clear">
+            <div class="buy">
+                <h2 class="color-1"><i class="icon"></i>买入</h2>
+                <div class="form-group">
+                    <div class="form-group-addon">买入价格</div>
+                    <div class="form-group-input stretch">
+                        <input class="no-left-border no-right-border stretch" data-val="true" data-val-number="字段 BuyPrice 必须是一个数字。" data-val-required="BuyPrice 字段是必需的。" id="BuyPrice" name="BuyPrice" type="text" value="0" maxlength="7">
+                    </div>
+                    <div class="form-group-addon no-left-border form-group-addon-white">金币</div>
+                </div>
+                <div class="form-group">
+                    <div class="form-group-addon">买入数量</div>
+                    <div class="form-group-input stretch">
+                        <input class="stretch no-right-border no-left-border" data-val="true" data-val-number="字段 BuyCount 必须是一个数字。" id="BuyCount" name="BuyCount" type="text" value="">
+                    </div>
+                    <div class="form-group-input">
+                        <button toggle="#buytogglebox" onclick="return false">%<i class="icon"></i></button>
+                        <div class="togglebox togglebox-top togglebox-right" id="buytogglebox">
+                            <dl>
+                                <dd onclick="BuyPersent(1.00)">100%</dd>
+                                <dd onclick="BuyPersent(0.75)">75%</dd>
+                                <dd onclick="BuyPersent(0.50)">50%</dd>
+                                <dd onclick="BuyPersent(0.25)">25%</dd>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="form-group-addon">总计金币</div>
+
+                    <div class="form-group-input stretch">
+                        <input type="text" id="buytotalmoney" name="buytotalmoney" value="0.0000" class="stretch no-right-border no-left-border" maxlength="7">
+                    </div>
+
+                    <div class="form-group-addon no-left-border form-group-addon-white">金币</div>
+                </div>
+                <div class="form-group clear">
+                    <div class="text-left">
+                        可用额:<span class="color-1" id="hasmoney">0.00000</span>金币
+                    </div>
+                    <div class="text-right">
+                        手续费:<span class="color-1" id="buychargemoney">无</span>
+                    </div>
+                </div>
+                <div class="form-group no-padding-bottom">
+                    <input type="button" class="button-color-1 button-stretch" value="限价买入" onclick="Buy()">
+                </div>
+
+            </div>
+            <div class="sale">
+
+                <h2 class="color-4">
+                    <i class="icon"></i>卖出
+                </h2>
+                <div class="form-group">
+                    <div class="form-group-addon">卖出价格</div>
+                    <div class="form-group-input stretch">
+                        <input class="no-left-border no-right-border stretch" data-val="true" data-val-number="字段 SalePrice 必须是一个数字。" data-val-required="SalePrice 字段是必需的。" id="SalePrice" name="SalePrice" type="text" value="0" maxlength="7">
+                    </div>
+                    <div class="form-group-addon no-left-border form-group-addon-white">金币</div>
+                </div>
+                <div class="form-group">
+                    <div class="form-group-addon">卖出数量</div>
+                    <div class="form-group-input stretch">
+                        <input class="stretch no-right-border no-left-border" data-val="true" data-val-number="字段 SaleCount 必须是一个数字。" id="SaleCount" name="SaleCount" type="text" value="">
+                    </div>
+                    <div class="form-group-input">
+                        <button toggle="#saletogglebox" onclick="return false">% <i class="icon"></i></button>
+                        <div class="togglebox togglebox-top togglebox-right" id="saletogglebox">
+                            <dl>
+                                <dd onclick="SalePersent(1.00)">100%</dd>
+                                <dd onclick="SalePersent(0.75)">75%</dd>
+                                <dd onclick="SalePersent(0.50)">50%</dd>
+                                <dd onclick="SalePersent(0.25)">25%</dd>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="form-group-addon">总计金币</div>
+                    <div class="form-group-addon stretch no-left-border no-right-border form-group-addon-white" id="saletotalmoney">0.00</div>
+                    <div class="form-group-addon no-left-border form-group-addon-white">金币</div>
+                </div>
+                <div class="form-group clear">
+                    <div class="text-left">
+                        持有量:<span class="color-1" id="hasnumber">0</span>个
+                    </div>
+                    <div class="text-right">
+                        手续费:<span class="color-1" id="salechargemoney">0.000</span>金币
+                    </div>
+                </div>
+                <div class="form-group no-padding-bottom">
+                    <input type="button" class="button-color-4 button-stretch" value="限价卖出" onclick="Sale()">
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="trade-entrust">
+        <h3 class="color-1">委托信息</h3>
+        <div class="tablebox">
+            <table>
+                <thead>
+                    <tr>
+                        <th>买/卖</th>
+                        <th>价格</th>
+                        <th>委托量</th>
+                    </tr>
+                </thead>
+                <tbody id="entrust">
+                    <tr class="bgsale" style="cursor: pointer;">
+                        <td class="color-4">卖五</td>
+                        <td class="color-1"><em class="flipy">0.01670</em></td>
+                        <td><em class="flipy">34900</em></td>
+                    </tr>
+                    <tr class="bgsale" style="cursor: pointer;">
+                        <td class="color-4">卖四</td>
+                        <td class="color-1"><em class="flipy">0.01648</em></td>
+                        <td><em class="flipy">61600</em></td>
+                    </tr>
+                    <tr class="bgsale" style="cursor: pointer;">
+                        <td class="color-4">卖三</td>
+                        <td class="color-1"><em class="flipy">0.01628</em></td>
+                        <td><em class="flipy">49400</em></td>
+                    </tr>
+                    <tr class="bgsale" style="cursor: pointer;">
+                        <td class="color-4">卖二</td>
+                        <td class="color-4"><em class="flipy">0.01600</em></td>
+                        <td><em class="flipy">99500</em></td>
+                    </tr>
+                    <tr class="bgsale" style="cursor: pointer;">
+                        <td class="color-4">卖一</td>
+                        <td class="color-4"><em class="flipy">0.01590</em></td>
+                        <td><em class="flipy">33600</em></td>
+                    </tr>
+
+                    <tr class="bgbuy" style="cursor: pointer;">
+                        <td class="color-1">买一</td>
+                        <td class="color-4"><em class="flipy">0.01589</em></td>
+                        <td><em class="flipy">300</em></td>
+                    </tr>
+                    <tr class="bgbuy" style="cursor: pointer;">
+                        <td class="color-1">买二</td>
+                        <td class="color-4"><em class="flipy">0.01588</em></td>
+                        <td><em class="flipy">6400</em></td>
+                    </tr>
+                    <tr class="bgbuy" style="cursor: pointer;">
+                        <td class="color-1">买三</td>
+                        <td class="color-4"><em class="flipy">0.01581</em></td>
+                        <td><em class="flipy">1200</em></td>
+                    </tr>
+                    <tr class="bgbuy" style="cursor: pointer;">
+                        <td class="color-1">买四</td>
+                        <td class="color-4"><em class="flipy">0.01580</em></td>
+                        <td><em class="flipy">200</em></td>
+                    </tr>
+                    <tr class="bgbuy" style="cursor: pointer;">
+                        <td class="color-1">买五</td>
+                        <td class="color-4"><em class="flipy">0.01573</em></td>
+                        <td><em class="flipy">1000</em></td>
+                    </tr>
+                </tbody>
+            </table>
+
+        </div>
+
+    </div>
+
+</div>

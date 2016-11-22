@@ -1,0 +1,9 @@
+﻿@model MarketDetailViewModel
+<div class="container">
+    <ul class="product-switch clear">
+        @foreach (var p in Model.Products)
+        {
+            <li>@Html.ActionLink(p.ProductName, "Detail", new { id = p.Id })</li>
+        }
+    </ul>
+</div>

@@ -11,14 +11,25 @@ namespace GoldenFarm.Repository
 {
     public class MarketRepository : RepositoryBase<Market>
     {
-        public IEnumerable<Market> GetAll()
+        Func<Market, Product, Market> mapper = (market, product) =>
         {
-            string sql = "SELECT * FROM Market m LEFT JOIN Product p ON m.ProductId = p.Id";
-            return Conn.Query<Product, Market, Market>(sql, (product, market) =>
-            {
-                market.Product = product;
-                return market;
-            });
+            market.Product = product;
+            return market;
+        };
+
+        public IEnumerable<Market> GeTodayMarkets()
+        {
+            DateTime date = DateTime.Today;
+            string sql = "SELECT * FROM Market m INNER JOIN Product p ON m.ProductId = p.Id WHERE Date=@date";
+            return Conn.Query<Market, Product, Market>(sql, mapper, new { date = date });
+        }
+
+        public Market GetTodayMarket(int productId)
+        {
+            DateTime date = DateTime.Today;
+            string sql = "SELECT TOP 1 * FROM Market m INNER JOIN Product p ON m.ProductId = p.Id WHERE m.productid=@pid AND Date=@date";
+            return Conn.Query<Market, Product, Market>(sql, mapper, new { pid = productId, date = date }).FirstOrDefault();
+
         }
     }
 }

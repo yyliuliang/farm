@@ -1,0 +1,48 @@
+﻿@model MarketDetailViewModel
+<div class="container">
+    <div class="kline">
+        <dl class="kline-head clear">
+            <dt class="color-4">
+                <img src="@Model.MarketDetail.Product.ImageUrl">
+                <div class="price" id="FlushPrice1">@Model.MarketDetail.CurrentPrice</div>
+                <div class="rise">
+                    <cite>涨额：<em id="FlushIncrease">@Model.MarketDetail.Raised</em></cite>
+                    <cite>涨幅：<em id="FlushIncreaseRate">@Model.MarketDetail.RaisedRate %</em></cite>
+                </div>
+            </dt>
+
+            <dd>
+                <span>今开</span>
+                <cite>@Model.MarketDetail.OpenPrice</cite>
+            </dd>
+            <dd>
+                <span>最低</span>
+                <cite id="FluashLowestPrice">@Model.MarketDetail.BottomPrice</cite>
+            </dd>
+            <dd>
+                <span>最高</span>
+                <cite id="FluashHighestPrice">@Model.MarketDetail.TopPrice</cite>
+            </dd>
+            <dd>
+                <span>成交</span>
+                <cite id="FluashVolume">@Model.MarketDetail.DealedTotalCount</cite>
+            </dd>
+
+        </dl>
+        <div class="kline-main">
+            <div class="kline-switch">
+                <span id="mbtn" onclick="Minute('@Model.MarketDetail.ProductId','/Market/Minute'); $('.kline-switch span').removeClass('select'); $(this).addClass('select');">分时</span>
+                <span id="kbtn" onclick="Candle('@Model.MarketDetail.ProductId', '/Market/Candle'); $('.kline-switch span').removeClass('select'); $(this).addClass('select');" class="select">日K</span>
+            </div>
+            <div class="flush-switch">自动刷新</div>
+            <div class="kline-ma">
+                <div class="ma05 clear"><i></i><b>MA05</b></div>
+                <div class="ma10 clear"><i></i><b>MA10</b></div>
+                <div class="ma30 clear"><i></i><b>MA30</b></div>
+            </div>
+            <div id="kline" class="kline-chart" data-highcharts-chart="0"></div>
+
+        </div>
+
+    </div>
+</div>

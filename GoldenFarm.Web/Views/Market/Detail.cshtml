@@ -1,56 +1,41 @@
 ﻿@{
     ViewBag.Title = "市场行情";
 }
+@model MarketDetailViewModel
 
-<div class="subbanner subbanner-about" style="position: relative; z-index: 0; background: none;">
+<div class="subbanner-small subbanner-user" style="position: relative; z-index: 0; background: none;">
     <div class="subbanner-inner">
         <div class="container">
-            <h1>法律声明</h1>
-            <h2>Charge declaration</h2>
+            <h1>蓝朝市场</h1>
+            <h2>Lanchao Market</h2>
         </div>
     </div>
-    <div class="backstretch" style="left: 0px; top: 0px; overflow: hidden; margin: 0px; padding: 0px; height: 195px; width: 1862px; z-index: -999998; position: absolute;">
-        <img src="/content/images/banner-market01.png" style="position: absolute; margin: 0px; padding: 0px; border: none; width: 1862px; height: 349.125px; max-height: none; max-width: none; z-index: -999999; left: 0px; top: -77.0625px;">
+    <div class="backstretch" style="left: 0px; top: 0px; overflow: hidden; margin: 0px; padding: 0px; height: 153px; width: 1862px; z-index: -999998; position: absolute;">
+        <img src="/content/images/banner-user02.png" style="position: absolute; margin: 0px; padding: 0px; border: none; width: 1862px; height: 232.75px; max-height: none; max-width: none; z-index: -999999; left: 0px; top: -39.875px;">
     </div>
 </div>
 
-<div class="container clear">
-    @Html.Partial("_AboutSideMenu")
-    <div class="main">
-        <div class="main-head">租借协议</div>
-        <div class="main-text">
-            <p>1.淘金果园平台推出租借服务，为淘金果园平台用户提供做空交易工具。</p>
-            <p>2.淘金果园为做空用户的交易提供风险管理服务，对用户在淘金果园平台的交易账户进行监控和风险管理。</p>
-            <p>3.租借用户在交易时，授权淘金果园在用户交易账户发生风险时，(租借保证金亏损≥70%)或逾期未归还的采取强制平仓等风险控制的操作。</p>
-            <p>4.用户将所借果实用于使用做空交易时应当遵守《淘金果园租借业务规则》的规定。</p>
-            <p>5.用户使用租借做空交易时，应当充分认识到风险的影响，谨慎操作，量力而行。</p>
-            <p>6.用户同意在淘金果园交易平台所进行的所有做空操作代表其真实意愿，并无条件接受所带来的潜在风险和收益。</p>
-            <p>7.用户同意在租借果实进行做空交易时可能产生手续费等相关费用，并同意按照其与出借方的协议的要求缴纳相应费用。</p>
-            <p>8.用户认同淘金果园交易平台在账户发生风险时保留对账户实施减仓，平仓等风险控制操作的权限，并无条件接受最终的成交结果。</p>
-            <p>9.淘金果园交易平台保留暂停，终止租借业务的权限，在必要的时候，淘金果园平台可以随时暂停，终止租借做空交易业务。</p>
-            <b>附1:淘金果园租借业务规则</b>
-            <b>1.总则</b>
-            <p>1.1 为规范虚拟商品租借做空行为，维护市场秩序，保护租借用户的合法权益，本着公平、公开、公正的原则，制定本规则。</p>
-            <p>1.2 本规则所称租借做空交易，是指租借者向淘金果园提供担保物，通过淘金果园交易平台交易借入果实并用于交易的行为。</p>
-            <p>1.3 在淘金果园交易平台进行的租借做空交易，适用本规则。本规则未做规定的，适用《淘金果园虚拟商品交易平台交易规则》和淘金果园交易平台其他有关规定。</p>
-            <p>1.4 用户可向淘金果园下达果实租借委托，借入虚拟商品用于在淘金果园交易，可委托品种仅平台各种果实</p>
-            <p>1.5本公司为果实租借提供信息发布、监管和风险控制服务，对用户在淘金果园进行做空交易业务不提供任何收益保证和保本承诺，做空用户应当充分认识到做空业务存的风险，自行评估可能遭受的损失，并且在确认风险可控，可承受的基础上自愿参与。</p>
-            <b>2.果实租借委托</b>
-            <p>2.1 用户可以通过淘金果园网页的委托方式，发送果实租借委托。</p>
-            <p>2.2除淘金果园另有规定外，用户发送的委托应当包含以下信息：</p>
-            <p>（1） 用户交易账号</p>
-            <p>（2） 租借果实的品种</p>
-            <p>（3） 租借果实借入数量</p>
-            <p>（4） 租借保证金（根据所借果实的单价及数量计算）</p>
-            <p>（5） 本平台要求的其他内容</p>
-            <p>2.3 租借交易只接受当前价格委托，不接受限价委托。</p>
-            <p>2.4在淘金农场的正常交易时间，均可接受租借委托。淘金果园在接到用户的租借委托后，按照委托情况进行出借。</p>
-            <p>2.5在租借交易中，租借果实的最小委托数量为1000个。委托利率为日息0.2%。</p>
-            <p>2.6 租借委托长期有效，直至该委托被系统或用户撤销。淘金果园有权在必要的时候撤销用户的租借委托。</p>
-            <p>2.7用户租借期限最长不超过一个月，如预期未归将强平。</p>
-            <b>3.附则</b>
-            <p>3.1 本规则由淘金果园制定，向所有平台用户公告后生效，修改时亦同。</p>
-            <p>3.2本规则由淘金淘金果园负责最终解释。</p>
+
+@using (Html.BeginForm())
+{
+    @Html.Partial("_Detail_Chart")
+    @Html.Partial("_Detail_Nav")
+    @Html.Partial("_Detail_Delegate")
+    @Html.Partial("_Detail_DelegateList")
+
+    <div class="container padding-bottom">
+        <div class="message message-warn">
+            温馨提示：<br>
+            1.
+            交易数量以整百倍进行交易。        <br>
+            2.
+            种子出售手续费20%，每日涨跌额0.0003。        <br>
+            3.交易时段为每天09:00至次日00:00，特殊停盘除外。<br>
+            4.非交易时段无法进行买卖委托和委托撤销。<br>
+            5.领取推广大礼包后，需将农场等级提升到4级后方可在淘金果园出售种子和果实。
         </div>
     </div>
-</div>
+}
+@section Scripts {
+    @Scripts.Render("~/bundles/highstock")
+}

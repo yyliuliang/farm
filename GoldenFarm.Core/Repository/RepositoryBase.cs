@@ -12,7 +12,7 @@ using Dapper.Contrib.Extensions;
 
 namespace GoldenFarm.Repository
 {
-    public abstract class RepositoryBase<TEntity> : IDisposable where TEntity : class
+    public abstract class RepositoryBase<TEntity> where TEntity : class
     {
         protected readonly IDbConnection Conn = null;
 
@@ -20,19 +20,24 @@ namespace GoldenFarm.Repository
         {
             Conn = new SqlConnection(ConfigurationManager.ConnectionStrings["farm"].ConnectionString);
         }
-        public virtual void Dispose()
-        {
-            if(Conn != null && Conn.State != ConnectionState.Closed)
-            {
-                Conn.Close();
-                Conn.Dispose();
-            }
-        }
+        //public virtual void Dispose()
+        //{
+        //    if(Conn != null && Conn.State != ConnectionState.Closed)
+        //    {
+        //        Conn.Close();
+        //        Conn.Dispose();
+        //    }
+        //}
+
+        //public virtual TEntity GetById(int id)
+        //{
+        //    return Conn.Get<TEntity>(id);
+        //}
 
         
-        public IEnumerable<TEntity> GetAll()
-        {
-            return Conn.GetAll<TEntity>();
-        }
+        //public IEnumerable<TEntity> GetAll()
+        //{
+        //    return Conn.GetAll<TEntity>();
+        //}
     }
 }

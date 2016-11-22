@@ -21,6 +21,11 @@ namespace GoldenFarm.Web
                         "~/Content/js/main.js"
                         ));
 
+            bundles.Add(new ScriptBundle("~/bundles/highstock").Include(
+                        "~/Content/js/highstock.js",
+                        "~/Content/js/kline.js"
+                        ));
+
 
             bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
                         "~/Scripts/jquery-{version}.js"));
