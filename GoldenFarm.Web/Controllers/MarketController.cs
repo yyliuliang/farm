@@ -28,7 +28,17 @@ namespace GoldenFarm.Web.Controllers
             model.MarketDetail = mr.GetTodayMarket(id);
             model.Products = pr.GetAllProducts();
             return View(model);
+        }
 
+
+        public ActionResult Minute()
+        {
+            return View();
+        }
+
+        public ActionResult Candle()
+        {
+            return View();
         }
     }
 }

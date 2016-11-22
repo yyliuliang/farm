@@ -3,7 +3,7 @@
     <ul class="product-switch clear">
         @foreach (var p in Model.Products)
         {
-            <li>@Html.ActionLink(p.ProductName, "Detail", new { id = p.Id })</li>
+             <li @(Model.MarketDetail.ProductId == p.Id ? "class=select" : string.Empty)>@Html.ActionLink(p.ProductName, "Detail", new { id = p.Id })</li>            
         }
     </ul>
 </div>
