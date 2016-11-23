@@ -1,3 +1,5 @@
+var intFormatFloat = 5;
+
 //算移动均线
 function MovingAverage(data, i, n) {
     if (i >= n - 1) {
@@ -122,7 +124,7 @@ function Candle(code, url) {
  
     $.ajax({
         url: url,
-        data: {code:code},
+        data: {id:code},
         type: "Post",
         dataType: 'json',
         success: function (result) {
@@ -151,7 +153,7 @@ function Minute(code,url) {
     $(".kline-ma").hide();
     $.ajax({
         url: url,
-        data:{code:code},
+        data:{id:code},
         type: "Post",
         dataType: 'json',
         success: function (result) {
@@ -419,7 +421,6 @@ var highStockChart = function (divid, data) {
                     color = '#33AA11'
                 }
                 
-
                 var seriesPointAttr = merge(series.pointAttr);
                 seriesPointAttr[''].stroke = color;
                 seriesPointAttr[''].fill = color;
@@ -573,6 +574,7 @@ var highStockChart = function (divid, data) {
                         zdf = parseFloat((data[i].ClosingPrice - data[i].OpeningPrice) / data[i].OpeningPrice).toFixed(intFormatFloat);
                     }
                 }
+
                 open = this.points[0].point.open.toFixed(intFormatFloat);
                 high = this.points[0].point.high.toFixed(intFormatFloat);
                 low = this.points[0].point.low.toFixed(intFormatFloat);

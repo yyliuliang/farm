@@ -25,14 +25,14 @@
             </dd>
             <dd>
                 <span>成交</span>
-                <cite id="FluashVolume">@Model.MarketDetail.DealedTotalCount</cite>
+                <cite id="FluashVolume">@Model.MarketDetail.Volume</cite>
             </dd>
 
         </dl>
         <div class="kline-main">
             <div class="kline-switch">
-                <span id="mbtn" onclick="Minute('@Model.MarketDetail.ProductId','/Market/Minute'); $('.kline-switch span').removeClass('select'); $(this).addClass('select');">分时</span>
-                <span id="kbtn" onclick="Candle('@Model.MarketDetail.ProductId', '/Market/Candle'); $('.kline-switch span').removeClass('select'); $(this).addClass('select');" class="select">日K</span>
+                <span id="mbtn" onclick="Minute('@Model.MarketDetail.Product.ProductCode','/Market/Minute'); $('.kline-switch span').removeClass('select'); $(this).addClass('select');">分时</span>
+                <span id="kbtn" onclick="Candle('@Model.MarketDetail.Product.ProductCode', '/Market/Candle'); $('.kline-switch span').removeClass('select'); $(this).addClass('select');" class="select">日K</span>
             </div>
             @*<div class="flush-switch">自动刷新</div>*@
             <div class="kline-ma">
@@ -40,9 +40,24 @@
                 <div class="ma10 clear"><i></i><b>MA10</b></div>
                 <div class="ma30 clear"><i></i><b>MA30</b></div>
             </div>
-            <div id="kline" class="kline-chart" data-highcharts-chart="0"></div>
+            <div id="kline" class="kline-chart">
+                <div id="loading" class="kline-chart-loading">
+                    <div class="rect1">&nbsp;</div>
+                    <div class="rect2">&nbsp;</div>
+                    <div class="rect3">&nbsp;</div>
+                    <div class="rect4">&nbsp;</div>
+                    <div class="rect5">&nbsp;</div>
+                </div>
+
+            </div>
 
         </div>
 
     </div>
 </div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        Candle('@Model.MarketDetail.Product.ProductCode', '/Market/Candle');
+    });
+</script>

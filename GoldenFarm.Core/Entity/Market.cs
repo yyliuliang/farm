@@ -7,7 +7,7 @@ using Dapper.Contrib.Extensions;
 
 namespace GoldenFarm.Entity
 {
-    [Table("Market")]
+
     [Serializable]
     public class Market : EntityBase
     {
@@ -27,18 +27,19 @@ namespace GoldenFarm.Entity
 
         public decimal BottomPrice { get; set; }
 
-        public int DealedTotalCount { get; set; }
+        public int Volume { get; set; }
 
         public DateTime Date { get; set; }
 
         public DateTime CreateTime { get; set; }
 
+        
         [Write(false)]
         public decimal Raised
         {
             get
             {
-                return CurrentPrice - OpenPrice;
+                return CurrentPrice - PrevDayPrice;
             }
         }
 

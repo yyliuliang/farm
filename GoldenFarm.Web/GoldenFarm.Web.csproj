@@ -305,6 +305,7 @@
     <Content Include="Content\js\echarts.js" />
     <Content Include="Content\js\exporting.js" />
     <Content Include="Content\js\highstock.js" />
+    <Content Include="Content\js\highstock424.js" />
     <Content Include="Content\js\jquery-1.11.0.min.js" />
     <Content Include="Content\js\jquery-1.11.3.min.js" />
     <Content Include="Content\js\jquery-1.8.3.min.js" />

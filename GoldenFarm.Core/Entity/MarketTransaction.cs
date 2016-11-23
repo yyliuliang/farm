@@ -13,11 +13,13 @@ namespace GoldenFarm.Entity
 
         public int ProductId { get; set; }
 
+        public virtual Product Product { get; set; }
+
         public int BuyerId { get; set; }
 
         public int SellerId { get; set; }
 
-        public int Count { get; set; }
+        public int Volume { get; set; }
 
         public decimal Price { get; set; }
 

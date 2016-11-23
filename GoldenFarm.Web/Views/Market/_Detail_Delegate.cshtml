@@ -4,10 +4,10 @@
     <div class="trade-form">
         <dl class="headbox clear">
 
-            <dd><span>产品：</span><em class="color-4">种子</em></dd>
-            <dd><span>现价：</span><em class="color-4" id="FlushPrice2">0.01590</em></dd>
-            <dd><span>涨停：</span><em id="limitUp">0.01648</em></dd>
-            <dd><span>跌停：</span><em id="limitDown">0.01588</em></dd>
+            <dd><span>产品：</span><em class="color-4">@Model.MarketDetail.Product.ProductName</em></dd>
+            <dd><span>现价：</span><em class="color-4" id="FlushPrice2">@Model.MarketDetail.CurrentPrice</em></dd>
+            <dd><span>涨停：</span><em id="limitUp">@(Model.MarketDetail.PrevDayPrice * (decimal)1.1)</em></dd>
+            <dd><span>跌停：</span><em id="limitDown">@(Model.MarketDetail.PrevDayPrice * (decimal)0.9)</em></dd>
         </dl>
         <div class="formbox clear">
             <div class="buy">

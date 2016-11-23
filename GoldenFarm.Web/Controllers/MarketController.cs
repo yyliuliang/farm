@@ -22,23 +22,75 @@ namespace GoldenFarm.Web.Controllers
 
         }
 
-        public ActionResult Detail(int id)
+        public ActionResult Detail(string id)
         {
             var model = new MarketDetailViewModel();
-            model.MarketDetail = mr.GetTodayMarket(id);
+            model.MarketDetail = mr.GetTodayProductMarket(id);
             model.Products = pr.GetAllProducts();
             return View(model);
         }
 
-
-        public ActionResult Minute()
+        [HttpPost]
+        public ActionResult Minute(string id)
         {
-            return View();
+            var currentMarket = mr.GetTodayProductMarket(id);
+            var transactions = mr.GetTodayTransactions(id).OrderBy(t => t.CreateTime.ToTimestamp());
+            var data = new
+            {
+                SysDT = DateTime.Now.ToTimestamp(),
+                TimeShare = from t in transactions
+                            select new
+                            {
+                                Time = t.CreateTime.ToTimestamp(),
+                                Price = t.Price,
+                                Volume = t.Volume
+                            },
+                MarketInfo = new
+                {
+                    OpenPrice = currentMarket.OpenPrice,
+                    LimitUp = transactions.Max(m => m.Price),
+                    LimitDown = transactions.Min(m => m.Price),
+                }
+
+            };
+            return Json(new { data = data });
         }
 
-        public ActionResult Candle()
+        [HttpPost]
+        public ActionResult Candle(string id)
         {
-            return View();
+            var markets = mr.GetProductMarkets(id).OrderBy(m => m.Date.ToTimestamp());
+            var currentMarket = mr.GetTodayProductMarket(id);
+            var data = new
+            {
+                KLineList = from m in markets
+                            select new
+                            {
+                                Date = m.Date.ToTimestamp(),
+                                OpeningPrice = m.OpenPrice,
+                                ClosingPrice = m.ClosePrice,
+                                HighestPrice = m.TopPrice,
+                                LowestPrice = m.BottomPrice,
+                                Volume = m.Volume,
+                                ChangePrice = m.Raised,
+                                ChangeRate = m.RaisedRate
+                            },
+                MarketInfo = new
+                {
+                    OpenPrice = currentMarket.OpenPrice,
+                    LimitUp = markets.Max(m => m.TopPrice),
+                    LimitDown = markets.Min(m => m.BottomPrice),
+                }
+            };
+            return Json(new { data = data });
+        }
+
+
+        public ActionResult __PrepareTestData()
+        {
+            mr.PrepareMarketsTestData();
+            mr.PrepareTransactionsTestData();
+            return Content("ok");
         }
     }
 }

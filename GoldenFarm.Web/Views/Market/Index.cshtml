@@ -38,15 +38,15 @@
                     @foreach (var m in Model)
                     {
                         <tr isopen="true" onclick="window.location.href='/Market/Detail/@m.ProductId'" style="cursor:pointer;">
-                            <td><a href="/Market/Detail/@m.ProductId"><img src="@m.Product.ImageUrl" width="30"></a></td>
-                            <td>@Html.ActionLink(m.Product.ProductName, "Detail", new { id = m.ProductId })</td>
+                            <td><a href="/Market/Detail/@m.Product.ProductCode"><img src="@m.Product.ImageUrl" width="30"></a></td>
+                            <td>@Html.ActionLink(m.Product.ProductName, "Detail", new { id = m.Product.ProductCode })</td>
                             <td class="color-1">@m.CurrentPrice</td>
                             <td class="color-1">@m.RaisedRate %</td>
                             <td class="color-1">@m.Raised</td>
                             <td>@m.OpenPrice</td>
                             <td class="color-1">@m.TopPrice</td>
                             <td class="color-4">@m.BottomPrice</td>
-                            <td>@m.DealedTotalCount</td>
+                            <td>@m.Volume</td>
                         </tr>
 
                     }

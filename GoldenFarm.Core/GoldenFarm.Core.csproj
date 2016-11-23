@@ -59,6 +59,7 @@
     <Compile Include="Entity\KeyValueConfig.cs" />
     <Compile Include="Entity\Role.cs" />
     <Compile Include="Entity\User.cs" />
+    <Compile Include="Extensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repository\MarketRepository.cs" />
     <Compile Include="Repository\ProductRepository.cs" />

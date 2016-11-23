@@ -16,13 +16,13 @@ namespace GoldenFarm.Web
             bundles.Add(new ScriptBundle("~/bundles/sitejs").Include(
                         "~/Content/js/jquery-1.11.3.min.js",
                         "~/Content/js/jquery.backstretch.min.js",
+                        "~/Content/js/main.js",
                         "~/Content/js/utilities.js",
-                        "~/Content/js/wow.min.js",                        
-                        "~/Content/js/main.js"
+                        "~/Content/js/wow.min.js"
                         ));
 
             bundles.Add(new ScriptBundle("~/bundles/highstock").Include(
-                        "~/Content/js/highstock.js",
+                        "~/Content/js/highstock424.js",
                         "~/Content/js/kline.js"
                         ));
 
