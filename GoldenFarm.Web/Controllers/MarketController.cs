@@ -86,6 +86,17 @@ namespace GoldenFarm.Web.Controllers
         }
 
 
+        public ActionResult TradeCenter()
+        {
+            return View();
+        }
+
+        public ActionResult Borrow()
+        {
+            return View();
+        }
+
+
         public ActionResult __PrepareTestData()
         {
             mr.PrepareMarketsTestData();

@@ -1,0 +1,68 @@
+﻿
+@{
+    ViewBag.Title = "用户登录";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="subbanner-small subbanner-user" style="position: relative; z-index: 0; background: none;">
+    <div class="subbanner-inner">
+        <div class="container">
+            <h1>用户中心</h1>
+            <h2>User Center</h2>
+        </div>
+    </div>
+    <div class="backstretch" style="left: 0px; top: 0px; overflow: hidden; margin: 0px; padding: 0px; height: 120px; width: 1423px; z-index: -999998; position: absolute;">
+        <img src="/content/images/banner-user01.png" style="position: absolute; margin: 0px; padding: 0px; border: none; width: 1423px; height: 177.875px; max-height: none; max-width: none; z-index: -999999; left: 0px; top: -28.9375px;" class="deleteable">
+        <img src="/content/images/banner-user02.png" style="position: absolute; margin: 0px; padding: 0px; border: none; width: 1423px; height: 177.875px; max-height: none; max-width: none; z-index: -999999; opacity: 0.701453; left: 0px; top: -28.9375px;">
+    </div>
+</div>
+
+
+<form method="post" novalidate="novalidate">
+    <div class="container">
+        <div class="loginbox">
+            <div class="loginbox-inner">
+                <div class="loginbox-inner-head">蓝朝通行证登录</div>
+                <div class="loginbox-inner-form">
+                    <div class="form-group">
+                        <div class="form-group-addon no-right-border">手　　机</div>
+                        <div class="form-group-input stretch">
+                            <input class="stretch" data-val="true" data-val-regex="手机号格式错误" data-val-regex-pattern="^1[0-9]{10}" data-val-required="请填写手机号" id="Phone" name="Phone" type="text" value="">
+                        </div>
+                    </div>
+                    <span class="field-validation-valid" data-valmsg-for="Phone" data-valmsg-replace="true"></span>
+
+                    <div class="form-group">
+                        <div class="form-group-addon no-right-border">密　　码</div>
+                        <div class="form-group-input stretch">
+                            <input type="password" class="stretch" id="PasswordText">
+                            <input data-val="true" data-val-required="请填写密码" id="Password" name="Password" type="hidden" value="">
+                        </div>
+                    </div>
+                    <span class="field-validation-valid" data-valmsg-for="Password" data-valmsg-replace="true"></span>
+
+                    <div class="form-group">
+                        <div class="form-group-addon no-right-border">图片验证</div>
+                        <div class="form-group-input stretch">
+                            <input class="stretch" data-val="true" data-val-regex="验证码错误" data-val-regex-pattern="^[A-Za-z0-9]+$" data-val-required="请填写验证码" id="VCode" name="VCode" type="text" value="">
+                        </div>
+                        <div class="form-group-addon no-left-border code">
+                            <img src="images/VerificationImgForm.jpg" title="点击图片换一张">
+                        </div>
+                    </div>
+                    <span class="field-validation-valid" data-valmsg-for="VCode" data-valmsg-replace="true"></span>
+
+                    <div class="form-group">
+                        <input type="button" value="立即登录" class="button button-color-1 button-stretch">
+                    </div>
+                    <span class="field-validation-valid" data-valmsg-for="Err" data-valmsg-replace="true"></span>
+
+                    <div class="form-group clear">
+                        <a class="ischeck" id="check">记住账号</a>
+                        <a href="forgetpassword_step1.html">忘记密码</a>
+                        <a href="Reg.html">账号注册</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

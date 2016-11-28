@@ -1,0 +1,70 @@
+﻿
+<ul id="side-menu-toggle" class="side-menu-toggle">
+    <li>
+        <div class="link">用户中心</div>
+        <ul class="side-menu-toggle-sub">
+            <li>@Html.ActionLink("账户概要", "Index", "User")</li>
+            <li>@Html.ActionLink("安全设置", "Safe", "User")</li>
+            <li>@Html.ActionLink("果园钱包", "Wallet", "User")</li>
+            <li>@Html.ActionLink("账户充值", "Deposit", "User")</li>
+            <li>@Html.ActionLink("金币提现", "Withdraw", "User")</li>
+            <li>@Html.ActionLink("金币明细", "FinanceDetail", "User")</li>
+        </ul>
+    </li>
+
+    <li class="open">
+        <div class="link">农贸市场</div>
+        <ul class="side-menu-toggle-sub side-menu-toggle-sub-show">
+            <li>@Html.ActionLink("实时行情", "TradeCenter", "Market")</li>
+            <li>@Html.ActionLink("委托管理", "Entrust", "User")</li>
+            <li>@Html.ActionLink("交易记录", "TradeHistory", "User")</li>
+            <li>@Html.ActionLink("果实重生", "Rebirth", "Market")</li>
+            <li>@Html.ActionLink("重生记录", "RebirthHistory", "Market")</li>
+            <li>@Html.ActionLink("果实租借", "Borrow", "Market")</li>
+            <li>@Html.ActionLink("租借记录", "BorrowHistory", "User")</li>
+            <li>@Html.ActionLink("果实赠送", "Give", "User")</li>
+            <li>@Html.ActionLink("赠送记录", "GiveHistory", "User")</li>
+        </ul>
+    </li>
+
+    <li>
+        <div class="link">推广中心</div>
+        <ul class="side-menu-toggle-sub ">
+            <li>@Html.ActionLink("推广链接", "PopLink", "User")</li>
+            <li>@Html.ActionLink("推广列表", "PopDetail", "User")</li>
+            <li>@Html.ActionLink("推广收益", "PopReward", "User")</li>
+            <li>@Html.ActionLink("补推广码", "FillReferId", "User")</li>
+        </ul>
+    </li>
+</ul>
+
+<script type="text/javascript">
+				    $(function () {
+				        var Toggle = function (el, multiple) {
+				            this.el = el || {};
+				            this.multiple = multiple || false;
+
+				            // Variables privadas
+				            var links = this.el.find('.link');
+				            // Evento
+				            links.on('click', { el: this.el, multiple: this.multiple }, this.dropdown)
+				        }
+
+				        Toggle.prototype.dropdown = function (e) {
+				            var $el = e.data.el;
+				            $this = $(this),
+							$next = $this.next();
+
+				            $next.slideToggle();
+				            $this.parent().toggleClass('open');
+
+				            if (!e.data.multiple) {
+				                $el.find('.side-menu-toggle-sub').not($next).slideUp().parent().removeClass('open');
+				            };
+
+				        }
+
+				        var toggle = new Toggle($('#side-menu-toggle'), false);
+
+				    });
+</script>

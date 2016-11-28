@@ -51,7 +51,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Entity\EntityBase.cs" />
-    <Compile Include="Entity\MarketDelegate.cs" />
+    <Compile Include="Entity\MarketEntrust.cs" />
     <Compile Include="Entity\MarketTransaction.cs" />
     <Compile Include="Entity\News.cs" />
     <Compile Include="Entity\Product.cs" />

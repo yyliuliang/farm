@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace GoldenFarm.Entity
 {
     [Serializable]
-    public class MarketDelegate : EntityBase
+    public class MarketEntrust : EntityBase
     {
         public int UserId { get; set; }
         

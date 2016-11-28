@@ -195,6 +195,7 @@
     <Compile Include="App_Start\IdentityConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
+    <Compile Include="Areas\Admin\AdminAreaRegistration.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\GuideController.cs" />
@@ -202,6 +203,7 @@
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\MarketController.cs" />
     <Compile Include="Controllers\NewsController.cs" />
+    <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -349,6 +351,7 @@
     <Content Include="Content\font\font_1477280014_116184.eot" />
     <Content Include="Content\font\font_1477280014_116184.ttf" />
     <Content Include="Content\font\font_1477280014_116184.woff" />
+    <Content Include="Areas\Admin\Views\web.config" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
@@ -418,8 +421,24 @@
     <Content Include="Views\Market\_Detail_Nav.cshtml" />
     <Content Include="Views\Market\_Detail_Delegate.cshtml" />
     <Content Include="Views\Market\_Detail_DelegateList.cshtml" />
+    <Content Include="Views\User\Index.cshtml" />
+    <Content Include="Views\User\Login.cshtml" />
+    <Content Include="Views\User\Reg.cshtml" />
+    <Content Include="Views\Shared\_UserCenterLayout.cshtml" />
+    <Content Include="Views\Shared\_UCSideMenu.cshtml" />
+    <Content Include="Views\User\Safe.cshtml" />
+    <Content Include="Views\User\Wallet.cshtml" />
+    <Content Include="Views\User\Deposit.cshtml" />
+    <Content Include="Views\User\Withdraw.cshtml" />
+    <Content Include="Views\User\FinanceDetail.cshtml" />
+    <Content Include="Views\User\Entrust.cshtml" />
+    <Content Include="Views\Market\TradeCenter.cshtml" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Areas\Admin\Controllers\" />
+    <Folder Include="Areas\Admin\Models\" />
+    <Folder Include="Areas\Admin\Views\Shared\" />
+  </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />

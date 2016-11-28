@@ -10,6 +10,8 @@ namespace GoldenFarm.Entity
 
     public class User : EntityBase
     {
+        public Guid UserGuid { get; set; }
+
         public string UserName { get; set; }
 
         public string DisplayName { get; set; }
