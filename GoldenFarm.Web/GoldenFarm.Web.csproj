@@ -346,9 +346,6 @@
     <Content Include="Content\Site.css" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
-    <Content Include="ApplicationInsights.config">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <Content Include="Content\font\font_1477280014_116184.eot" />
     <Content Include="Content\font\font_1477280014_116184.ttf" />
     <Content Include="Content\font\font_1477280014_116184.woff" />

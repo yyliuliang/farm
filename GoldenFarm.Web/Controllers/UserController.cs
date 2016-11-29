@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GoldenFarm.Repository;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -8,14 +9,25 @@ namespace GoldenFarm.Web.Controllers
 {
     public class UserController : BaseController
     {
+        private UserRepository ur = new UserRepository();
         // GET: User
         public ActionResult Index()
         {
             return View();
         }
 
+        public ActionResult UserExists()
+        {
+            string username = Request["username"];
+            return Content(ur.UserExists(username) ? "1" : "0");
+        }
+
         public ActionResult Login()
         {
+            string username = Request.Form["username"];
+            string password = Request.Form["password"];
+
+            bool logined = ur.Login(username, password);
             return View();
         }
 

@@ -11,12 +11,19 @@ namespace GoldenFarm.Repository
 {
     public class UserRepository : RepositoryBase<User>
     {
-        public bool Login(string username, string password)
-        {
 
-            return false;
+        public bool UserExists(string username)
+        {
+            string sql = "SELECT TOP 1 * FROM User WHERE UserName = @name";
+            return Conn.QueryFirst<User>(sql, new { name = username }) != null;
         }
 
+
+        public bool Login(string username, string password)
+        {
+            string sql = "SELECT TOP 1 * FROM User WHERE UserName = @name AND Password = @password";
+            return Conn.QueryFirst<User>(sql, new { name = username, password = password }) != null;
+        }
 
     }
 }
