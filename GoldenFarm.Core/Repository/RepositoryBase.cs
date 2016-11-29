@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using Dapper;
 using Dapper.Contrib;
 using Dapper.Contrib.Extensions;
+using System.Linq.Expressions;
 
 namespace GoldenFarm.Repository
 {
@@ -20,24 +21,37 @@ namespace GoldenFarm.Repository
         {
             Conn = new SqlConnection(ConfigurationManager.ConnectionStrings["farm"].ConnectionString);
         }
-        //public virtual void Dispose()
-        //{
-        //    if(Conn != null && Conn.State != ConnectionState.Closed)
-        //    {
-        //        Conn.Close();
-        //        Conn.Dispose();
-        //    }
-        //}
-
-        //public virtual TEntity GetById(int id)
-        //{
-        //    return Conn.Get<TEntity>(id);
-        //}
-
         
-        //public IEnumerable<TEntity> GetAll()
-        //{
-        //    return Conn.GetAll<TEntity>();
-        //}
+        public TEntity Get(int id)
+        {
+            return Conn.Get<TEntity>(id);
+        }
+
+        public void Delete(TEntity entity)
+        {
+            Conn.Delete(entity);
+        }
+
+        public void Update(TEntity entity)
+        {
+            Conn.Update(entity);
+        }
+
+        public IEnumerable<TEntity> GetAll()
+        {
+            return Conn.GetAll<TEntity>();
+        }
+
+        public IEnumerable<TEntity> GetPagedData(PageCriteria criterial)
+        {
+            //  return Conn.get
+            return null;
+        }
+
+        public void Create(TEntity entity)
+        {
+            Conn.Insert(entity);
+        }
+
     }
 }

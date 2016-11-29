@@ -24,6 +24,11 @@ namespace GoldenFarm.Web.Controllers
             return View();
         }
 
+        public ActionResult FindPassword()
+        {
+            return View();
+        }
+
         public ActionResult Safe()
         {
             return View();

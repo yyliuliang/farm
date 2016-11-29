@@ -59,10 +59,25 @@
                     <div class="form-group clear">
                         <a class="ischeck" id="check">记住账号</a>
                         <a href="forgetpassword_step1.html">忘记密码</a>
-                        <a href="Reg.html">账号注册</a>
+                        @Html.ActionLink("忘记密码", "FindPassword", "User")
+                        @Html.ActionLink("账号注册", "Reg", "User")
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </form>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#check").click(function () {
+            if ($(this).hasClass("ischeck")) {
+                $(this).removeClass("ischeck");
+                $(this).addClass("check");
+            } else {
+                $(this).removeClass("check");
+                $(this).addClass("ischeck");
+            }
+        });
+    });
+</script>
