@@ -11,23 +11,21 @@ namespace GoldenFarm.Web.Controllers
 {
     public class CommonController : Controller
     {
+
+        public const string CaptchaImageText = "CaptchaImageText";
         // GET: Common
         public ActionResult VerificationImgForm()
         {
-            this.Session["CaptchaImageText"] = GenerateRandomCode();
-            // Create a CAPTCHA image using the text stored in the Session object.
-            RandomImage ci = new RandomImage(this.Session
-                ["CaptchaImageText"].ToString(), 300, 75);
-            // Change the response headers to output a JPEG image.
-            //this.Response.Clear();
-            //this.Response.ContentType = "image/jpeg";
-            // Write the image to the response stream in JPEG format.
-            MemoryStream ms = new MemoryStream();
-            ci.Image.Save(ms, ImageFormat.Jpeg);
-            // Dispose of the CAPTCHA image object.
-           // ci.Dispose();
+            string code = GenerateRandomCode();            
+            RandomImage ci = new RandomImage(code, 240, 60);
+            TempData[CaptchaImageText] = code;
+            using (MemoryStream ms = new MemoryStream())
+            {
+                ci.Image.Save(ms, ImageFormat.Jpeg);
+                ci.Dispose();
 
-            return File(ms.ToArray(), "image/jpeg");
+                return File(ms.ToArray(), "image/jpeg");
+            }
         }
 
 

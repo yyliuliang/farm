@@ -21,11 +21,14 @@
     <div class="loginbox">
         <div class="loginbox-inner">
             <div class="loginbox-inner-head">蓝朝通行证注册</div>
+            @using (Html.BeginForm())
+            {
+                @Html.AntiForgeryToken()
             <div class="loginbox-inner-form">
                 <div class="form-group">
                     <div class="form-group-addon no-right-border">手　　机</div>
                     <div class="form-group-input stretch">
-                        <input class="stretch" id="Phone" name="Phone" placeholder="请输入手机号" type="text" value="">
+                        <input class="stretch" id="Phone" name="phone" placeholder="请输入手机号" type="text" value="">
                     </div>
                 </div>
                 <span class="field-validation-valid"></span>
@@ -33,8 +36,7 @@
                 <div class="form-group">
                     <div class="form-group-addon no-right-border">密　　码</div>
                     <div class="form-group-input stretch">
-                        <input type="password" class="stretch" id="PasswordText" placeholder="请输入密码" }="">
-                        <input id="Password" name="Password" type="hidden" value="">
+                        <input type="password" class="stretch" id="PasswordText" name="password" placeholder="请输入密码" />
                     </div>
                 </div>
                 <span class="field-validation-valid"></span>
@@ -42,8 +44,7 @@
                 <div class="form-group">
                     <div class="form-group-addon no-right-border">确认密码</div>
                     <div class="form-group-input stretch">
-                        <input type="password" class="stretch" id="RePasswordText" placeholder="请再次输入密码" }="">
-                        <input id="RePassword" name="RePassword" type="hidden" value="">
+                        <input type="password" class="stretch" id="RePasswordText" name="passwordc" placeholder="请再次输入密码"/>
                     </div>
                 </div>
                 <span class="field-validation-valid"></span>
@@ -51,13 +52,13 @@
                 <div class="form-group">
                     <div class="form-group-addon no-right-border">图片验证</div>
                     <div class="form-group-input stretch">
-                        <input class="stretch" id="VCode" maxlength="4" name="VCode" type="text" value="">
+                        <input class="stretch" id="VCode" maxlength="4" name="vcode" type="text" value="">
                     </div>
                     <div class="form-group-addon no-left-border code">
-                        <img src="/common/VerificationImgForm" title="点击图片换一张"  onclick="this.src = '/common/VerificationImgForm?flag=' + Math.random()">
+                        <img src="/common/VerificationImgForm" title="点击图片换一张"  onclick="this.src = '/common/VerificationImgForm?flag=' + Math.random()" />
                     </div>
                 </div>
-                <span class="field-validation-valid"></span>
+                @*<span class="field-validation-valid"></span>*@
 
                 @*<div class="form-group">
                     <div class="form-group-addon no-right-border">短信验证</div>
@@ -76,13 +77,15 @@
                         <input class="stretch" id="RefCode" name="RefCode" placeholder="请输入推荐码" type="text" value="">
                     </div>
                 </div>*@
+                @Html.ValidationMessage("reg", new { @class = "field-validation-valid" })
                 <div class="form-group">
-                    <input type="button" class="button button-color-1 button-stretch" value="我已阅读并同意相关协议">
-                    <div class="validation-summary-valid">
+                    <input type="button" class="button button-color-1 button-stretch" id="btnReg" value="我已阅读并同意相关协议">
+                    @*<div class="validation-summary-valid">
                         <ul>
                             <li style="display:none"></li>
                         </ul>
-                    </div>
+                    </div>*@
+                   
                 </div>
 
                 <div class="form-group clear">
@@ -91,6 +94,14 @@
                     @Html.ActionLink("直接登录", "Login", "User")
                 </div>
             </div>
+            }
         </div>
     </div>
 </div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#btnReg').click(function () {
+            $('form').submit();
+        });
+    });
+</script>

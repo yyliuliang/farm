@@ -10,13 +10,9 @@ using System.Drawing.Text;
 
 namespace GoldenFarm.Util
 {
-    //Extra name space
-   
     public class RandomImage
     {
-        //Default Constructor 
         public RandomImage() { }
-        //property
         public string Text
         {
             get { return this.text; }
@@ -33,13 +29,13 @@ namespace GoldenFarm.Util
         {
             get { return this.height; }
         }
-        //Private variable
+
         private string text;
         private int width;
         private int height;
         private Bitmap image;
         private Random random = new Random();
-        //Methods declaration
+
         public RandomImage(string s, int width, int height)
         {
             this.text = s;
@@ -78,7 +74,7 @@ namespace GoldenFarm.Util
                 Color.LightGray, Color.White);
             g.FillRectangle(hatchBrush, rect);
             SizeF size;
-            float fontSize = rect.Height + 3;
+            float fontSize = rect.Height + 1;
             Font font;
 
             do
@@ -91,8 +87,7 @@ namespace GoldenFarm.Util
             format.Alignment = StringAlignment.Center;
             format.LineAlignment = StringAlignment.Center;
             GraphicsPath path = new GraphicsPath();
-            //path.AddString(this.text, font.FontFamily, (int) font.Style, 
-            //    font.Size, rect, format);
+
             path.AddString(this.text, font.FontFamily, (int)font.Style, 75, rect, format);
             float v = 4F;
             PointF[] points =

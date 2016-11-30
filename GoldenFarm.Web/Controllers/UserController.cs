@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Security;
 
 namespace GoldenFarm.Web.Controllers
 {
@@ -12,7 +13,7 @@ namespace GoldenFarm.Web.Controllers
         private UserRepository ur = new UserRepository();
         // GET: User
         public ActionResult Index()
-        {
+        {            
             return View();
         }
 
@@ -23,17 +24,83 @@ namespace GoldenFarm.Web.Controllers
         }
 
         public ActionResult Login()
-        {
-            string username = Request.Form["username"];
-            string password = Request.Form["password"];
-
-            bool logined = ur.Login(username, password);
+        {            
             return View();
+        }
+
+        public ActionResult Logout()
+        {
+            return RedirectToAction("Login");
+        }
+
+        [ValidateAntiForgeryToken]
+        [HttpPost]
+        public ActionResult Login(string phone, string password, string vcode)
+        {
+            if(string.IsNullOrEmpty(phone) || string.IsNullOrEmpty(password))
+            {
+                ModelState.AddModelError("login", "请填写手机和密码");
+                return View();
+            }
+            string code = (string)TempData[CommonController.CaptchaImageText];
+            if (string.Compare(vcode, code, StringComparison.InvariantCultureIgnoreCase) != 0)
+            {
+                ModelState.AddModelError("login", "验证码错误");
+                return View();
+            }
+            password = FormsAuthentication.HashPasswordForStoringInConfigFile(password, "MD5");
+            bool logined = ur.Login(phone, password);
+            if(!logined)
+            {
+                ModelState.AddModelError("login", "用户名或密码错误");
+                return View();
+            }
+            return RedirectToAction("Index");
         }
 
         public ActionResult Reg()
         {
             return View();
+        }
+
+        [ValidateAntiForgeryToken]
+        [HttpPost]
+        public ActionResult Reg(string phone, string password, string passwordc, string vcode)
+        {
+            if (string.IsNullOrEmpty(phone) || string.IsNullOrEmpty(password))
+            {
+                ModelState.AddModelError("reg", "请填写手机和密码");
+                return View();
+            }
+
+            if(password != passwordc)
+            {
+                ModelState.AddModelError("reg", "请确认密码");
+                return View();
+            }
+
+            string code = (string)TempData[CommonController.CaptchaImageText];
+            if (string.Compare(vcode, code, StringComparison.InvariantCultureIgnoreCase) != 0)
+            {
+                ModelState.AddModelError("reg", "验证码错误");
+                return View();
+            }
+
+            if(ur.UserExists(phone))
+            {
+                ModelState.AddModelError("reg", "此号码系统中已存在");
+                return View();
+            }
+
+            Entity.User user = new Entity.User();
+            user.UserGuid = Guid.NewGuid();
+            user.Phone = phone;
+            user.Password = FormsAuthentication.HashPasswordForStoringInConfigFile(password, "MD5");
+            user.LastLoginIP = Request.UserIP();
+            user.LastLoginTime = DateTime.Now;
+            user.CreateTime = DateTime.Now;
+            ur.Create(user);
+            return RedirectToAction("Index");
         }
 
         public ActionResult FindPassword()

@@ -7,7 +7,7 @@ using Dapper.Contrib.Extensions;
 
 namespace GoldenFarm.Entity
 {
-
+    [Table("Product")]
     [Serializable]
     public class Product : EntityBase
     {
