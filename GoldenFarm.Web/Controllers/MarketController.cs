@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using GoldenFarm.Entity;
 using GoldenFarm.Repository;
 using GoldenFarm.Web.Models;
+using GoldenFarm.Web.Filter;
 
 namespace GoldenFarm.Web.Controllers
 {
@@ -22,6 +23,7 @@ namespace GoldenFarm.Web.Controllers
 
         }
 
+        [CheckLogin]
         public ActionResult Detail(string id)
         {
             var model = new MarketDetailViewModel();

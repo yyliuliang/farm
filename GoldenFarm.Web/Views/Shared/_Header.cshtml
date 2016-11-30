@@ -11,8 +11,16 @@
         </ul>
 
         <div class="link clear">
-            @Html.ActionLink("登录", "Login", "User")
-            @Html.ActionLink("注册", "Reg", "User")            
+            @if (Html.IsLogined())
+            {
+                @Html.ActionLink("用户中心", "Index", "User")
+                @Html.ActionLink("退出", "Logout", "User")
+            }
+            else
+            {
+                @Html.ActionLink("登录", "Login", "User")
+                @Html.ActionLink("注册", "Reg", "User")
+            }
         </div>
 
         <div class="switch" id="switch"><i></i></div>

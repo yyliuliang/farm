@@ -205,6 +205,8 @@
     <Compile Include="Controllers\MarketController.cs" />
     <Compile Include="Controllers\NewsController.cs" />
     <Compile Include="Controllers\UserController.cs" />
+    <Compile Include="Extensions.cs" />
+    <Compile Include="Filter\CheckLogin.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -350,6 +352,7 @@
     <Content Include="Content\font\font_1477280014_116184.ttf" />
     <Content Include="Content\font\font_1477280014_116184.woff" />
     <Content Include="Areas\Admin\Views\web.config" />
+    <None Include="Properties\PublishProfiles\local.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />

@@ -56,6 +56,8 @@
                         <input type="button" value="立即登录" id="btnLogin" class="button button-color-1 button-stretch">
                     </div>
                     <div class="form-group clear">
+                        <input type="hidden" name="rememberme" id="rememberme" value="1" />
+                        <input type="hidden" name="returnUrl" value="@ViewBag.ReturnUrl"
                         <a class="ischeck" id="check">记住账号</a> 
                         @Html.ActionLink("忘记密码", "FindPassword", "User")
                         @Html.ActionLink("账号注册", "Reg", "User")
@@ -72,9 +74,11 @@
             if ($(this).hasClass("ischeck")) {
                 $(this).removeClass("ischeck");
                 $(this).addClass("check");
+                $('#rememberme').val('0');
             } else {
                 $(this).removeClass("check");
                 $(this).addClass("ischeck");
+                $('#rememberme').val('1');
             }
         });
 

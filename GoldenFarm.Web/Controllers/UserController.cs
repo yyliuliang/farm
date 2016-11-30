@@ -1,4 +1,5 @@
 ﻿using GoldenFarm.Repository;
+using GoldenFarm.Entity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,19 +24,21 @@ namespace GoldenFarm.Web.Controllers
             return Content(ur.UserExists(username) ? "1" : "0");
         }
 
-        public ActionResult Login()
-        {            
+        public ActionResult Login(string returnUrl)
+        {
+            ViewBag.ReturnUrl = returnUrl;
             return View();
         }
 
         public ActionResult Logout()
         {
+            _Logout();
             return RedirectToAction("Login");
         }
 
         [ValidateAntiForgeryToken]
         [HttpPost]
-        public ActionResult Login(string phone, string password, string vcode)
+        public ActionResult Login(string phone, string password, string vcode, bool rememberMe = false)
         {
             if(string.IsNullOrEmpty(phone) || string.IsNullOrEmpty(password))
             {
@@ -49,14 +52,33 @@ namespace GoldenFarm.Web.Controllers
                 return View();
             }
             password = FormsAuthentication.HashPasswordForStoringInConfigFile(password, "MD5");
-            bool logined = ur.Login(phone, password);
-            if(!logined)
+            var user = ur.Login(phone, password);
+            if(user == null)
             {
                 ModelState.AddModelError("login", "用户名或密码错误");
                 return View();
             }
+            rememberMe = Request.Form["rememberme"] == "1";
+            _Login(user, rememberMe);
+            string returnUrl = Request.Form["returnUrl"];
+            if (!string.IsNullOrEmpty(returnUrl))
+            {
+                return Redirect(returnUrl);
+            }
             return RedirectToAction("Index");
         }
+
+        //private void _Logout()
+        //{
+            
+        //}
+
+        //private void _Login(User user, bool rememberMe)
+        //{
+        //    DateTime date = rememberMe ? DateTime.Now.AddDays(30) : DateTime.Now.AddHours(24);
+        //    Response.Cookies["uid"].Value = user.UserGuid.ToString();
+        //    Response.Cookies["uid"].Expires = date;
+        //}
 
         public ActionResult Reg()
         {

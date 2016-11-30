@@ -9,7 +9,7 @@ using System.Web.Mvc;
 
 namespace GoldenFarm.Web.Controllers
 {
-    public class CommonController : Controller
+    public class CommonController : BaseController
     {
 
         public const string CaptchaImageText = "CaptchaImageText";
