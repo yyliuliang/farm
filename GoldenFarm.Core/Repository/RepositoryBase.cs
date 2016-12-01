@@ -73,6 +73,8 @@ namespace GoldenFarm.Repository
             sql = "SELECT COUNT(1) FROM {0} WHERE {1}";
             sql = string.Format(sql, table, criteria.Where);
             data.TotalCount = Conn.QueryFirstOrDefault<int>(sql);
+            data.PageIndex = criteria.PageIndex;
+            data.PageSize = criteria.PageSize;
             return data;
         }
 

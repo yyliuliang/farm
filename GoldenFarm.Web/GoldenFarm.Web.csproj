@@ -211,6 +211,7 @@
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="Filter\CheckLogin.cs" />
+    <Compile Include="GFPagerOptions.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
