@@ -14,6 +14,26 @@ namespace GoldenFarm.Web.Controllers
         Cache cache = HttpRuntime.Cache;
         private UserRepository ur = new UserRepository();
 
+        public int CurrentPageIndex
+        {
+            get
+            {
+                int page = 1;
+                if(!string.IsNullOrEmpty(Request["page"]))
+                {
+                    int.TryParse(Request["page"], out page);                    
+                }
+                return page;
+            }
+        }
+
+        public int PageSize
+        {
+            get
+            {
+                return 20;
+            }
+        }
 
         [NonAction]
         protected void _Logout()

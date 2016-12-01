@@ -1,6 +1,7 @@
 ﻿@{
     ViewBag.Title = "新闻资讯";
 }
+@model News
 <div class="subbanner subbanner-news" style="position: relative; z-index: 0; background: none;">
     <div class="subbanner-inner">
         <div class="container">
@@ -9,4 +10,25 @@
         </div>
     </div>
     <div class="backstretch" style="left: 0px; top: 0px; overflow: hidden; margin: 0px; padding: 0px; height: 192px; width: 1903px; z-index: -999998; position: absolute;"><img src="/content/images/banner-news01.png" style="position: absolute; margin: 0px; padding: 0px; border: none; width: 1903px; height: 356.813px; max-height: none; max-width: none; z-index: -999999; left: 0px; top: -82.4063px;"></div>
+</div>
+
+<div class="container clear">
+    <div class="side">
+        @{
+            Html.RenderAction("SideMenu", "News");
+        }
+    </div>
+    <div class="main">
+        <div class="newsitem">
+            <div class="newsitem-head">@Model.Title</div>
+            <div class="newsitem-info">
+                <span>来源：@Model.Source</span><span>日期：@Model.CreateTime.ToString("yyyy-MM-dd")</span><span>阅读：@Model.ReadCount</span>
+            </div>
+            <div class="newsitem-text" style="min-height:400px;">
+                @Html.Raw(Model.Content)
+            </div>
+        </div>
+
+    </div>
+
 </div>

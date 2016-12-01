@@ -13,6 +13,13 @@ namespace GoldenFarm.Entity
     {
         public string Title  { get; set; }
 
+        public int CategoryId { get; set; }
+
+        public string PreviewContent { get; set; }
+
+        [Write(false)]
+        public virtual NewsCategory Category { get; set; }
+
         public string Source { get; set; }
 
         public string Author { get; set; }
@@ -21,6 +28,10 @@ namespace GoldenFarm.Entity
 
         public string Content { get; set; }
 
-        public DateTime Create { get; set; }
+        public int Creator { get; set; }
+
+        public bool Deleted { get; set; }
+
+        public DateTime CreateTime { get; set; }
     }
 }

@@ -56,6 +56,7 @@
     <Compile Include="Entity\MarketEntrust.cs" />
     <Compile Include="Entity\MarketTransaction.cs" />
     <Compile Include="Entity\News.cs" />
+    <Compile Include="Entity\NewsCategory.cs" />
     <Compile Include="Entity\Product.cs" />
     <Compile Include="Entity\Market.cs" />
     <Compile Include="Entity\KeyValueConfig.cs" />
@@ -63,8 +64,10 @@
     <Compile Include="Entity\User.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="PageCriteria.cs" />
+    <Compile Include="PageViewData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repository\MarketRepository.cs" />
+    <Compile Include="Repository\NewsRepository.cs" />
     <Compile Include="Repository\ProductRepository.cs" />
     <Compile Include="Repository\RepositoryBase.cs" />
     <Compile Include="Repository\UserRepository.cs" />

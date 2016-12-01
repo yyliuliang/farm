@@ -1,0 +1,40 @@
+﻿@{
+    ViewBag.Title = "新闻资讯";
+}
+@model PageViewData<News>
+<div class="subbanner subbanner-news" style="position: relative; z-index: 0; background: none;">
+    <div class="subbanner-inner">
+        <div class="container">
+            <h1>新闻资讯</h1>
+            <h2>News &amp; Bulletin</h2>
+        </div>
+    </div>
+    <div class="backstretch" style="left: 0px; top: 0px; overflow: hidden; margin: 0px; padding: 0px; height: 192px; width: 1903px; z-index: -999998; position: absolute;"><img src="/content/images/banner-news01.png" style="position: absolute; margin: 0px; padding: 0px; border: none; width: 1903px; height: 356.813px; max-height: none; max-width: none; z-index: -999999; left: 0px; top: -82.4063px;"></div>
+</div>
+
+<div class="container clear">
+    <div class="side">
+        @{
+            Html.RenderAction("SideMenu", "News");
+        }
+    </div>
+    <div class="main">
+        <ul class="newslist">
+            @foreach (var n in Model.Items)
+            {
+                <li>
+                <div class="newslist-item-head">
+                    @Html.ActionLink(n.Title, "Detail", "News", new { id = n.Id }, null)
+                </div>
+                <div class="newslist-item-info">
+                    <span>来源：@n.Source</span><span>日期：@n.CreateTime.ToString("yyyy-MM-dd")</span><span>阅读：@n.ReadCount</span>
+                </div>
+                <div class="newslist-item-text">@n.PreviewContent</div>
+            </li>
+            }
+        </ul>
+       
+        <div class="pager"></div>
+    </div>
+
+</div>

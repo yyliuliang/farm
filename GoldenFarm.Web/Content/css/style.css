@@ -195,13 +195,13 @@ a:focus { outline: none; }
 
 .main .newslist { overflow:hidden; }
 .main .newslist li { margin-bottom:20px; }
-.main .newslist li .newslist-item-head { height:50px; padding:10px 0; line-height:30px; font-size:18px; font-weight:bold; border-bottom:1px solid #EEE; }
+.main .newslist li .newslist-item-head { min-height:50px; padding:10px 0; line-height:30px; font-size:18px; font-weight:bold; border-bottom:1px solid #EEE; }
 .main .newslist li .newslist-item-info { padding:10px 0; color:#999; }
 .main .newslist li .newslist-item-info span { padding-right:20px; }
 .main .newslist li .newslist-item-text { line-height:30px; }
 
 .main .newsitem { overflow:hidden; }
-.main .newsitem .newsitem-head { height:50px; padding:10px 0; line-height:30px; font-size:18px; font-weight:bold; border-bottom:1px solid #EEE; }
+.main .newsitem .newsitem-head { min-height:50px; padding:10px 0; line-height:30px; font-size:18px; font-weight:bold; border-bottom:1px solid #EEE; }
 .main .newsitem .newsitem-info { padding:10px 0; color:#999; }
 .main .newsitem .newsitem-info span { padding-right:20px; }
 .main .newsitem .newsitem-text { line-height:30px; font-size:14px; }

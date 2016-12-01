@@ -1,0 +1,8 @@
+﻿@model IEnumerable<NewsCategory>
+<dl class="sidemenu">
+    <dt><i class="icon"></i>游戏公告</dt>
+    @foreach (var n in Model)
+    {
+        <dd @(ViewBag.Cid != null && n.Id == (int)ViewBag.Cid ? "class=select" : string.Empty) >@Html.ActionLink(n.Title, "List", new { category = n.Name })</dd>
+    }
+</dl>
