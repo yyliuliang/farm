@@ -13,11 +13,7 @@
 </div>
 
 <div class="container clear">
-    <div class="side">
-        @{
-            Html.RenderAction("SideMenu", "News");
-        }
-    </div>
+    <div class="side">@Html.Action("SideMenu", "News")</div> 
     <div class="main">
         <ul class="newslist">
             @foreach (var n in Model.Items)

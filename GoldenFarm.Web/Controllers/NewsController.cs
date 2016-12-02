@@ -40,14 +40,20 @@ namespace GoldenFarm.Web.Controllers
             //{
             //    ViewBag.Cid = news.First().CategoryId;
             //}
-
-           
+            var cat = nr.GetNewsCategory(category);
+            int catId = 0;
+            if(cat != null)
+            {
+                catId = cat.Id;
+            }
+            ViewBag.Cid = catId;
             var criteria = new PageCriteria
             {
                 PageSize = PageSize,
                 PageIndex = CurrentPageIndex,
-                Where = "Deleted = 0",
-                Order = "ID DESC"
+                Where = catId > 0 ? "Deleted = 0 AND CategoryId = @catId" : "Deleted = 0",
+                Order = "ID DESC",
+                Parameter = catId > 0 ? new { catId = catId } : null
             };
             var model = nr.GetPagedData(criteria);           
             return View(model);

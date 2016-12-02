@@ -69,10 +69,10 @@ namespace GoldenFarm.Repository
             string table = typeof(TEntity).GetTableName();
             string sql = @"SELECT * FROM {0} WHERE {1} ORDER BY {2} OFFSET ({3} * ({4}-1)) ROW FETCH NEXT {3} ROWS ONLY";
             sql = string.Format(sql, table, criteria.Where, criteria.Order, criteria.PageSize, criteria.PageIndex);
-            data.Items = Conn.Query<TEntity>(sql);
+            data.Items = Conn.Query<TEntity>(sql, criteria.Parameter);
             sql = "SELECT COUNT(1) FROM {0} WHERE {1}";
             sql = string.Format(sql, table, criteria.Where);
-            data.TotalCount = Conn.QueryFirstOrDefault<int>(sql);
+            data.TotalCount = Conn.QueryFirstOrDefault<int>(sql, criteria.Parameter);
             data.PageIndex = criteria.PageIndex;
             data.PageSize = criteria.PageSize;
             return data;

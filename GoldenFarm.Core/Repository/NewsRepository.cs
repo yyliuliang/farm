@@ -36,6 +36,13 @@ namespace GoldenFarm.Repository
             }
         }
 
+
+        public NewsCategory GetNewsCategory(string category)
+        {
+            string sql = "SELECT * FROM NewsCategory WHERE Name = @name";
+            return Conn.QueryFirstOrDefault<NewsCategory>(sql, new { name = category });
+        }
+
         public IEnumerable<News> GetAllNews()
         {
             string sql = "SELECT * FROM News WHERE Deleted = 0";

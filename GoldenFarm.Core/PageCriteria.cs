@@ -14,6 +14,8 @@ namespace GoldenFarm
 
         public string Where { get; set; }
 
+        public object Parameter { get; set; }
+
         public string Order { get; set; }
     }
 }
