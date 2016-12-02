@@ -16,7 +16,7 @@ namespace GoldenFarm.Web
             routes.MapRoute(
                 name: "NewsList",
                 url: "News/{category}",
-                defaults: new { controller = "News", action = "List", category = UrlParameter.Optional }
+                defaults: new { controller = "News", action = "Index", category = UrlParameter.Optional }
             );
 
             routes.MapRoute(

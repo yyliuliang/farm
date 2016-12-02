@@ -3,6 +3,6 @@
     <dt><i class="icon"></i>游戏公告 @ViewBag.Cid</dt>
     @foreach (var n in Model)
     {
-        <dd @(ViewBag.Cid != null && n.Id == (int)ViewBag.Cid ? "class=select" : string.Empty) >@Html.ActionLink(n.Title, "List", new { category = n.Name })</dd>
+        <dd @(ViewBag.Cid != null && n.Id == (int)ViewBag.Cid ? "class=select" : string.Empty) >@Html.ActionLink(n.Title, "Index", new { category = n.Name })</dd>
     }
 </dl>

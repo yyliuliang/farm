@@ -1,0 +1,102 @@
+﻿@{
+    ViewBag.Title = "游戏介绍";
+}
+<div class="subbanner subbanner-news" style="position: relative; z-index: 0; background: none;">
+    <div class="subbanner-inner">
+        <div class="container">
+            <h1>游戏攻略</h1>
+            <h2>Game &amp; Strategy</h2>
+        </div>
+    </div>
+    <div class="backstretch" style="left: 0px; top: 0px; overflow: hidden; margin: 0px; padding: 0px; height: 192px; width: 1903px; z-index: -999998; position: absolute;"><img src="/content/images/banner-news01.png" style="position: absolute; margin: 0px; padding: 0px; border: none; width: 1903px; height: 356.813px; max-height: none; max-width: none; z-index: -999999; left: 0px; top: -82.4063px;"></div>
+</div>
+
+
+<div class="container clear">
+    <div class="side">
+        @Html.Partial("_StrategySideMenu")
+    </div>
+    <div class="main">
+        <div class="main-head">公司介绍</div>
+        @Html.Partial("_FarmSubMenu")
+        <div class="main-farm">
+            <div class="tablebox">
+                <table>
+                    <tbody>
+                        <tr>
+                            <th></th>
+                            <th>名称</th>
+                            <th>出产土地</th>
+                            <th>介绍</th>
+                        </tr>
+                        <tr>
+                            <td><img src="/Content/images/800002.png" width="30"></td>
+                            <td>萝卜</td>
+                            <td>黄土地、红土地、黑土地、金土地</td>
+                            <td>萝卜可用于普通土地升级红土地，也可兑换木头，升级房屋。</td>
+                        </tr>
+                        <tr>
+                            <td><img src="/Content/images/800003.png" width="30"></td>
+                            <td>苹果</td>
+                            <td>黄土地、红土地、黑土地、金土地</td>
+                            <td>苹果可用于普通土地升级红土地，也可兑换木头，升级房屋。</td>
+                        </tr>
+                        <tr>
+                            <td><img src="/Content/images/800004.png" width="30"></td>
+                            <td>辣椒</td>
+                            <td>红土地、黑土地、金土地</td>
+                            <td>辣椒可用于红土地升级黑土地，也可兑换石头，升级房屋。</td>
+                        </tr>
+                        <tr>
+                            <td><img src="/Content/images/800005.png" width="30"></td>
+                            <td>西瓜</td>
+                            <td>红土地、黑土地、金土地</td>
+                            <td>西瓜可用于红土地升级黑土地，也可兑换石头，升级房屋。</td>
+                        </tr>
+                        <tr>
+                            <td><img src="/Content/images/800006.png" width="30"></td>
+                            <td>南瓜</td>
+                            <td>黑土地、金土地</td>
+                            <td>南瓜可用于黑土地升级金土地，也可兑换钢材，升级房屋。</td>
+                        </tr>
+                        <tr>
+                            <td><img src="/Content/images/800007.png" width="30"></td>
+                            <td>草莓</td>
+                            <td>黑土地、金土地</td>
+                            <td>草莓可用于黑土地升级金土地，也可兑换钢材，升级房屋。</td>
+                        </tr>
+                        <tr>
+                            <td><img src="/Content/images/800008.png" width="30"></td>
+                            <td>玫瑰</td>
+                            <td>金土地</td>
+                            <td>火红的玫瑰，爱情的象征，充满了神秘的力量。</td>
+                        </tr>
+                        <tr>
+                            <td><img src="/Content/images/800009.png" width="30"></td>
+                            <td>核桃</td>
+                            <td>金土地</td>
+                            <td>神秘的专属作物，7级及以上才可产出</td>
+                        </tr>
+                        <tr>
+                            <td><img src="/Content/images/800010.png" width="30"></td>
+                            <td>可可</td>
+                            <td>金土地</td>
+                            <td>神秘的专属作物，8级及以上才可产出</td>
+                        </tr>
+                        <tr>
+                            <td><img src="/Content/images/800011.png" width="30"></td>
+                            <td>人参</td>
+                            <td>金土地</td>
+                            <td>神秘的专属作物，9级及以上才可产出</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <br><br>
+                <p class="color-3">
+                    <b>果实重生</b>
+                </p>
+                多余、无用的果实，可以在淘金农场通过“果实重生”功能变会“种子”状态，重新在淘金农场内种植。
+            </div>
+        </div>
+    </div>
+</div>

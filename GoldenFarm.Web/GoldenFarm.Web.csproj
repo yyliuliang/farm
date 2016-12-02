@@ -203,6 +203,7 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\CommonController.cs" />
+    <Compile Include="Controllers\StaticController.cs" />
     <Compile Include="Controllers\StrategyController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
@@ -383,8 +384,8 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\Home\About.cshtml" />
-    <Content Include="Views\Home\Contact.cshtml" />
+    <Content Include="Views\Static\About.cshtml" />
+    <Content Include="Views\Static\Contact.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Account\_ExternalLoginsListPartial.cshtml" />
     <Content Include="Views\Account\ConfirmEmail.cshtml" />
@@ -411,15 +412,15 @@
     <Content Include="Views\Shared\_Banner.cshtml" />
     <Content Include="Views\Market\Index.cshtml" />
     <Content Include="Views\Shared\_AboutSideMenu.cshtml" />
-    <Content Include="Views\Home\Join.cshtml" />
-    <Content Include="Views\Home\Agreement.cshtml" />
-    <Content Include="Views\Home\Law.cshtml" />
-    <Content Include="Views\Home\Borrow.cshtml" />
-    <Content Include="Views\Home\Charge.cshtml" />
+    <Content Include="Views\Static\Join.cshtml" />
+    <Content Include="Views\Static\Agreement.cshtml" />
+    <Content Include="Views\Static\Law.cshtml" />
+    <Content Include="Views\Static\Borrow.cshtml" />
+    <Content Include="Views\Static\Charge.cshtml" />
     <Content Include="Views\Shared\_HelpSideMenu.cshtml" />
-    <Content Include="Views\Home\Faq.cshtml" />
-    <Content Include="Views\Home\Guide.cshtml" />
-    <Content Include="Views\Home\Service.cshtml" />
+    <Content Include="Views\Static\Faq.cshtml" />
+    <Content Include="Views\Static\Guide.cshtml" />
+    <Content Include="Views\Static\Service.cshtml" />
     <Content Include="Views\Strategy\Index.cshtml" />
     <Content Include="Views\News\Index.cshtml" />
     <Content Include="Views\Market\Detail.cshtml" />
@@ -443,6 +444,16 @@
     <Content Include="Views\News\List.cshtml" />
     <Content Include="Views\News\Detail.cshtml" />
     <Content Include="Views\News\_NewsSideMenu.cshtml" />
+    <Content Include="Views\Shared\_StrategySideMenu.cshtml" />
+    <Content Include="Views\Shared\_FarmSubMenu.cshtml" />
+    <Content Include="Views\Static\Farm.cshtml" />
+    <Content Include="Views\Static\FaqForFarm.cshtml" />
+    <Content Include="Views\Static\Land.cshtml" />
+    <Content Include="Views\Static\Fruit.cshtml" />
+    <Content Include="Views\Static\Prop.cshtml" />
+    <Content Include="Views\Static\Joss.cshtml" />
+    <Content Include="Views\Static\GuideForFarm.cshtml" />
+    <Content Include="Views\Static\Video.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Areas\Admin\Controllers\" />

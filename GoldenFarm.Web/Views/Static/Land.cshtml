@@ -1,0 +1,198 @@
+﻿@{
+    ViewBag.Title = "游戏介绍";
+}
+<div class="subbanner subbanner-news" style="position: relative; z-index: 0; background: none;">
+    <div class="subbanner-inner">
+        <div class="container">
+            <h1>游戏攻略</h1>
+            <h2>Game &amp; Strategy</h2>
+        </div>
+    </div>
+    <div class="backstretch" style="left: 0px; top: 0px; overflow: hidden; margin: 0px; padding: 0px; height: 192px; width: 1903px; z-index: -999998; position: absolute;"><img src="/content/images/banner-news01.png" style="position: absolute; margin: 0px; padding: 0px; border: none; width: 1903px; height: 356.813px; max-height: none; max-width: none; z-index: -999999; left: 0px; top: -82.4063px;"></div>
+</div>
+
+
+<div class="container clear">
+    <div class="side">
+        @Html.Partial("_StrategySideMenu")
+    </div>
+    <div class="main">
+        <div class="main-head">公司介绍</div>
+        @Html.Partial("_FarmSubMenu")
+        <div class="main-farm">
+
+            <p>
+                淘金农场内，每位玩家共有12块土地，玩家每次<b>升级房屋等级</b>后，系统会赠送一块新的土地。
+            </p>
+
+            <dl class="main-farm-land clear">
+                <dd class="clear">
+                    <div class="img">
+                        <img src="/Content/images/11.png">
+                    </div>
+                    <div class="txt">
+                        <span>名称：<b>黄土地</b></span>
+                        <span>介绍：普通的土地，只能种出最普通的作物。</span>
+                        <span>产出：苹果、萝卜。</span>
+                    </div>
+                </dd>
+
+                <dd class="clear">
+                    <div class="img">
+                        <img src="/Content/images/22.png">
+                    </div>
+                    <div class="txt">
+                        <span>名称：<b>红土地</b></span>
+                        <span>介绍：改良过的土地，可以种植4种不同的作物。</span>
+                        <span>产出：苹果、萝卜、辣椒、西瓜</span>
+                    </div>
+                </dd>
+
+                <dd class="clear">
+                    <div class="img">
+                        <img src="/Content/images/33.png">
+                    </div>
+                    <div class="txt">
+                        <span>名称：<b>黑土地</b></span>
+                        <span>介绍：少见的肥沃土地，可以产出多种不同的作物。</span>
+                        <span>产出：苹果、萝卜、辣椒、西瓜、南瓜、草莓</span>
+                    </div>
+                </dd>
+
+                <dd class="clear">
+                    <div class="img">
+                        <img src="/Content/images/44.png">
+                    </div>
+                    <div class="txt">
+                        <span>名称：<b>金土地</b></span>
+                        <span>介绍：神秘的金土地，可以种出具有神奇功能的玫瑰。</span>
+                        <span>产出：所有作物(专属果实需达到指定级数)</span>
+                    </div>
+                </dd>
+            </dl>
+
+            <p class="color-3">
+                <b>升级土地需要的果实说明</b>
+            </p>
+
+            <div class="tablebox">
+                <table>
+                    <tbody>
+                        <tr>
+                            <th></th>
+                            <th>土地名称</th>
+                            <th>苹果</th>
+                            <th>萝卜</th>
+                            <th>辣椒</th>
+                            <th>西瓜</th>
+                            <th>南瓜</th>
+                            <th>草莓</th>
+                            <th>钻石</th>
+                        </tr>
+                        <tr>
+                            <td><img src="/Content/images/11.png" width="30"></td>
+                            <td>黄土地</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                        </tr>
+                        <tr>
+                            <td><img src="/Content/images/22.png" width="30"></td>
+                            <td>红土地</td>
+                            <td>150</td>
+                            <td>150</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>100</td>
+                        </tr>
+                        <tr>
+                            <td><img src="/Content/images/33.png" width="30"></td>
+                            <td>黑土地</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>225</td>
+                            <td>225</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>300</td>
+                        </tr>
+                        <tr>
+                            <td><img src="/Content/images/44.png" width="30"></td>
+                            <td>金土地</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>300</td>
+                            <td>300</td>
+                            <td>500</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <p class="color-3">
+                <b>兑换材料需要的果实说明</b>
+            </p>
+
+            <div class="tablebox">
+                <table>
+                    <tbody>
+                        <tr>
+                            <th></th>
+                            <th>材料名称</th>
+                            <th>苹果</th>
+                            <th>萝卜</th>
+                            <th>辣椒</th>
+                            <th>西瓜</th>
+                            <th>南瓜</th>
+                            <th>草莓</th>
+                        </tr>
+                        <tr>
+                            <td><img src="/Content/images/111.png" width="30"></td>
+                            <td>木材</td>
+                            <td>75</td>
+                            <td>75</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                        </tr>
+                        <tr>
+                            <td><img src="/Content/images/222.png" width="30"></td>
+                            <td>石头</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>150</td>
+                            <td>150</td>
+                            <td>0</td>
+                            <td>0</td>
+                        </tr>
+                        <tr>
+                            <td><img src="/Content/images/333.png" width="30"></td>
+                            <td>钢材</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>225</td>
+                            <td>225</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+
+
+
+
+
+        </div>
+    </div>
+</div>

@@ -1,8 +1,12 @@
-﻿
+﻿@{ 
+    string[] ucactions = new string[] { "index", "safe", "wallet", "deposit", "withdraw", "financedetail" };
+    string[] tradeactions = new string[] { "tradecenter", "entrust", "tradehistory", "rebirth", "rebirthhistory", "borrow", "borrowhistory", "give", "givehistory" };
+    string action = ViewContext.RouteData.Values["action"].ToString().ToLower();
+}
 <ul id="side-menu-toggle" class="side-menu-toggle">
-    <li>
+    <li @(ucactions.Contains(action) ? "class=open" : string.Empty)>
         <div class="link">用户中心</div>
-        <ul class="side-menu-toggle-sub">
+        <ul class="side-menu-toggle-sub @(ucactions.Contains(action) ? "side-menu-toggle-sub-show" : string.Empty)">
             <li>@Html.ActionLink("账户概要", "Index", "User")</li>
             <li>@Html.ActionLink("安全设置", "Safe", "User")</li>
             <li>@Html.ActionLink("果园钱包", "Wallet", "User")</li>
@@ -12,9 +16,9 @@
         </ul>
     </li>
 
-    <li class="open">
+    <li @(tradeactions.Contains(action) ? "class=open" : string.Empty)>
         <div class="link">农贸市场</div>
-        <ul class="side-menu-toggle-sub side-menu-toggle-sub-show">
+        <ul class="side-menu-toggle-sub  @(tradeactions.Contains(action) ? "side-menu-toggle-sub-show" : string.Empty)">
             <li>@Html.ActionLink("实时行情", "TradeCenter", "Market")</li>
             <li>@Html.ActionLink("委托管理", "Entrust", "User")</li>
             <li>@Html.ActionLink("交易记录", "TradeHistory", "User")</li>
@@ -27,9 +31,9 @@
         </ul>
     </li>
 
-    <li>
+    <li  @(!tradeactions.Contains(action) &&  !ucactions.Contains(action) ? "class=open" : string.Empty)>
         <div class="link">推广中心</div>
-        <ul class="side-menu-toggle-sub ">
+        <ul class="side-menu-toggle-sub @(!tradeactions.Contains(action) && !ucactions.Contains(action) ? "side-menu-toggle-sub-show" : string.Empty)">
             <li>@Html.ActionLink("推广链接", "PopLink", "User")</li>
             <li>@Html.ActionLink("推广列表", "PopDetail", "User")</li>
             <li>@Html.ActionLink("推广收益", "PopReward", "User")</li>

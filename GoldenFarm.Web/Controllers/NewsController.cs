@@ -12,9 +12,25 @@ namespace GoldenFarm.Web.Controllers
     {
         private NewsRepository nr = new NewsRepository();
         // GET: News
-        public ActionResult Index()
+        public ActionResult Index(string category)
         {
-            return View();
+            var cat = nr.GetNewsCategory(category);
+            int catId = 0;
+            if (cat != null)
+            {
+                catId = cat.Id;
+            }
+            ViewBag.Cid = catId;
+            var criteria = new PageCriteria
+            {
+                PageSize = PageSize,
+                PageIndex = CurrentPageIndex,
+                Where = catId > 0 ? "Deleted = 0 AND CategoryId = @catId" : "Deleted = 0",
+                Order = "ID DESC",
+                Parameter = catId > 0 ? new { catId = catId } : null
+            };
+            var model = nr.GetPagedData(criteria);
+            return View(model);
         }
 
         public ActionResult Detail(int id)
