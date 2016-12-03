@@ -3,6 +3,108 @@
     ViewBag.Title = "用户中心";
     Layout = "~/Views/Shared/_UserCenterLayout.cshtml";
 }
+@model UserIndexViewModel
+    <div class="uc-head uc-head-border">个人首页</div>
+    <div class="uc-home clear">
 
-<h2>Index</h2>
+        <div class="face">
+            <div class="img"><img id="face" src="http://www.taojingy.com/img/Default/user.Png"></div>
+            <div class="cov"><span>修改</span><input type="file" id="Image" name="Image" title="请自行准备宽高1:1的图片,系统会自动切割图片."></div>
+        </div>
+        <div class="text">
+            <h1>您好 <span class="color-1">@Model.User.DisplayName</span> <cite id="Hello">，吃饭去吧！</cite></h1>
+            <h2>账号：@(Model.User.Phone.Substring(0, 3) + "****" + Model.User.Phone.Substring(7, 4)) （ID: @Model.User.Id）</h2>
+            <h3>登录：@Model.User.LastLoginTime</h3>
+        </div>
+        <div class="cert clear">
+            <cite>
+                <a href="/User/Certificated"><i class="icon color"></i></a>
+                <span>实名认证</span>
+            </cite>
+            <cite>
+                <a href="/User/BindBankCard"><i class="icon"></i></a>
+                <span>提现账户</span>
+            </cite>
+            <cite>
+                <a href="/User/Institution"><i class="icon"></i></a>
+                <span>普通会员</span>
+            </cite>
+        </div>
+    </div>
+
+
+    <dl class="uc-money clear">
+        <dd>
+            <cite>@Model.User.TotalScore</cite>
+            <span>账户总额</span>
+        </dd>
+        <dd>
+            <cite>@Model.User.FrozenScore</cite>
+            <span>冻结金币</span>
+        </dd>
+        <dd>
+            <cite>@(Model.User.TotalScore - Model.User.FrozenScore)</cite>
+            <span>可用金币</span>
+        </dd>
+        <dt class="clear">
+            <a href="/User/Deposit" class="button">金币充值</a>
+            <a href="/User/Withdraw" class="button">金币提现</a>
+        </dt>
+    </dl>
+
+    @*<dl class="uc-money clear">
+        <dd>
+            <cite>0.0000</cite>
+            <span>农场资产总额</span>
+        </dd>
+        <dd>
+            <cite>0.0000</cite>
+            <span>土地预估价值</span>
+        </dd>
+        <dd>
+            <cite>0.0000</cite>
+            <span>钻石价值</span>
+        </dd>
+        <dt class="clear">
+            <a href="http://www.taojinnc.com" target="_blank" class="button gotofarm">进入农场</a>
+        </dt>
+    </dl>*@
+
+    <div class="uc-head">持有产品</div>
+
+    <div class="tablebox">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>名称</th>
+                    <th>持有量</th>
+                    <th>冻结量</th>
+                    <th>市值</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.UserProducts == null || !Model.UserProducts.Any())
+                {
+                <tr>
+                    <td class="algin" colspan="5">没有持有任何产品</td>
+                </tr>
+                }
+                else
+                {
+                    foreach (var p in Model.UserProducts)
+                    {
+                        <tr>
+                            <td></td>
+                            <td>@p.Product.ProductName</td>
+                            <td>@p.TotalCount</td>
+                            <td>@p.FrozenCount</td>
+                            <td>@p.TotalCount</td>
+                        </tr>
+                    }
+
+                }
+            </tbody>
+        </table>
+    </div>
 

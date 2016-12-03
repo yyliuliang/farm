@@ -62,6 +62,7 @@
     <Compile Include="Entity\KeyValueConfig.cs" />
     <Compile Include="Entity\Role.cs" />
     <Compile Include="Entity\User.cs" />
+    <Compile Include="Entity\UserProduct.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="PageCriteria.cs" />
     <Compile Include="PageViewData.cs" />

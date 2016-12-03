@@ -31,5 +31,17 @@ namespace GoldenFarm.Repository
             return Conn.QueryFirstOrDefault<User>(sql, new { name = username, password = password });
         }
 
+
+
+        #region product
+
+        public IEnumerable<UserProduct> GetProductsByUser(int id)
+        {
+            string sql = "SELECT * FROM [User] u INNER JOIN UserProduct p on u.Id = p.UserId WHERE u.Id = @id";
+            return Conn.Query<UserProduct, Product, UserProduct>(sql, (u, p) => { u.Product = p; return u; }, new { id = id });
+        }
+
+        #endregion
+
     }
 }

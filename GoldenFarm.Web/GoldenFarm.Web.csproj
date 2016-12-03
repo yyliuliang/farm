@@ -220,6 +220,7 @@
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\MarketViewModel.cs" />
+    <Compile Include="Models\UserViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
@@ -454,6 +455,8 @@
     <Content Include="Views\Static\Joss.cshtml" />
     <Content Include="Views\Static\GuideForFarm.cshtml" />
     <Content Include="Views\Static\Video.cshtml" />
+    <Content Include="Views\User\BindBankCard.cshtml" />
+    <Content Include="Views\User\Certificated.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Areas\Admin\Controllers\" />

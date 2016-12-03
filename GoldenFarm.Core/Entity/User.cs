@@ -29,6 +29,10 @@ namespace GoldenFarm.Entity
 
         public DateTime CreateTime { get; set; }
 
+        public decimal TotalScore { get; set; }
+
+        public decimal FrozenScore { get; set; }
+
         public bool Deleted { get; set; }
     }
 }

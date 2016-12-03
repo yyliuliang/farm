@@ -3,9 +3,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <meta charset="utf-8" />
-    @*<meta name="viewport" content="width=device-width, initial-scale=1.0">*@
-    <meta name="viewport" content="width=device-width,inital-scale=1.0,minimum-scale=0.5,maximum-scale=2.0,user-scalable=no">
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title - 淘金果园</title>
     @Styles.Render("~/Content/sitecss")
     @Scripts.Render("~/bundles/sitejs")
@@ -15,7 +13,6 @@
 
 </head>
 <body>
-
     @Html.Partial("_Header")
     <div class="subbanner-small subbanner-user" style="position: relative; z-index: 0; background: none;">
         <div class="subbanner-inner">
@@ -35,8 +32,6 @@
     </div>
         
         @Html.Partial("_Footer")
-
-        @*@Scripts.Render("~/bundles/bootstrap")*@
         @RenderSection("scripts", required: false)
 </body>
 </html>

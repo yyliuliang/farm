@@ -6,6 +6,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
+using GoldenFarm.Web.Models;
 
 namespace GoldenFarm.Web.Controllers
 {
@@ -14,8 +15,11 @@ namespace GoldenFarm.Web.Controllers
         private UserRepository ur = new UserRepository();
         // GET: User
         public ActionResult Index()
-        {            
-            return View();
+        {
+            var model = new UserIndexViewModel();
+            model.User = CurrentUser;
+            model.UserProducts = ur.GetProductsByUser(CurrentUser.Id);
+            return View(model);
         }
 
         public ActionResult UserExists()
@@ -117,6 +121,7 @@ namespace GoldenFarm.Web.Controllers
             Entity.User user = new Entity.User();
             user.UserGuid = Guid.NewGuid();
             user.Phone = phone;
+            user.UserName = user.Phone;
             user.Password = FormsAuthentication.HashPasswordForStoringInConfigFile(password, "MD5");
             user.LastLoginIP = Request.UserIP();
             user.LastLoginTime = DateTime.Now;
@@ -176,6 +181,17 @@ namespace GoldenFarm.Web.Controllers
         }
 
         public ActionResult GiveHistory()
+        {
+            return View();
+        }
+
+
+        public ActionResult Certificated()
+        {
+            return View();
+        }
+
+        public ActionResult BindBankCard()
         {
             return View();
         }
