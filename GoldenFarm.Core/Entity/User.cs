@@ -11,7 +11,7 @@ namespace GoldenFarm.Entity
     [Table("[User]")]
     public class User : EntityBase
     {
-        public int RefUserId { get; set; }
+       
 
         public Guid UserGuid { get; set; }
 
@@ -39,6 +39,10 @@ namespace GoldenFarm.Entity
         public string IdNum { get; set; }
 
         public bool SmsGiveSwitch { get; set; }
+
+        public int RefUserId { get; set; }
+
+        public string RefUserPath { get; set; }
 
         [Write(false)]
         public virtual UserBankAccount BankAccount { get; set; }

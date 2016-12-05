@@ -21,7 +21,7 @@ namespace GoldenFarm.Repository
         public bool UserExists(string username)
         {
             string sql = "SELECT TOP 1 * FROM [User] WHERE (UserName = @name OR Phone = @name) AND Deleted = 0";
-            return Conn.QueryFirstOrDefault<User>(sql, new { name = username }) != null;
+            return Conn.QuerySingleOrDefault<User>(sql, new { name = username }) != null;
         }
 
 
@@ -39,7 +39,7 @@ namespace GoldenFarm.Repository
         public UserBankAccount GetBankAccount(int userId)
         {
             string sql = "SELECT TOP 1 * FROM [UserBankAccount] WHERE UserId = @userId";
-            return Conn.QueryFirstOrDefault<UserBankAccount>(sql, new { userId = userId });
+            return Conn.QuerySingleOrDefault<UserBankAccount>(sql, new { userId = userId });
         }
 
         public void SaveBankAccount(UserBankAccount bankAccount)
@@ -66,6 +66,25 @@ namespace GoldenFarm.Repository
         }
 
         #endregion
+
+
+        public int GetDirectRefUsersCount(int userId)
+        {
+            string sql = "SELECT COUNT(1) FROM [User] WHERE Deleted = 0 AND RefUserId = @userId";
+            return Conn.QuerySingle<int>(sql, new { userId = userId });
+        }
+
+        public int GetIndirectRefUsersCount(int userId)
+        {
+            string sql = "SELECT COUNT(1) FROM [User] WHERE Deleted = 0 AND RefUserPath like @userId";
+            return Conn.QuerySingle<int>(sql, new { userId = userId + "%" });
+        }
+
+        public IEnumerable<User> GetRefUsers(int userId)
+        {
+            string sql = "SELECT * FROM [User] WHERE Deleted = 0 AND RefUserPath like @userId";
+            return Conn.Query<User>(sql, new { userId = userId + "%" });
+        }
 
     }
 }

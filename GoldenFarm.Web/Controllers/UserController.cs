@@ -107,7 +107,9 @@ namespace GoldenFarm.Web.Controllers
                 return View();
             }
 
-            Entity.User user = new Entity.User();
+            var user = new User();
+            User refUser = null;
+            string refPath = string.Empty;
             user.UserGuid = Guid.NewGuid();
             user.Phone = phone;
             user.UserName = user.Phone;
@@ -117,9 +119,23 @@ namespace GoldenFarm.Web.Controllers
             user.CreateTime = DateTime.Now;
             if(refuid > 0)
             {
-                user.RefUserId = refuid;
+                refUser = ur.Get(refuid);
+                if (refUser != null)
+                {
+                    user.RefUserId = refuid;
+                    refPath = refUser.RefUserPath;
+                }                
             }
-            ur.Create(user);
+            int uid = ur.Create(user);
+            if(refUser != null)
+            {
+                user.RefUserPath = refPath + ";" + uid;
+            }
+            else
+            {
+                user.RefUserPath = uid + ";";
+            }
+            ur.Update(user);
             return RedirectToAction("Index");
         }
 
@@ -315,12 +331,18 @@ namespace GoldenFarm.Web.Controllers
 
         public ActionResult PopLink()
         {
-            return View();
+            return View(CurrentUser);
         }
 
         public ActionResult PopDetail()
         {
-            return View();
+            int uid = CurrentUser.Id;
+            ViewBag.UserId = uid;
+            var model = new PopDetailViewModel();
+            model.DirectRefUsersCount = ur.GetDirectRefUsersCount(uid);
+            model.IndirectRefUsersCount = ur.GetIndirectRefUsersCount(uid);
+            model.RefUsers = ur.GetRefUsers(uid);
+            return View(model);
         }
 
         public ActionResult PopReward()
@@ -330,7 +352,7 @@ namespace GoldenFarm.Web.Controllers
 
         public ActionResult FillReferId()
         {
-            return View();
+            return View(CurrentUser);
         }
         #endregion
 

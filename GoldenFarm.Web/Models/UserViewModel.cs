@@ -13,4 +13,14 @@ namespace GoldenFarm.Web.Models
         public IEnumerable<UserProduct> UserProducts { get; set;
         }
     }
+
+
+    public class PopDetailViewModel
+    {
+        public int DirectRefUsersCount { get; set; }
+
+        public int IndirectRefUsersCount { get; set; }
+
+        public IEnumerable<User> RefUsers { get; set; }
+    }
 }

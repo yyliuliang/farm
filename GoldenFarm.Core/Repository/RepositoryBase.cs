@@ -80,9 +80,9 @@ namespace GoldenFarm.Repository
 
         
 
-        public void Create(TEntity entity)
+        public int Create(TEntity entity)
         {
-            Conn.Insert(entity);
+            return (int)Conn.Insert(entity);
         }
 
     }

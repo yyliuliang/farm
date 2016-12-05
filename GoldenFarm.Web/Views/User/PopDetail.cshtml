@@ -1,0 +1,55 @@
+﻿
+@{
+    ViewBag.Title = "用户中心";
+    Layout = "~/Views/Shared/_UserCenterLayout.cshtml";
+    var uid = (int)ViewBag.UserId;
+}
+@model PopDetailViewModel
+
+<div class="uc-head uc-head-border">推广统计</div>
+<dl class="uc-money clear" style="border-top:none; padding:0px;margin:0px;">
+    <dd style="text-align:left">
+        <cite style="line-height:60px;height:60px;">@Model.DirectRefUsersCount</cite>
+        <span>直接推广人数</span>
+    </dd>
+    <dd style="text-align:left">
+        <cite style="line-height:60px;height:60px;">@Model.IndirectRefUsersCount</cite>
+        <span>间接推广人数</span>
+    </dd>
+</dl>
+
+<div class="uc-head">推广列表</div>
+<div class="tablebox">
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>用户名</th>
+                <th>注册时间</th>
+                <th>关系</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.RefUsers == null || !Model.RefUsers.Any())
+            {
+                <tr>
+                    <td class="algin" colspan="4">没有找到相关记录</td>
+                </tr>
+            }
+            else
+            {
+                foreach (var u in Model.RefUsers)
+                {
+                    <tr>
+                        <td>@u.Id</td>
+                        <td>@u.DisplayName</td>
+                        <td>@u.CreateTime</td>
+                        <td>@(u.RefUserId == uid ? "直接" : "间接")</td>
+                    </tr>
+                }
+            }
+        </tbody>
+
+    </table>
+</div>
+

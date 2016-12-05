@@ -466,6 +466,9 @@
     <Content Include="Views\User\VerifyMobile.cshtml" />
     <Content Include="Views\User\GiveSwitch.cshtml" />
     <Content Include="Views\User\ChangeMobile.cshtml" />
+    <Content Include="Views\User\PopLink.cshtml" />
+    <Content Include="Views\User\PopDetail.cshtml" />
+    <Content Include="Views\User\FillReferId.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Areas\Admin\Controllers\" />
