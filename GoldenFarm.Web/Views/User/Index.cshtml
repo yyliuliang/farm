@@ -12,7 +12,7 @@
             <div class="cov"><span>修改</span><input type="file" id="Image" name="Image" title="请自行准备宽高1:1的图片,系统会自动切割图片."></div>
         </div>
         <div class="text">
-            <h1>您好 <span class="color-1">@Model.User.DisplayName</span> <cite id="Hello">，吃饭去吧！</cite></h1>
+            <h1>您好 <span class="color-1">@(!string.IsNullOrEmpty(Model.User.DisplayName) ? Model.User.DisplayName : Model.User.Phone)</span> <cite id="Hello">，吃饭去吧！</cite></h1>
             <h2>账号：@(Model.User.Phone.Substring(0, 3) + "****" + Model.User.Phone.Substring(7, 4)) （ID: @Model.User.Id）</h2>
             <h3>登录：@Model.User.LastLoginTime</h3>
         </div>

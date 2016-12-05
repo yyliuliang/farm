@@ -457,6 +457,9 @@
     <Content Include="Views\Static\Video.cshtml" />
     <Content Include="Views\User\BindBankCard.cshtml" />
     <Content Include="Views\User\Certificated.cshtml" />
+    <Content Include="Views\User\ChangePwd.cshtml" />
+    <Content Include="Views\User\VerifyMobile.cshtml" />
+    <Content Include="Views\User\GiveSwitch.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Areas\Admin\Controllers\" />

@@ -17,6 +17,7 @@ namespace GoldenFarm.Entity
 
         public string DisplayName { get; set; }
 
+        
         public string Phone { get; set; }
 
         public string Password { get; set; }
@@ -32,6 +33,13 @@ namespace GoldenFarm.Entity
         public decimal TotalScore { get; set; }
 
         public decimal FrozenScore { get; set; }
+
+        public string IdNum { get; set; }
+
+        public bool SmsGiveSwitch { get; set; }
+
+        [Write(false)]
+        public virtual UserBankAccount BankAccount { get; set; }
 
         public bool Deleted { get; set; }
     }

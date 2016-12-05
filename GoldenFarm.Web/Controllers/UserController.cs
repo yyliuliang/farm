@@ -71,18 +71,7 @@ namespace GoldenFarm.Web.Controllers
             }
             return RedirectToAction("Index");
         }
-
-        //private void _Logout()
-        //{
-            
-        //}
-
-        //private void _Login(User user, bool rememberMe)
-        //{
-        //    DateTime date = rememberMe ? DateTime.Now.AddDays(30) : DateTime.Now.AddHours(24);
-        //    Response.Cookies["uid"].Value = user.UserGuid.ToString();
-        //    Response.Cookies["uid"].Expires = date;
-        //}
+        
 
         public ActionResult Reg()
         {
@@ -130,6 +119,11 @@ namespace GoldenFarm.Web.Controllers
             return RedirectToAction("Index");
         }
 
+        public ActionResult ChangePwd()
+        {
+            return View();
+        }
+
         public ActionResult FindPassword()
         {
             return View();
@@ -137,22 +131,34 @@ namespace GoldenFarm.Web.Controllers
 
         public ActionResult Safe()
         {
-            return View();
+            return View(CurrentUser);
         }
+
+        public ActionResult VerifyMobile()
+        {
+            return View(CurrentUser);
+        }
+
+
+        public ActionResult GiveSwitch()
+        {
+            return View(CurrentUser);
+        }
+
 
         public ActionResult Wallet()
         {
-            return View();
+            return View(CurrentUser);
         }
 
         public ActionResult Deposit()
         {
-            return View();
+            return View(CurrentUser);
         }
 
         public ActionResult Withdraw()
         {
-            return View();
+            return View(CurrentUser);
         }
 
         public ActionResult FinanceDetail()

@@ -27,10 +27,34 @@ namespace GoldenFarm.Repository
 
         public User Login(string username, string password)
         {
-            string sql = "SELECT TOP 1 * FROM [User] WHERE (UserName = @name OR Phone = @name) AND [Password] = @password AND Deleted = 0";
-            return Conn.QueryFirstOrDefault<User>(sql, new { name = username, password = password });
+            string sql = @"SELECT TOP 1 * FROM [User] u LEFT JOIN [UserBankAccount] uba ON u.Id = uba.UserId
+                           WHERE (UserName = @name OR Phone = @name) AND [Password] = @password AND Deleted = 0 ";
+            var r = Conn.Query<User, UserBankAccount, User>(sql, (u, b) => { u.BankAccount = b; return u; }, new { name = username, password = password });
+            return r != null && r.Any() ? r.FirstOrDefault() : null;
         }
 
+
+        #region bank account
+
+        public UserBankAccount GetBankAccount(int userId)
+        {
+            string sql = "SELECT TOP 1 * FROM [UserBankAccount] WHERE UserId = @userId";
+            return Conn.QueryFirstOrDefault<UserBankAccount>(sql, new { userId = userId });
+        }
+
+        public void SaveBankAccount(UserBankAccount bankAccount)
+        {
+            if (bankAccount.Id == 0)
+            {
+                Conn.Insert<UserBankAccount>(bankAccount);
+            }
+            else
+            {
+                Conn.Update<UserBankAccount>(bankAccount);
+            }
+        }
+
+        #endregion
 
 
         #region product

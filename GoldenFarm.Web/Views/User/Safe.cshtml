@@ -3,6 +3,101 @@
     ViewBag.Title = "用户中心";
     Layout = "~/Views/Shared/_UserCenterLayout.cshtml";
 }
+@model GoldenFarm.Entity.User
 
-<h2>Safe</h2>
+<div class="uc-head uc-head-border">修改密码</div>
+<div class="uc-safe clear">
+    <i class="icon color-3"></i>
+    <cite>
+        <p>登录密码修改</p>
+        <p>定期修改密码有助于提高帐号安全！</p>
+    </cite>
+    <span>
+        @Html.ActionLink("立即修改", "ChangePwd", "User", null, new { @class = "button" })
+    </span>
+</div>
+
+<div class="uc-head uc-head-border">绑定手机</div>
+<div class="uc-safe clear">
+    <i class="icon color-4"></i>
+    <cite>
+        <p>您已绑定手机：@(Model.Phone.Substring(0, 3) + "****" + Model.Phone.Substring(7, 4))</p>
+        <p>绑定手机可用于找回密码与提现等短信验证。</p>
+    </cite>
+    <span>
+        @Html.ActionLink("立即修改", "VerifyMobile", "User", null, new { @class = "button" })
+    </span>
+</div>
+
+<div class="uc-head uc-head-border">实名认证</div>
+<div class="uc-safe clear">
+    <i class="icon color-1"></i>
+    <cite>
+        @if (string.IsNullOrEmpty(Model.IdNum))
+        {
+            <p>您还没有实名认证</p>
+            <p>通过实名认证，开启财富之旅。</p>
+        }
+        else
+        {
+            <p>您已认证：@Model.DisplayName</p>
+            <p>证件号码：@(Model.IdNum.Substring(0, 10) + "********")</p>
+        }
+
+    </cite>
+    <span>
+        @Html.ActionLink("查看认证", "Certificated", "User", null, new { @class = "button" })
+    </span>
+
+
+</div>
+
+<div class="uc-head uc-head-border">绑定提现账户</div>
+<div class="uc-safe clear">
+    <i class="icon color-2"></i>
+
+    <cite>
+        @if (Model.BankAccount != null)
+        {
+            <p>您已绑定：@(Model.BankAccount.Bank + " - " + Model.BankAccount.AccountNum)</p>
+            <p>您只可以绑定一个提现账户，可以是银行卡或者其他支付账号。</p>
+        }
+        else
+        {
+            <p>您还没有绑定提现账户</p>
+            <p>您只可以绑定一个提现账户，可以是银行卡或者其他支付账号。</p>
+        }
+    </cite>
+    <span>
+        @Html.ActionLink("管理账户", "BindBankCard", "User", null, new { @class = "button" })
+    </span>
+
+
+
+</div>
+
+
+<div class="uc-head uc-head-border">小额果实赠送免短信验证开关</div>
+<div class="uc-safe clear">
+    <i class="icon color-2"></i>
+
+    <cite>
+        @if (Model.SmsGiveSwitch)
+        {
+            <p>当前状态：开启</p>
+            <p>开启后当天赠送价值累计小于200金币将不需要短信验证。</p>
+        }
+        else
+        {
+            <p>当前状态：关闭</p>
+            <p>关闭后你每次果实赠送都需要短信验证。</p>
+        }
+    </cite>
+    <span>
+        @Html.ActionLink(Model.SmsGiveSwitch ? "立即关闭" : "立即开启", "GiveSwitch", "User", null, new { @class = "button" })
+    </span>
+
+
+
+</div>
 

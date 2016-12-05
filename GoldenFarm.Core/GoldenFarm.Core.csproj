@@ -61,7 +61,9 @@
     <Compile Include="Entity\Market.cs" />
     <Compile Include="Entity\KeyValueConfig.cs" />
     <Compile Include="Entity\Role.cs" />
+    <Compile Include="Entity\Sms.cs" />
     <Compile Include="Entity\User.cs" />
+    <Compile Include="Entity\UserBankAccount.cs" />
     <Compile Include="Entity\UserProduct.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="PageCriteria.cs" />
@@ -71,8 +73,11 @@
     <Compile Include="Repository\NewsRepository.cs" />
     <Compile Include="Repository\ProductRepository.cs" />
     <Compile Include="Repository\RepositoryBase.cs" />
+    <Compile Include="Repository\SmsRepository.cs" />
     <Compile Include="Repository\UserRepository.cs" />
     <Compile Include="Util\RandomImage.cs" />
+    <Compile Include="Util\SmsHelper.cs" />
+    <Compile Include="Util\StringHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
