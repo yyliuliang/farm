@@ -314,6 +314,11 @@
     <Content Include="Content\images\spline_yellow.png" />
     <Content Include="Content\images\user.Png" />
     <Content Include="Content\images\VerificationImgForm.jpg" />
+    <Content Include="Content\js\datetime\calendar.js" />
+    <Content Include="Content\js\datetime\lang\zh-cn.js" />
+    <Content Include="Content\js\datetime\skin\default\datepicker.css" />
+    <Content Include="Content\js\datetime\skin\WdatePicker.css" />
+    <Content Include="Content\js\datetime\WdatePicker.js" />
     <Content Include="Content\js\echarts.js" />
     <Content Include="Content\js\exporting.js" />
     <Content Include="Content\js\highstock.js" />
@@ -460,6 +465,7 @@
     <Content Include="Views\User\ChangePwd.cshtml" />
     <Content Include="Views\User\VerifyMobile.cshtml" />
     <Content Include="Views\User\GiveSwitch.cshtml" />
+    <Content Include="Views\User\ChangeMobile.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Areas\Admin\Controllers\" />

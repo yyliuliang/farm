@@ -48,6 +48,10 @@ namespace GoldenFarm.Web.Controllers
             DateTime date = rememberMe ? DateTime.Now.AddDays(30) : DateTime.Now.AddHours(24);
             Response.Cookies["gyuid"].Value = user.UserGuid.ToString();
             Response.Cookies["gyuid"].Expires = date;
+
+            user.LastLoginIP = Request.UserIP();
+            user.LastLoginTime = DateTime.Now;
+            ur.Update(user);
         }
 
         public User CurrentUser

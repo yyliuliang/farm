@@ -1,5 +1,6 @@
 ﻿using Dapper.Contrib.Extensions;
 using GoldenFarm.Entity;
+using GoldenFarm.Util;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -50,6 +51,12 @@ namespace GoldenFarm
                 name = ((TableAttribute)tableAttr[0]).Name;
             }
             return name;
+        }
+
+
+        public static string MD5Hash(this string text)
+        {
+            return StringHelper.MD5Hash(text);
         }
     }
 }

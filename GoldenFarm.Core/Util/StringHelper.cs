@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web.Security;
 
 namespace GoldenFarm.Util
 {
@@ -39,6 +40,12 @@ namespace GoldenFarm.Util
                 r.Next(100, 1999);
             }
             return s;
+        }
+
+
+        public static string MD5Hash(string text)
+        {
+            return FormsAuthentication.HashPasswordForStoringInConfigFile(text, "MD5");
         }
     }
 }

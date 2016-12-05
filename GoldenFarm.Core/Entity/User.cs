@@ -11,6 +11,8 @@ namespace GoldenFarm.Entity
     [Table("[User]")]
     public class User : EntityBase
     {
+        public int RefUserId { get; set; }
+
         public Guid UserGuid { get; set; }
 
         public string UserName { get; set; }

@@ -3,6 +3,109 @@
     ViewBag.Title = "用户中心";
     Layout = "~/Views/Shared/_UserCenterLayout.cshtml";
 }
+<div class="uc-head uc-head-border">财务明细</div>
 
-<h2>Deposit</h2>
+<dl class="uc-search">
 
+    <dd>
+        <div class="form-group">
+            <div class="form-group-addon no-right-border">类型</div>
+            <div class="form-group-addon form-group-addon-white stretch">
+                <select id="TypeId" name="TypeId">
+                    <option value="0" selected="">全部</option>
+                    <option value="2">充值</option>
+                    <option value="5">提现</option>
+
+                    <option value="3">购买</option>
+                    <option value="7">出售</option>
+
+
+                    <option value="4">推广奖励-交易</option>
+                    <option value="10">推广奖励-游戏</option>
+                    <option value="20">推广奖励-首充</option>
+
+                    <option value="14">机构奖励-交易</option>
+                    <option value="15">机构奖励-游戏</option>
+                    <option value="21">机构奖励-首充</option>
+                    <option value="17">机构入驻费</option>
+                    <option value="18">机构入驻退费</option>
+
+
+                    <option value="6">钻石宝箱</option>
+
+                    <option value="8">果实重生</option>
+                    <option value="9">游戏消费</option>
+
+                    <option value="11">果实租借</option>
+                    <option value="12">果实归还</option>
+                    <option value="13">补充保证金</option>
+
+                    <option value="16">系统奖励</option>
+                    <option value="19">赠送手续费</option>
+
+
+
+                </select>
+            </div>
+        </div>
+    </dd>
+
+
+    <dd>
+        <div class="form-group">
+            <div class="form-group-addon no-right-border">开始</div>
+            <div class="form-group-input stretch">
+                <input class="stretch" id="StartDate" name="StartDate" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" type="text" value="">
+            </div>
+        </div>
+    </dd>
+    <dd>
+        <div class="form-group">
+            <div class="form-group-addon no-right-border">结束</div>
+            <div class="form-group-input stretch">
+                <input class="stretch" id="EndDate" name="EndDate" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" type="text" value="">
+            </div>
+        </div>
+    </dd>
+    <dd>
+        <div class="form-group">
+            <input type="submit" class="button button-color-1 button-stretch" value="查询" onclick="return check()">
+        </div>
+    </dd>
+</dl>
+
+<div class="tablebox">
+    <table>
+        <thead>
+            <tr>
+                <th>订单号</th>
+                <th>类型</th>
+                <th>金额</th>
+                <th>手续费</th>
+                <th>状态</th>
+                <th>时间</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td class="algin" colspan="6">没有找到相关记录</td>
+            </tr>
+
+        </tbody>
+
+    </table>
+</div>
+@section Scripts {
+    <script type="text/javascript" src="~/Content/js/datetime/WdatePicker.js"></script>
+}
+<script type="text/javascript">
+    function check() {
+        if ($("#StartDate").val() != "" && $("#EndDate").val() != "") {
+            if (new Date($("#StartDate").val().replace(/-/g, "/")) > new Date($("#EndDate").val().replace(/-/g, "/"))) {
+                alert("开始时间不能大于结束时间");
+                return false;
+            }
+        }
+    }
+
+</script>

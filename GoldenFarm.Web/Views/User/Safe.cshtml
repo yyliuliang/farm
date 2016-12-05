@@ -46,7 +46,7 @@
 
     </cite>
     <span>
-        @Html.ActionLink("查看认证", "Certificated", "User", null, new { @class = "button" })
+        @Html.ActionLink(string.IsNullOrEmpty(Model.IdNum) ? "立即认证" : "查看认证", "Certificated", "User", null, new { @class = "button" })
     </span>
 
 

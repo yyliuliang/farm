@@ -3,18 +3,20 @@
     ViewBag.Title = "用户中心";
     Layout = "~/Views/Shared/_UserCenterLayout.cshtml";
 }
+
 @model GoldenFarm.Entity.User
 
-@using (Html.BeginForm())
-{
     <div class="uc-head uc-head-border">修改手机号码</div>
 
     <div class="uc-form">
 
         <div class="form-group">
-            <div class="form-group-addon no-right-border">原手机号码</div>
-            <div class="form-group-addon form-group-addon-disabled stretch">@(Model.Phone.Substring(0, 3) + "****" + Model.Phone.Substring(7, 4))</div>
+            <div class="form-group-addon no-right-border">新手机号码</div>
+            <div class="form-group-input stretch">
+                <input class="stretch" data-val="true" data-val-regex="手机号格式错误" data-val-regex-pattern="^1[0-9]{10}" data-val-required="请填写新的手机号" id="Phone" name="phone" placeholder="新手机号码" type="text" value="">
+            </div>
         </div>
+        <span class="field-validation-valid" data-valmsg-for="Phone" data-valmsg-replace="true"></span>
 
         <div class="form-group">
             <div class="form-group-addon no-right-border">图片验证码</div>
@@ -30,52 +32,19 @@
         <div class="form-group">
             <div class="form-group-addon no-right-border">短信验证码</div>
             <div class="form-group-input stretch">
-                <input class="stretch" data-val="true" data-val-regex="短信验证码错误" data-val-regex-pattern="\d{6}" data-val-required="请填写短信验证码" id="MobileVCode" maxlength="6" name="mcode" placeholder="" type="text" value="">
+                <input class="stretch" data-val="true" data-val-regex="短信验证码错误" data-val-regex-pattern="\d{6}" data-val-required="请填写短信验证码" id="MobileVCode" maxlength="6" name="vcode" placeholder="" type="text" value="">
             </div>
             <div class="form-group-input">
                 <button class="no-left-border button-color-2" type="button" onclick="GetSMS()" id="Sms">获取手机验证码</button>
             </div>
         </div>
-        @Html.ValidationMessage("vm", new { @class = "field-validation-valid" })
+        @Html.ValidationMessage("cm", new { @class = "field-validation-valid" })
         <span class="field-validation-valid" data-valmsg-for="MobileVCode" data-valmsg-replace="true"></span>
         <div class="form-group">
-            <input type="submit" class="button button-color-1 button-stretch" value="下一步">
+            <input type="submit" class="button button-color-1 button-stretch" value="提交">
         </div>
         <span class="field-validation-valid" data-valmsg-for="Err" data-valmsg-replace="true"></span>
 
 
     </div>
-}
 
-<script type="text/javascript">
-    function GetSMS() {
-
-        $.post("/Common/GetSMS_VerifyMobile", { PhoneNo: '18618477035', VCode: $("#VCode").val() }, function (data, textStatus) {
-            if (data.result) {
-                showTime(180);
-            }
-            else
-                alert(data.msg);
-        });
-    }
-
-    function showTime(s) {
-        $("#Sec").val(s);
-        $("#Sms").text(s + "秒后重新获取");
-        $("#Sms").addClass("progress");
-        $("#Sms").attr("disabled", "disabled");
-
-        $("#Sec").val(s);
-        if (s != 0) {
-            s = s - 1;
-            setTimeout("showTime(" + s + ")", 1000);
-        }
-        else {
-            $("#Sec").val("");
-            $("#Sms").removeClass("progress");
-            $("#Sms").removeAttr("disabled");
-            $("#Sms").text("获取手机验证码");
-        }
-    }
-
-</script>

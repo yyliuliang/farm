@@ -6,6 +6,7 @@
 
 @using (Html.BeginForm())
 {
+    @Html.AntiForgeryToken()
     <div class="uc-head uc-head-border">修改登录密码</div>
 
     <div class="uc-form">
@@ -41,6 +42,7 @@
             <input type="button" class="button button-color-1 button-stretch" value="提交" onclick="return PreSubmit()">
         </div>
         <span class="field-validation-valid" data-valmsg-for="Err" data-valmsg-replace="true"></span>
+        @Html.ValidationMessage("changepwd", new { @class = "field-validation-valid" })
     </div>
 }
 
@@ -50,6 +52,6 @@
     });
 
     function PreSubmit() {
-
+        $('form').submit();
     }
 </script>
