@@ -1,0 +1,77 @@
+﻿
+@{
+    ViewBag.Title = "用户中心";
+    Layout = "~/Views/Shared/_UserCenterLayout.cshtml";
+}
+@model GoldenFarm.Entity.User
+
+<div class="message message-info">
+    温馨提示：<br>
+    1.通过您的推荐链接/二维码/推荐码注册的会员,将成为您的推广会员。<br>
+    2.您将享受所有推广会员在“淘金果园”购买种子、果实时产生的交易手续费奖励，直接40%，间接20%。<br>
+    3.您将享受所有推广会员在“淘金农场”兑换钻石时的兑换金额奖励,直接10%，间接5%。<br>
+    4.您将享受直接推广会员在淘金果园首次充值的奖励，奖励2金币。
+</div>
+
+<div class="uc-head uc-head-border">推广链接</div>
+<div class="uc-pop clear">
+
+    @*<div class="uc-pop-qrcode">
+        <span class="color-1">微信推广链接(推荐)</span>
+        <div id="qrcode-wx" class="qrcode"><canvas width="256" height="256"></canvas></div>
+        <cite>
+            <b class="color-1">http://www.taojinnc.com/share/72562</b>
+        </cite>
+    </div>*@
+
+    <div class="uc-pop-qrcode">
+        <span class="color-1">果园推广链接</span>
+        <div id="qrcode-gy" class="qrcode"></div>
+        <cite>
+            <b class="color-1">http://www.guoyuan.com/ref/@Model.Id</b>
+        </cite>
+    </div>
+
+    @*<div class="uc-pop-qrcode">
+        <span class="color-1">农场推广链接</span>
+        <div id="qrcode-nc" class="qrcode"><canvas width="256" height="256"></canvas></div>
+        <cite>
+            <b class="color-1">http://www.taojinnc.com/ref/72562</b>
+        </cite>
+    </div>*@
+
+
+
+</div>
+
+<div class="message message-help">
+    使用说明：<br>
+    <p>1.复制上面的推广链接或二维码，并发送给好友。</p>
+    <p>2.好友通过链接或者扫码进入注册页面进行注册，将成为您的推广会员。</p>
+    <span class="color-1">关于微信推广连接的补充说明：</span><br>
+    <p>1.进入微信客户端</p>
+    <p>2.点击底部主菜单[发现]-&gt;[扫一扫]，扫描二维护码即可打开页面。（当然你也可以直接复制连接发送给您的好友）</p>
+    <p>3.进入页面后，点击界面右上角的菜单按钮，弹出菜单面板后可分享页面给好友，朋友圈以及QQ空间。</p>
+</div>
+
+<div class="uc-head uc-head-border">推广码</div>
+<div class="form-group">
+    <div class="form-group-addon">我的推广码</div>
+    <div class="form-group-addon no-left-border form-group-addon-disabled stretch" id="FreezeMoney">@Model.Id</div>
+</div>
+
+<div class="message message-help">
+    温馨提示：<br>
+    <p>1.复制上面的推广码，并发送给好友。</p>
+    <p>2.好友在"淘金果园"、"淘金农场"注册页面填写推广码完成注册，将成为您的推广会员。</p>
+</div>
+<br>
+
+<script src="/Content/js/jquery.qrcode.min.js"></script>
+<script type="text/javascript">
+    $(function () {
+        $('#qrcode-gy').qrcode("http://www.guoyuan.com/ref/@Model.Id");
+        jQuery('#qrcode-nc').qrcode("http://www.taojinnc.com/ref/id");
+        jQuery('#qrcode-wx').qrcode("http://www.taojinnc.com/share/id");
+    })
+</script>

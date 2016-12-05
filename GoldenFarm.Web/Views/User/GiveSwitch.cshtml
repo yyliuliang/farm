@@ -1,0 +1,49 @@
+﻿
+@{
+    ViewBag.Title = "用户中心";
+    Layout = "~/Views/Shared/_UserCenterLayout.cshtml";
+}
+@model GoldenFarm.Entity.User
+
+<div class="uc-head uc-head-border">小额果实赠送免短信验证开关</div>
+
+<div class="uc-form">
+
+    <div class="form-group">
+        <div class="form-group-addon">开关状态</div>
+        <div class="form-group-addon no-left-border form-group-addon-disabled stretch">@(Model.SmsGiveSwitch ? "已开启" : "关闭")</div>
+    </div>
+
+    <div class="form-group">
+        <div class="form-group-addon no-right-border">图片验证</div>
+        <div class="form-group-input stretch">
+            <input class="stretch" id="VCode" maxlength="4" name="VCode" type="text" value="">
+        </div>
+        <div class="form-group-addon no-left-border code">
+            <img src="/common/VerificationImgForm" title="点击图片换一张" onclick="this.src = '/common/VerificationImgForm?flag=' + Math.random()">
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="form-group-addon no-right-border">短信验证</div>
+        <div class="form-group-input stretch">
+            <input class="stretch" id="MobileVCode" maxlength="6" name="MobileVCode" placeholder="" type="text" value="">
+        </div>
+        <div class="form-group-input">
+            <button class="no-left-border button-color-1" type="button" onclick="GetSMS()" id="Sms">获取手机验证码</button>
+        </div>
+    </div>
+
+
+    <div class="form-group">
+        <input type="submit" class="button-color-1 button-stretch" value="确认开启" onclick="return GiveSwitch()">
+    </div>
+    <span class="field-validation-valid" data-valmsg-for="Err" data-valmsg-replace="true"></span>
+</div>
+
+<div class="message message-help">
+    温馨提示：<br>
+    1.小额果实赠送免短信验证开关<span class="color-1">[开启]</span>后，当天赠送累计小于200金币将<span class="color-1">不需要短信验证。</span><br>
+    2.小额果实赠送免短信验证开关<span class="color-1">[关闭]</span>后，你每次果实赠送<span class="color-1">都需要短信验证，您的账户更加安全。</span><br>
+    3.为了您账户的安全，请谨慎操作！
+</div>
+

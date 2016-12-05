@@ -1,0 +1,57 @@
+﻿
+@{
+    ViewBag.Title = "用户中心";
+    Layout = "~/Views/Shared/_UserCenterLayout.cshtml";
+}
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <div class="uc-head uc-head-border">修改登录密码</div>
+
+    <div class="uc-form">
+        <div class="form-group">
+            <div class="form-group-addon no-right-border">　　原密码</div>
+            <div class="form-group-input stretch">
+                <input type="password" class="stretch" id="OldPasswordText" name="oldpassword" placeholder="请输入新密码">
+                <input data-val="true" data-val-required="请填写密码" id="OldPassword" name="OldPassword" type="hidden" value="">
+            </div>
+        </div>
+        <span class="field-validation-valid" data-valmsg-for="OldPassword" data-valmsg-replace="true"></span>
+
+        <div class="form-group">
+            <div class="form-group-addon no-right-border">　　新密码</div>
+            <div class="form-group-input stretch">
+                <input type="password" class="stretch" id="NewPasswordText" name="newpassword" placeholder="请输入新密码">
+                <input data-val="true" data-val-required="请填写密码" id="NewPassword" name="NewPassword" type="hidden" value="">
+            </div>
+        </div>
+        <span class="field-validation-valid" data-valmsg-for="NewPassword" data-valmsg-replace="true"></span>
+
+        <div class="form-group">
+            <div class="form-group-addon no-right-border">确认新密码</div>
+            <div class="form-group-input stretch">
+                <input type="password" class="stretch" id="ReNewPasswordText" name="newpasswordc" placeholder="请再次输入新密码">
+                <input data-val="true" data-val-equalto="两次密码不一致" data-val-equalto-other="*.NewPassword" id="ReNewPassword" name="ReNewPassword" type="hidden" value="">
+
+            </div>
+        </div>
+        <span class="field-validation-valid" data-valmsg-for="ReNewPassword" data-valmsg-replace="true"></span>
+
+        <div class="form-group">
+            <input type="button" class="button button-color-1 button-stretch" value="提交" onclick="return PreSubmit()">
+        </div>
+        <span class="field-validation-valid" data-valmsg-for="Err" data-valmsg-replace="true"></span>
+        @Html.ValidationMessage("changepwd", new { @class = "field-validation-valid" })
+    </div>
+}
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        
+    });
+
+    function PreSubmit() {
+        $('form').submit();
+    }
+</script>

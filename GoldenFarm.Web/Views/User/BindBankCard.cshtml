@@ -2,7 +2,88 @@
 @{
     ViewBag.Title = "用户中心";
     Layout = "~/Views/Shared/_UserCenterLayout.cshtml";
+
+    bool binded = Model != null;
+    bool m = (Request["m"] == "true" || !binded);
+}
+@model GoldenFarm.Entity.UserBankAccount
+
+
+<div class="uc-head uc-head-border">提现账户管理</div>
+
+@if (binded)
+{
+    <div class="message message-succ">
+        您已绑定提现账户 @Html.ActionLink("修改账户", "BindBankCard", "User", new { m = "true" }, new { @class = "color-1" }) <br>
+        温馨提示:<br>
+        1.绑定的收款账户开户人需与实名认证姓名一致！<br>
+        2.请仔细确认您的帐号是否填写正确。
+    </div>
+}
+else
+{
+    <div class="message message-fail">
+        您还未绑定提现账户<br>
+        温馨提示:<br>
+        请确认您输入的银行卡的<b><u>开户姓名</u></b>与您<b><u>实名认证的姓名</u></b>一致!
+    </div>
 }
 
-<h2>Entrust</h2>
 
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <input data-val="true" data-val-number="字段 BankId 必须是一个数字。" data-val-required="BankId 字段是必需的。" id="BankId" name="BankId" type="hidden" value="0">
+    <!-- uc-form start -->
+    <div class="uc-form">
+        <div class="form-group">
+            <div class="form-group-addon no-right-border">开户姓名</div>
+            <div class="form-group-addon form-group-addon-disabled stretch">@ViewBag.Name</div>
+        </div>
+        <div class="form-group">
+            <div class="form-group-addon">收款银行</div>
+            <div class="form-group-addon no-left-border form-group-addon-disabled stretch" id="BankNameText">@(Model != null ? Model.Bank : string.Empty)</div>
+            <input id="BankName" name="bank" type="hidden" value="@(Model!=null ? Model.Bank : string.Empty)">
+            <div class="form-group-input" @(!m ? "style=display:none" : string.Empty)>
+                <button class="no-left-border" onclick="return false;" toggle="#banktogglebox">选择 <i class="icon"></i></button>
+                <div class="togglebox togglebox-top togglebox-right" id="banktogglebox" style="display: none;">
+                    <dl>
+                        <dd onclick="$('#BankNameText').html($(this).html()); $('#BankName').val($(this).html()); $('#BankId').val($(this).attr('bid'))" bid="2">中国工商银行</dd>
+                        <dd onclick="$('#BankNameText').html($(this).html()); $('#BankName').val($(this).html()); $('#BankId').val($(this).attr('bid'))" bid="3">中国农业银行</dd>
+                        <dd onclick="$('#BankNameText').html($(this).html()); $('#BankName').val($(this).html()); $('#BankId').val($(this).attr('bid'))" bid="4">中国银行</dd>
+                        <dd onclick="$('#BankNameText').html($(this).html()); $('#BankName').val($(this).html()); $('#BankId').val($(this).attr('bid'))" bid="5">中国建设银行</dd>
+                        <dd onclick="$('#BankNameText').html($(this).html()); $('#BankName').val($(this).html()); $('#BankId').val($(this).attr('bid'))" bid="6">交通银行</dd>
+                        <dd onclick="$('#BankNameText').html($(this).html()); $('#BankName').val($(this).html()); $('#BankId').val($(this).attr('bid'))" bid="7">中国邮政储蓄银行</dd>
+                        <dd onclick="$('#BankNameText').html($(this).html()); $('#BankName').val($(this).html()); $('#BankId').val($(this).attr('bid'))" bid="8">招商银行</dd>
+                        <dd onclick="$('#BankNameText').html($(this).html()); $('#BankName').val($(this).html()); $('#BankId').val($(this).attr('bid'))" bid="9">兴业银行</dd>
+                        <dd onclick="$('#BankNameText').html($(this).html()); $('#BankName').val($(this).html()); $('#BankId').val($(this).attr('bid'))" bid="10">民生银行</dd>
+                        <dd onclick="$('#BankNameText').html($(this).html()); $('#BankName').val($(this).html()); $('#BankId').val($(this).attr('bid'))" bid="11">平安银行</dd>
+                    </dl>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            <div class="form-group-addon no-right-border">银行卡号</div>
+            @if (m)
+            {
+            <div class="form-group-input stretch">
+                <input class="stretch" id="CardNo" name="accountNum" type="text" value="@(Model != null ? Model.AccountNum : string.Empty)">
+            </div>
+            }
+            else
+            {
+                <div class="form-group-addon form-group-addon-disabled stretch" id="CardNo">@Model.AccountNum</div>
+            }
+        </div>
+        @Html.ValidationMessage("bank", new { @class = "field-validation-valid" })
+        @if (m)
+        {
+            <div class="form-group">
+                <input type="submit" class="button button-color-1 button-stretch" value="提交">
+            </div>
+        }
+    </div>
+    <!-- uc-form end -->
+}

@@ -1,0 +1,50 @@
+﻿
+@{
+    ViewBag.Title = "用户中心";
+    Layout = "~/Views/Shared/_UserCenterLayout.cshtml";
+}
+
+@model GoldenFarm.Entity.User
+
+    <div class="uc-head uc-head-border">修改手机号码</div>
+
+    <div class="uc-form">
+
+        <div class="form-group">
+            <div class="form-group-addon no-right-border">新手机号码</div>
+            <div class="form-group-input stretch">
+                <input class="stretch" data-val="true" data-val-regex="手机号格式错误" data-val-regex-pattern="^1[0-9]{10}" data-val-required="请填写新的手机号" id="Phone" name="phone" placeholder="新手机号码" type="text" value="">
+            </div>
+        </div>
+        <span class="field-validation-valid" data-valmsg-for="Phone" data-valmsg-replace="true"></span>
+
+        <div class="form-group">
+            <div class="form-group-addon no-right-border">图片验证码</div>
+            <div class="form-group-input stretch">
+                <input class="stretch" data-val="true" data-val-required="请填写图片验证码" id="VCode" maxlength="4" name="vcode" type="text" value="">
+            </div>
+            <div class="form-group-addon no-left-border code">
+                <img src="/common/VerificationImgForm" title="点击图片换一张" onclick="this.src = '/common/VerificationImgForm?flag=' + Math.random()">
+            </div>
+        </div>
+        <span class="field-validation-valid" data-valmsg-for="VCode" data-valmsg-replace="true"></span>
+
+        <div class="form-group">
+            <div class="form-group-addon no-right-border">短信验证码</div>
+            <div class="form-group-input stretch">
+                <input class="stretch" data-val="true" data-val-regex="短信验证码错误" data-val-regex-pattern="\d{6}" data-val-required="请填写短信验证码" id="MobileVCode" maxlength="6" name="vcode" placeholder="" type="text" value="">
+            </div>
+            <div class="form-group-input">
+                <button class="no-left-border button-color-2" type="button" onclick="GetSMS()" id="Sms">获取手机验证码</button>
+            </div>
+        </div>
+        @Html.ValidationMessage("cm", new { @class = "field-validation-valid" })
+        <span class="field-validation-valid" data-valmsg-for="MobileVCode" data-valmsg-replace="true"></span>
+        <div class="form-group">
+            <input type="submit" class="button button-color-1 button-stretch" value="提交">
+        </div>
+        <span class="field-validation-valid" data-valmsg-for="Err" data-valmsg-replace="true"></span>
+
+
+    </div>
+
