@@ -3,7 +3,39 @@
     ViewBag.Title = "用户中心";
     Layout = "~/Views/Shared/_UserCenterLayout.cshtml";
 }
+@model IEnumerable<Market>
 
-<h2>TradeCenter</h2>
-
- 
+<div class="uc-head">最新行情</div>
+<div class="tablebox">
+    <table>
+        <thead>
+            <tr>
+                <th></th>
+                <th>名称</th>
+                <th>现价</th>
+                <th>涨幅</th>
+                <th>涨跌</th>
+                <th>今开</th>
+                <th>最高</th>
+                <th>最低</th>
+                <th>成交量</th>
+            </tr>
+        </thead>
+        <tbody id="MarketList">
+            @foreach (var m in Model)
+            {
+                <tr isopen="true" onclick="window.location.href='/Market/Detail/@m.ProductId'" style="cursor:pointer;">
+                    <td><a href="/Market/Detail/@m.Product.ProductCode"><img src="@m.Product.ImageUrl" width="30"></a></td>
+                    <td>@Html.ActionLink(m.Product.ProductName, "Detail", new { id = m.Product.ProductCode })</td>
+                    <td class="color-1">@m.CurrentPrice</td>
+                    <td class="color-1">@m.RaisedRate %</td>
+                    <td class="color-1">@m.Raised</td>
+                    <td>@m.OpenPrice</td>
+                    <td class="color-1">@m.TopPrice</td>
+                    <td class="color-4">@m.BottomPrice</td>
+                    <td>@m.Volume</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

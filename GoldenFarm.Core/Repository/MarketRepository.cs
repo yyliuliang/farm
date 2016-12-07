@@ -17,7 +17,7 @@ namespace GoldenFarm.Repository
             return market;
         };
 
-        Func<MarketTransaction, Product, MarketTransaction> mtpMapper = (transaction, product) =>
+        Func<Transaction, Product, Transaction> mtpMapper = (transaction, product) =>
         {
             transaction.Product = product;
             return transaction;
@@ -39,11 +39,11 @@ namespace GoldenFarm.Repository
             return Conn.Query<Market, Product, Market>(sql, mpMapper, new { code = productCode, date = date }).FirstOrDefault();
         }
 
-        public IEnumerable<MarketTransaction> GetTodayTransactions(string productCode)
+        public IEnumerable<Transaction> GetTodayTransactions(string productCode)
         {
             DateTime date = DateTime.Today;
             string sql = "SELECT * FROM MarketTransaction mt INNER JOIN Product p ON mt.ProductId = p.Id WHERE p.productcode=@code AND mt.Date=@date";
-            return Conn.Query<MarketTransaction, Product, MarketTransaction>(sql, mtpMapper, new { code = productCode, date = date });
+            return Conn.Query<Transaction, Product, Transaction>(sql, mtpMapper, new { code = productCode, date = date });
         }
         #endregion
 
@@ -52,6 +52,31 @@ namespace GoldenFarm.Repository
         {
             string sql = "SELECT * FROM Market m INNER JOIN Product p ON m.ProductId = p.Id WHERE p.productcode=@code";
             return Conn.Query<Market, Product, Market>(sql, mpMapper, new { code = productCode});
+        }
+
+
+
+        public IEnumerable<Entrust> GetEntrusts(MarketCriteria criteria)
+        {
+            string sql = @"SELECT * FROM Entrust e INNER JOIN Product p on e.ProductId = p.Id 
+                           WHERE e.UserId = @userId AND e.CreateTime BETWEEN @start AND @end";
+
+            var parameters = new DynamicParameters();
+            parameters.Add("userId", criteria.UserId);
+            parameters.Add("start", criteria.StartDate);
+            parameters.Add("end", criteria.EndDate);
+            if (criteria.ProductId > 0)
+            {
+                sql += " AND e.ProductId = @pid";
+                parameters.Add("pid", criteria.ProductId);
+            }
+            if(criteria.IsBuy > -1)
+            {
+                sql += " AND e.IsBuy = @buy";
+                parameters.Add("buy", criteria.IsBuy);
+            }
+
+            return Conn.Query<Entrust, Product, Entrust>(sql, (e, p) => { e.Product = p; return e; }, parameters);
         }
 
         

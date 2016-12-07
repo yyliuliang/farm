@@ -86,5 +86,21 @@ namespace GoldenFarm.Repository
             return Conn.Query<User>(sql, new { userId = userId + "%" });
         }
 
+        public IEnumerable<UserScore> GetRefUserScores(UserScoreCriteria criteria)
+        {
+            string sql = @"SELECT * FROM UserScore us INNER JOIN [User] u on us.UserId = u.Id 
+                                WHERE TypeId IN (4, 10, 20) AND us.UserPath LIKE @path AND us.CreateTime BETWEEN @start AND @end";
+
+            return Conn.Query<UserScore, User, UserScore>(sql, (us, u) => { us.User = u; return us; }, new { path = criteria.RefUserId + "%", start = criteria.StartDate, end = criteria.EndDate });
+        }
+
+        public IEnumerable<UserScore> GetUserScores(UserScoreCriteria criteria)
+        {
+            string sql = @"SELECT * FROM UserScore us INNER JOIN [User] u on us.UserId = u.Id 
+                                WHERE TypeId IN (4, 10, 20) AND us.UserId = @userId AND us.CreateTime BETWEEN @start AND @end";
+
+            return Conn.Query<UserScore, User, UserScore>(sql, (us, u) => { us.User = u; return us; }, new { userId = criteria.RefUserId, start = criteria.StartDate, end = criteria.EndDate });
+        }
+
     }
 }

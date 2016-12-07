@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace GoldenFarm.Entity
 {
-    [Table("MarketTransaction")]
+    [Table("Transaction")]
     [Serializable]
-    public class MarketTransaction : EntityBase
+    public class Transaction : EntityBase
     {
         public Guid TransactionId { get; set; }
 

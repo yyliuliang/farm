@@ -8,6 +8,8 @@
 
 @using (Html.BeginForm())
 {
+    @Html.AntiForgeryToken()
+
     <div class="uc-head uc-head-border">补填推广码</div>
 
     <div class="message message-info">
@@ -17,20 +19,24 @@
     <div class="uc-form">
 
         <div class="form-group">
-            <div class="form-group-addon no-right-border">推广码/手机号</div>
-            <div class="form-group-input stretch">
-                <input class="stretch" data-val="true" data-val-regex="请输入正确的推广码" data-val-regex-pattern="\d{5,}" data-val-required="请输入推广码" id="ReferId" name="referId" placeholder="请填写推广码或手机号" type="text" value="">
+            <div class="form-group-addon no-right-border">推广码</div>
+            @if (!filed)
+            {
+                <div class="form-group-input stretch">
+                    <input class="stretch" data-val="true" data-val-regex="请输入正确的推广码" data-val-regex-pattern="\d{5,}" data-val-required="请输入推广码" id="ReferId" name="referId" placeholder="请填写推广码" type="text" value="">
+                </div>
+            }
+            else
+            {
+                <div class="form-group-addon form-group-addon-disabled stretch">@Model.RefUserId</div>
+            }
+        </div>
+        @if (!filed)
+        {
+            <div class="form-group">
+                <input type="submit" class="button button-color-1 button-stretch" value="提交">
             </div>
-        </div>
-        <span class="field-validation-valid" data-valmsg-for="ReferId" data-valmsg-replace="true"></span>
-        <div class="form-group">
-            <input type="submit" class="button button-color-1 button-stretch" value="提交">
-        </div>
-        <span class="field-validation-valid" data-valmsg-for="Err" data-valmsg-replace="true"></span>
-        <script type="text/javascript">
-            $(function () {
-                $("#referId").val('');
-            });
-        </script>
+        }
+
     </div>
 }

@@ -52,9 +52,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Entity\Criteria\MarketCriteria.cs" />
+    <Compile Include="Entity\Criteria\UserScoreCriteria.cs" />
     <Compile Include="Entity\EntityBase.cs" />
-    <Compile Include="Entity\MarketEntrust.cs" />
-    <Compile Include="Entity\MarketTransaction.cs" />
+    <Compile Include="Entity\Entrust.cs" />
+    <Compile Include="Entity\Transaction.cs" />
     <Compile Include="Entity\News.cs" />
     <Compile Include="Entity\NewsCategory.cs" />
     <Compile Include="Entity\Product.cs" />
@@ -65,6 +67,7 @@
     <Compile Include="Entity\User.cs" />
     <Compile Include="Entity\UserBankAccount.cs" />
     <Compile Include="Entity\UserProduct.cs" />
+    <Compile Include="Entity\UserScore.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="PageCriteria.cs" />
     <Compile Include="PageViewData.cs" />

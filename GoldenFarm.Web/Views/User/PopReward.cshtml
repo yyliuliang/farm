@@ -3,34 +3,41 @@
     ViewBag.Title = "用户中心";
     Layout = "~/Views/Shared/_UserCenterLayout.cshtml";
 }
-@model IEnumerable<Entrust>
-<div class="uc-head">委托记录</div>
+@model IEnumerable<UserScore>
+<div class="uc-head uc-head-border">推广统计</div>
+<dl class="uc-money clear" style="border-top:none; padding:0px;margin:0px;">
+    <dd style="text-align:left">
+        <cite style="line-height:60px;height:60px;">@ViewBag.TotalScore</cite>
+        <span>推广奖励总额</span>
+    </dd>
+</dl>
 
+
+
+<div class="uc-head uc-head-border">推广奖励列表</div>
 
 @using (Html.BeginForm())
 {
+
     <dl class="uc-search">
-
-
         <dd>
             <div class="form-group">
-                <div class="form-group-addon no-right-border">产品</div>
-                <div class="form-group-addon form-group-addon-white stretch">                  
-                    @Html.DropDownList("ProductId", (IEnumerable<SelectListItem>)ViewBag.Products, "全部")
+                <div class="form-group-addon no-right-border">来源</div>
+                <div class="form-group-input stretch">
+                    <input class="stretch" id="RefUserId" maxlength="8" name="RefUserId" placeholder="用户ID" type="text" value="">
                 </div>
             </div>
         </dd>
 
         <dd>
             <div class="form-group">
-                <div class="form-group-addon no-right-border">类别</div>
+                <div class="form-group-addon no-right-border">类型</div>
                 <div class="form-group-addon form-group-addon-white stretch">
-                    <select id="IsBuy" name="IsBuy">
-
-                        <option value="-1" selected="">全部</option>
-                        <option value="1">买入</option>
-                        <option value="0">卖出</option>
-
+                    <select id="TypeId" name="TypeId">
+                        <option value="0" selected="">全部</option>
+                        <option value="4">推广奖励--交易</option>
+                        <option value="10">推广奖励--游戏</option>
+                        <option value="20">推广奖励--首充</option>
                     </select>
                 </div>
             </div>
@@ -48,7 +55,7 @@
             <div class="form-group">
                 <div class="form-group-addon no-right-border">结束</div>
                 <div class="form-group-input stretch">
-                    <input class="stretch" id="EndDate" name="EndDate" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" type="text" value="@ViewBag.StartDate">
+                    <input class="stretch" id="EndDate" name="EndDate" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" type="text" value="@ViewBag.EndDate">
                 </div>
             </div>
         </dd>
@@ -63,47 +70,37 @@
     <table>
         <thead>
             <tr>
-                <th></th>
-                <th>产品</th>
-                <th>委托时间</th>
+                <th>来源</th>
                 <th>类型</th>
-                <th>委托价格</th>
-                <th>委托量</th>
-                <th>已成交</th>
+                <th>奖励金币</th>
                 <th>状态</th>
-                <th>操作</th>
+                <th>时间</th>
             </tr>
         </thead>
         <tbody>
             @if (Model == null || !Model.Any())
             {
                 <tr>
-                    <td class="algin" colspan="9">没有查询到相关数据</td>
+                    <td class="algin" colspan="5">没有找到相关记录</td>
                 </tr>
             }
             else
             {
-                foreach (var e in Model)
+                foreach (var s in Model)
                 {
                     <tr>
-                        <td></td>
-                        <td>@e.Product.ProductName</td>
-                        <td>@e.CreateTime</td>
-                        <td>@(e.IsBuy ? "买入" : "卖出")</td>
-                        <td>@e.Price</td>
-                        <td>@e.Count</td>
-                        <td>@e.DealedCount</td>
-                        <td>@(e.Cancelled ? "已取消" : "正常")</td>
-                        <td></td>
+                        <td>@(!string.IsNullOrEmpty(s.User.DisplayName) ? s.User.DisplayName : s.UserId.ToString())</td>
+                        <td>@((ScoreType)s.TypeId)</td>
+                        <td>@s.Score</td>
+                        <td>@s.Status</td>
+                        <td>@s.CreateTime.ToString("yyyy-MM-dd")</td>
                     </tr>
                 }
             }
         </tbody>
+
     </table>
-
 </div>
-
-
 @section Scripts {
     <script type="text/javascript" src="~/Content/js/datetime/WdatePicker.js"></script>
 }

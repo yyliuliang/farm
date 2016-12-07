@@ -7,22 +7,27 @@ using System.Threading.Tasks;
 
 namespace GoldenFarm.Entity
 {
-    [Table("MarketEntrust")]
+    [Table("Entrust")]
     [Serializable]
-    public class MarketEntrust : EntityBase
+    public class Entrust : EntityBase
     {
         public int UserId { get; set; }
         
         public int ProductId { get; set; }
 
+        [Write(false)]
+        public virtual Product Product { get; set; }
+
         public decimal Price { get; set; }
 
         public int Count { get; set; }
 
-        public bool Buy { get; set; }
+        public int DealedCount { get; set; }
+
+        public bool IsBuy { get; set; }
 
         /// <summary>
-        /// 0: 未成交   1:已成交
+        /// 0: 未成交   1:已成交  2: 部分成交
         /// </summary>
         public int Status { get; set; }
 

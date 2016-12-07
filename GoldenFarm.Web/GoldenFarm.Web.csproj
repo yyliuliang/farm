@@ -220,6 +220,7 @@
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\MarketViewModel.cs" />
+    <Compile Include="Models\PopViewModel.cs" />
     <Compile Include="Models\UserViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
@@ -469,6 +470,8 @@
     <Content Include="Views\User\PopLink.cshtml" />
     <Content Include="Views\User\PopDetail.cshtml" />
     <Content Include="Views\User\FillReferId.cshtml" />
+    <Content Include="Views\User\PopReward.cshtml" />
+    <Content Include="Views\User\TradeHistory.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Areas\Admin\Controllers\" />

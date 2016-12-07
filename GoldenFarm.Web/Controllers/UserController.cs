@@ -13,6 +13,9 @@ namespace GoldenFarm.Web.Controllers
     public class UserController : BaseController
     {
         private UserRepository ur = new UserRepository();
+        private MarketRepository mr = new MarketRepository();
+        private ProductRepository pr = new ProductRepository();
+
         // GET: User
         public ActionResult Index()
         {
@@ -236,14 +239,69 @@ namespace GoldenFarm.Web.Controllers
             return View(CurrentUser);
         }
 
-        public ActionResult FinanceDetail()
+        public ActionResult FinanceDetail(UserScoreCriteria criteria)
         {
-            return View();
+            IEnumerable<UserScore> scores = null;
+            decimal total = 0.00000M;
+            if (!criteria.StartDate.HasValue)
+            {
+                criteria.StartDate = DateTime.Now.AddYears(-5);
+            }
+            else
+            {
+                ViewBag.StartDate = criteria.StartDate.Value.ToString("yyyy-MM-dd");
+            }
+            if (!criteria.EndDate.HasValue)
+            {
+                criteria.EndDate = DateTime.Now.AddYears(5);
+            }
+            else
+            {
+                ViewBag.EndDate = criteria.EndDate.Value.ToString("yyyy-MM-dd");
+            }
+            if (criteria.RefUserId > 0)
+            {
+                scores = ur.GetUserScores(criteria);
+            }
+            else
+            {
+                criteria.RefUserId = CurrentUser.Id;
+                scores = ur.GetRefUserScores(criteria);
+            }
+            if (criteria.TypeId > 0)
+            {
+                scores = scores.Where(s => s.TypeId == criteria.TypeId);
+            }
+            if (scores != null && scores.Any())
+            {
+                total = scores.Sum(s => s.Score);
+            }
+            ViewBag.TotalScore = total;
+            return View(scores);
         }
 
-        public ActionResult Entrust()
+        public ActionResult Entrust(MarketCriteria criteria)
         {
-            return View();
+            criteria.UserId = CurrentUser.Id;
+            if (!criteria.StartDate.HasValue)
+            {
+                criteria.StartDate = DateTime.Now.AddYears(-5);
+            }
+            else
+            {
+                ViewBag.StartDate = criteria.StartDate.Value.ToString("yyyy-MM-dd");
+            }
+            if (!criteria.EndDate.HasValue)
+            {
+                criteria.EndDate = DateTime.Now.AddYears(5);
+            }
+            else
+            {
+                ViewBag.EndDate = criteria.EndDate.Value.ToString("yyyy-MM-dd");
+            }
+            var entrusts = mr.GetEntrusts(criteria);
+            ViewBag.Products = pr.GetAllProducts().Select(p => new SelectListItem { Text = p.ProductName, Value = p.Id.ToString() });
+            return View(entrusts);
         }
 
         public ActionResult TradeHistory()
@@ -279,13 +337,13 @@ namespace GoldenFarm.Web.Controllers
             if(string.IsNullOrEmpty(name))
             {
                 ModelState.AddModelError("cert", "请输入姓名");
-                return View();
+                return View(CurrentUser);
             }
 
             if(string.IsNullOrEmpty(idnum))
             {
                 ModelState.AddModelError("cert", "请输入身份证号");
-                return View();
+                return View(CurrentUser);
             }
 
             CurrentUser.DisplayName = name;
@@ -345,13 +403,65 @@ namespace GoldenFarm.Web.Controllers
             return View(model);
         }
 
-        public ActionResult PopReward()
+        public ActionResult PopReward(UserScoreCriteria criteria)
         {
-            return View();
+            IEnumerable<UserScore> scores = null;
+            decimal total = 0.00000M;
+            if (!criteria.StartDate.HasValue)
+            {
+                criteria.StartDate = DateTime.Now.AddYears(-5);
+            }
+            else
+            {
+                ViewBag.StartDate = criteria.StartDate.Value.ToString("yyyy-MM-dd");
+            }
+            if (!criteria.EndDate.HasValue)
+            {
+                criteria.EndDate = DateTime.Now.AddYears(5);
+            }
+            else
+            {
+                ViewBag.EndDate = criteria.EndDate.Value.ToString("yyyy-MM-dd");
+            }
+            if (criteria.RefUserId > 0)
+            {
+                scores = ur.GetUserScores(criteria);
+            }
+            else
+            {
+                criteria.RefUserId = CurrentUser.Id;
+                scores = ur.GetRefUserScores(criteria);
+            }
+            if(criteria.TypeId > 0)
+            {
+                scores = scores.Where(s => s.TypeId == criteria.TypeId);
+            }
+            if (scores != null && scores.Any())
+            {
+                total = scores.Sum(s => s.Score);
+            }
+            ViewBag.TotalScore = total;
+            return View(scores);
         }
 
         public ActionResult FillReferId()
         {
+            return View(CurrentUser);
+        }
+
+        [ValidateAntiForgeryToken]
+        [HttpPost]
+        public ActionResult FillReferId(int referId)
+        {
+            var user = ur.Get(referId);
+            if(user == null)
+            {
+                ModelState.AddModelError("refid", "推广码错误");
+                return View(CurrentUser);
+            }
+
+            CurrentUser.RefUserId = referId;
+            ur.Update(CurrentUser);
             return View(CurrentUser);
         }
         #endregion

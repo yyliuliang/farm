@@ -90,7 +90,8 @@ namespace GoldenFarm.Web.Controllers
 
         public ActionResult TradeCenter()
         {
-            return View();
+            var markets = mr.GeTodayMarkets();
+            return View(markets);
         }
 
         public ActionResult Borrow()
