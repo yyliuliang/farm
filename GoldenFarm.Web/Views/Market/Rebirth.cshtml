@@ -1,0 +1,46 @@
+﻿
+@{
+    ViewBag.Title = "用户中心";
+    Layout = "~/Views/Shared/_UserCenterLayout.cshtml";
+}
+@model IEnumerable<UserProduct>
+
+<div class="uc-head">可重生果实列表</div>
+<div class="tablebox">
+    <table>
+        <thead>
+            <tr>
+                <th></th>
+                <th>果实</th>
+                <th>持有量</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model == null || !Model.Any())
+            {
+                <tr>
+                    <td class="algin" colspan="4">没有可重生果实</td>
+                </tr>
+            }
+            else
+            {
+                foreach (var p in Model)
+                {
+                    <tr>
+                        <td></td>
+                        <td>@p.Product.ProductName</td>
+                        <td>@p.TotalCount</td>
+                        <td>重生</td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+    <div class="message message-info">
+        温馨提示<br>
+        1. 果实重生：让果实变回种子状态，重新播种，萝卜也可能变成玫瑰，赶紧来试试吧！<br>
+        2. 果实重生种子比例为1：1<br>
+        3. 玫瑰不能进行重生。
+    </div>
+</div>

@@ -304,14 +304,34 @@ namespace GoldenFarm.Web.Controllers
             return View(entrusts);
         }
 
-        public ActionResult TradeHistory()
+        public ActionResult TradeHistory(MarketCriteria criteria)
         {
-            return View();
+            criteria.UserId = CurrentUser.Id;
+            if (!criteria.StartDate.HasValue)
+            {
+                criteria.StartDate = DateTime.Now.AddYears(-5);
+            }
+            else
+            {
+                ViewBag.StartDate = criteria.StartDate.Value.ToString("yyyy-MM-dd");
+            }
+            if (!criteria.EndDate.HasValue)
+            {
+                criteria.EndDate = DateTime.Now.AddYears(5);
+            }
+            else
+            {
+                ViewBag.EndDate = criteria.EndDate.Value.ToString("yyyy-MM-dd");
+            }
+            var transactions = mr.GetTransactions(criteria);
+            ViewBag.Products = pr.GetAllProducts().Select(p => new SelectListItem { Text = p.ProductName, Value = p.Id.ToString() });
+            return View(transactions);
         }
 
         public ActionResult BorrowHistory()
         {
-            return View();
+            var history = ur.GetBorrowHistoryByUser(CurrentUser.Id);
+            return View(history);
         }
 
         public ActionResult Give()

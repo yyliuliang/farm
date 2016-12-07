@@ -14,6 +14,7 @@ namespace GoldenFarm.Web.Controllers
     {
         MarketRepository mr = new MarketRepository();
         ProductRepository pr = new ProductRepository();
+        UserRepository ur = new UserRepository();
 
         // GET: Market
         public ActionResult Index()
@@ -45,7 +46,7 @@ namespace GoldenFarm.Web.Controllers
                             {
                                 Time = t.CreateTime.ToTimestamp(),
                                 Price = t.Price,
-                                Volume = t.Volume
+                                Volume = t.Count
                             },
                 MarketInfo = new
                 {
@@ -96,7 +97,20 @@ namespace GoldenFarm.Web.Controllers
 
         public ActionResult Borrow()
         {
-            return View();
+            return View(CurrentUser);
+        }
+
+        public ActionResult Rebirth()
+        {
+            var products = ur.GetProductsByUser(CurrentUser.Id);
+            return View(products);
+        }
+
+
+        public ActionResult RebirthHistory()
+        {
+            var history = ur.GetRebirthHistoryByUser(CurrentUser.Id);
+            return View(history);
         }
 
 

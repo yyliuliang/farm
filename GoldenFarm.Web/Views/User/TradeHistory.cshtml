@@ -3,6 +3,115 @@
     ViewBag.Title = "用户中心";
     Layout = "~/Views/Shared/_UserCenterLayout.cshtml";
 }
+@model IEnumerable<Transaction>
 
-<h2>Trade History</h2>
+<div class="uc-head">交易记录</div>
 
+@using (Html.BeginForm())
+{
+    <dl class="uc-search">
+
+
+        <dd>
+            <div class="form-group">
+                <div class="form-group-addon no-right-border">产品</div>
+                <div class="form-group-addon form-group-addon-white stretch">
+                    @Html.DropDownList("ProductId", (IEnumerable<SelectListItem>)ViewBag.Products, "全部")
+                </div>
+            </div>
+        </dd>
+
+        <dd>
+            <div class="form-group">
+                <div class="form-group-addon no-right-border">类别</div>
+                <div class="form-group-addon form-group-addon-white stretch">
+                    <select id="IsBuy" name="IsBuy">
+
+                        <option value="-1" selected="">全部</option>
+                        <option value="1">买入</option>
+                        <option value="0">卖出</option>
+
+                    </select>
+                </div>
+            </div>
+        </dd>
+
+        <dd>
+            <div class="form-group">
+                <div class="form-group-addon no-right-border">开始</div>
+                <div class="form-group-input stretch">
+                    <input class="stretch" id="StartDate" name="StartDate" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" type="text" value="">
+                </div>
+            </div>
+        </dd>
+        <dd>
+            <div class="form-group">
+                <div class="form-group-addon no-right-border">结束</div>
+                <div class="form-group-input stretch">
+                    <input class="stretch" id="EndDate" name="EndDate" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" type="text" value="">
+                </div>
+            </div>
+        </dd>
+        <dd>
+            <div class="form-group">
+                <input type="submit" class="button button-color-1 button-stretch" value="查询" onclick="return check()">
+            </div>
+        </dd>
+    </dl>
+}
+
+<div class="tablebox">
+
+    <table>
+        <thead>
+            <tr>
+                <th></th>
+                <th>产品</th>
+                <th>交易时间</th>
+                <th>类型</th>
+                <th>成交价</th>
+                <th>成交量</th>
+                <th>成交额</th>
+                <th>手续费</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model == null || !Model.Any())
+            {
+                <tr>
+                    <td class="algin" colspan="8">没有查询到相关数据</td>
+                </tr>
+            }
+            else
+            {
+                foreach (var t in Model)
+                {
+                    <tr>
+                        <td></td>
+                        <td>@t.Product.ProductName</td>
+                        <td>@t.CreateTime</td>
+                        <td>@(t.IsBuy ? "买入" : "卖出")</td>
+                        <td>@t.Price</td>
+                        <td>@t.Count</td>
+                        <td>@(t.Price * t.Count)</td>
+                        <td>@t.ChargeFee</td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>
+@section Scripts {
+    <script type="text/javascript" src="~/Content/js/datetime/WdatePicker.js"></script>
+}
+<script type="text/javascript">
+    function check() {
+        if ($("#StartDate").val() != "" && $("#EndDate").val() != "") {
+            if (new Date($("#StartDate").val().replace(/-/g, "/")) > new Date($("#EndDate").val().replace(/-/g, "/"))) {
+                alert("开始时间不能大于结束时间");
+                return false;
+            }
+        }
+    }
+
+</script>

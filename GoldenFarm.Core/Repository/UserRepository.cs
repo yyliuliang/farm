@@ -59,10 +59,10 @@ namespace GoldenFarm.Repository
 
         #region product
 
-        public IEnumerable<UserProduct> GetProductsByUser(int id)
+        public IEnumerable<UserProduct> GetProductsByUser(int userId)
         {
-            string sql = "SELECT * FROM [User] u INNER JOIN UserProduct p on u.Id = p.UserId WHERE u.Id = @id";
-            return Conn.Query<UserProduct, Product, UserProduct>(sql, (u, p) => { u.Product = p; return u; }, new { id = id });
+            string sql = "SELECT * FROM [User] u INNER JOIN UserProduct p on u.Id = p.UserId WHERE u.Id = @userId";
+            return Conn.Query<UserProduct, Product, UserProduct>(sql, (u, p) => { u.Product = p; return u; }, new { userId = userId });
         }
 
         #endregion
@@ -100,6 +100,20 @@ namespace GoldenFarm.Repository
                                 WHERE TypeId IN (4, 10, 20) AND us.UserId = @userId AND us.CreateTime BETWEEN @start AND @end";
 
             return Conn.Query<UserScore, User, UserScore>(sql, (us, u) => { us.User = u; return us; }, new { userId = criteria.RefUserId, start = criteria.StartDate, end = criteria.EndDate });
+        }
+
+
+        public IEnumerable<ProductRebirth> GetRebirthHistoryByUser(int userId)
+        {
+            string sql = "SELECT * FROM ProductRebirth r INNER JOIN Product p on r.ProductId = p.Id WHERE r.UserId = @userId";
+            return Conn.Query<ProductRebirth, Product, ProductRebirth>(sql, (r, p) => { r.Product = p; return r; }, new { userId = userId });
+        }
+
+
+        public IEnumerable<UserBorrow> GetBorrowHistoryByUser(int userId)
+        {
+            string sql = "SELECT * FROM UserBorrow r INNER JOIN Product p on r.ProductId = p.Id WHERE r.UserId = @userId";
+            return Conn.Query<UserBorrow, Product, UserBorrow>(sql, (r, p) => { r.Product = p; return r; }, new { userId = userId });
         }
 
     }

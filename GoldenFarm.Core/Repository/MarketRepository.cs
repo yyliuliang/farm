@@ -79,6 +79,12 @@ namespace GoldenFarm.Repository
             return Conn.Query<Entrust, Product, Entrust>(sql, (e, p) => { e.Product = p; return e; }, parameters);
         }
 
+
+        public IEnumerable<Transaction> GetTransactions(MarketCriteria criteria)
+        {
+            return null;
+        }
+
         
 
         public void PrepareMarketsTestData()
@@ -107,7 +113,7 @@ namespace GoldenFarm.Repository
 
         public void PrepareTransactionsTestData()
         {
-            string sql = "TRUNCATE TABLE [MarketTransaction]";
+            string sql = "TRUNCATE TABLE [Transaction]";
             Conn.Execute(sql);
 
             DateTime now = DateTime.Now;
@@ -123,9 +129,9 @@ namespace GoldenFarm.Repository
 
                 foreach (var p in products)
                 {
-                    sql = @"INSERT INTO MarketTransaction( TransactionId, ProductId, BuyerId, SellerId, Volume, Price, [Date], CreateTime)
-                            VALUES(NEWID(), {0}, 0, 0, {1}, {2}, '{3}', '{4}')";
-                    sql = string.Format(sql, p.Id, r.Next(999999), r.NextDouble(), date, time);
+                    sql = @"INSERT INTO [Transaction]( TransactionId, ProductId, UserId, IsBuy, [Count], ChargeFee, Price, [Date], CreateTime)
+                            VALUES(NEWID(), {0}, 0, 1, {1}, {2}, {3}, '{4}', '{5}')";
+                    sql = string.Format(sql, p.Id, r.Next(999999), r.NextDouble(), r.NextDouble(),  date, time);
                     Conn.Execute(sql);
                 }
             }

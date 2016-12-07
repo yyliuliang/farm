@@ -1,0 +1,61 @@
+﻿
+@{
+    ViewBag.Title = "用户中心";
+    Layout = "~/Views/Shared/_UserCenterLayout.cshtml";
+}
+@model IEnumerable<UserBorrow>
+
+<div class="uc-head">租借记录</div>
+<div>
+
+</div>
+<div class="tablebox">
+    <table>
+        <thead>
+            <tr>
+                <th></th>
+                <th>名称</th>
+                <th>租借时间</th>
+                <th>数量</th>
+                <th>保证金</th>
+                <th>日息</th>
+                <th>最后归还日期</th>
+                <th>状态</th>
+                <th>归还日期</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model == null || !Model.Any())
+            {
+                <tr>
+                    <td class="algin" colspan="10">没有找到相关记录</td>
+                </tr>
+            }
+            else
+            {
+                foreach (var b in Model)
+                {
+                    <tr>
+                        <td></td>
+                        <td>@b.Product.ProductName</td>
+                        <td>@b.CreateTime</td>
+                        <td>@b.BorrowCount</td>
+                        <td>@b.Bail</td>
+                        <td>@b.DailyInterest</td>
+                        <td>@b.Deadline.ToString("yyyy-MM-dd")</td>
+                        <td>@b.Status</td>
+                        <td>@(b.ReturnTime.HasValue ? b.ReturnTime.Value.ToString("yyyy-MM-dd") : string.Empty)</td>
+                        <td>归还</td>
+                    </tr>
+                }
+            }
+        </tbody>
+
+    </table>
+</div>
+<div class="message message-help">
+    温馨提示：<br>
+    1.补充的保证金不收取手续费，不计算日息。<br>
+    2.如果超过最后归还日期仍未归还，系统将强制平仓（用保证金从市场自动购买租借的果实并归还）。<br>
+</div>

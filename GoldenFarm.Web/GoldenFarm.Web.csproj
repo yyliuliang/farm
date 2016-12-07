@@ -472,6 +472,12 @@
     <Content Include="Views\User\FillReferId.cshtml" />
     <Content Include="Views\User\PopReward.cshtml" />
     <Content Include="Views\User\TradeHistory.cshtml" />
+    <Content Include="Views\Market\Rebirth.cshtml" />
+    <Content Include="Views\Market\RebirthHistory.cshtml" />
+    <Content Include="Views\Market\Borrow.cshtml" />
+    <Content Include="Views\User\BorrowHistory.cshtml" />
+    <Content Include="Views\User\Give.cshtml" />
+    <Content Include="Views\User\GiveHistory.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Areas\Admin\Controllers\" />

@@ -1,0 +1,45 @@
+﻿
+@{
+    ViewBag.Title = "用户中心";
+    Layout = "~/Views/Shared/_UserCenterLayout.cshtml";
+}
+@model IEnumerable<ProductRebirth>
+
+<div class="uc-head">果实重生记录</div>
+<div class="tablebox">
+    <table>
+        <thead>
+            <tr>
+                <th></th>
+                <th>重生果实</th>
+                <th>重生数量</th>
+                <th>获得种子数</th>
+                <th>手续费</th>
+                <th>时间</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model == null || !Model.Any())
+            {
+                <tr>
+                    <td class="algin" colspan="6">没有重生记录</td>
+                </tr>
+            }
+            else
+            {
+                foreach (var p in Model)
+                {
+                    <tr>
+                        <td></td>
+                        <td>@p.Product.ProductName</td>
+                        <td>@p.RebirthCount</td>
+                        <td>@p.SeedCount</td>
+                        <td>@p.ChargeFee</td>
+                        <td>@p.CreateTime</td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+
+</div>
