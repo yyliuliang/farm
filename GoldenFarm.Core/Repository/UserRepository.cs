@@ -14,8 +14,9 @@ namespace GoldenFarm.Repository
 
         public User GetByUserGuid(Guid id)
         {
-            string sql = "SELECT TOP 1 * FROM [User] WHERE UserGuid = @id AND Deleted=0";
-            return Conn.QueryFirstOrDefault<User>(sql, new { id = id });
+            string sql = "SELECT TOP 1 * FROM [User] u LEFT JOIN [UserBankAccount] uba ON u.Id = uba.UserId WHERE u.UserGuid = @id AND Deleted=0";
+            var r = Conn.Query<User, UserBankAccount, User>(sql, (u, b) => { u.BankAccount = b; return u; }, new { id = id });
+            return r != null && r.Any() ? r.FirstOrDefault() : null;
         }
 
         public bool UserExists(string username)
@@ -32,6 +33,9 @@ namespace GoldenFarm.Repository
             var r = Conn.Query<User, UserBankAccount, User>(sql, (u, b) => { u.BankAccount = b; return u; }, new { name = username, password = password });
             return r != null && r.Any() ? r.FirstOrDefault() : null;
         }
+
+
+       
 
 
         #region bank account
@@ -70,19 +74,19 @@ namespace GoldenFarm.Repository
 
         public int GetDirectRefUsersCount(int userId)
         {
-            string sql = "SELECT COUNT(1) FROM [User] WHERE Deleted = 0 AND RefUserId = @userId";
+            string sql = "SELECT COUNT(1) FROM [User] WHERE Deleted = 0 AND RefUserId = @userId AND RefUserId != Id";
             return Conn.QuerySingle<int>(sql, new { userId = userId });
         }
 
         public int GetIndirectRefUsersCount(int userId)
         {
-            string sql = "SELECT COUNT(1) FROM [User] WHERE Deleted = 0 AND RefUserPath like @userId";
+            string sql = "SELECT COUNT(1) FROM [User] WHERE Deleted = 0 AND RefUserPath like @userId AND RefUserId != Id";
             return Conn.QuerySingle<int>(sql, new { userId = userId + "%" });
         }
 
         public IEnumerable<User> GetRefUsers(int userId)
         {
-            string sql = "SELECT * FROM [User] WHERE Deleted = 0 AND RefUserPath like @userId";
+            string sql = "SELECT * FROM [User] WHERE Deleted = 0 AND RefUserPath like @userId AND RefUserId != Id";
             return Conn.Query<User>(sql, new { userId = userId + "%" });
         }
 
@@ -115,6 +119,20 @@ namespace GoldenFarm.Repository
             string sql = "SELECT * FROM UserBorrow r INNER JOIN Product p on r.ProductId = p.Id WHERE r.UserId = @userId";
             return Conn.Query<UserBorrow, Product, UserBorrow>(sql, (r, p) => { r.Product = p; return r; }, new { userId = userId });
         }
+
+
+        public IEnumerable<UserGive> GetGiveHistoryByUser(int userId)
+        {
+            string sql = "SELECT * FROM UserGive g INNER JOIN Product p on g.ProductId = p.Id INNER JOIN [User] u on g.ReceiverId = u.Id  WHERE g.UserId = @userId";
+            return Conn.Query<UserGive, Product, User, UserGive>(sql, (g, p, u) => { g.Product = p; g.Receiver = u; return g; }, new { userId = userId });
+        }
+
+        public IEnumerable<UserWithdraw> GetWithdrawHistoryByUser(int userId)
+        {
+            string sql = "SELECT * FROM UserWithdraw WHERE UserId = @userId";
+            return Conn.Query<UserWithdraw>(sql, new { userId = userId });
+        }
+
 
     }
 }

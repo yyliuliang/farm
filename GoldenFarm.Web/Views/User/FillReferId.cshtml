@@ -31,6 +31,7 @@
                 <div class="form-group-addon form-group-addon-disabled stretch">@Model.RefUserId</div>
             }
         </div>
+        @Html.ValidationMessage("refid", new { @class = "field-validation-valid" })
         @if (!filed)
         {
             <div class="form-group">

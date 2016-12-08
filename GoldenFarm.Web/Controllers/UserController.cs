@@ -15,6 +15,7 @@ namespace GoldenFarm.Web.Controllers
         private UserRepository ur = new UserRepository();
         private MarketRepository mr = new MarketRepository();
         private ProductRepository pr = new ProductRepository();
+        private SmsRepository sr = new SmsRepository();
 
         // GET: User
         public ActionResult Index()
@@ -83,7 +84,7 @@ namespace GoldenFarm.Web.Controllers
 
         [ValidateAntiForgeryToken]
         [HttpPost]
-        public ActionResult Reg(string phone, string password, string passwordc, string vcode, int refuid)
+        public ActionResult Reg(string phone, string password, string passwordc, string vcode, int? refuid)
         {
             if (string.IsNullOrEmpty(phone) || string.IsNullOrEmpty(password))
             {
@@ -120,25 +121,28 @@ namespace GoldenFarm.Web.Controllers
             user.LastLoginIP = Request.UserIP();
             user.LastLoginTime = DateTime.Now;
             user.CreateTime = DateTime.Now;
-            if(refuid > 0)
+            if(refuid.HasValue)
             {
-                refUser = ur.Get(refuid);
+                refUser = ur.Get(refuid.Value);
                 if (refUser != null)
                 {
-                    user.RefUserId = refuid;
+                    user.RefUserId = refuid.Value;
                     refPath = refUser.RefUserPath;
                 }                
             }
+            
             int uid = ur.Create(user);
             if(refUser != null)
             {
                 user.RefUserPath = refPath + ";" + uid;
             }
-            else
-            {
-                user.RefUserPath = uid + ";";
-            }
+            //else
+            //{
+            //    user.RefUserId = uid;
+            //    user.RefUserPath = uid + ";";
+            //}
             ur.Update(user);
+            _Login(user, false);
             return RedirectToAction("Index");
         }
 
@@ -223,6 +227,23 @@ namespace GoldenFarm.Web.Controllers
             return View(CurrentUser);
         }
 
+        [ValidateAntiForgeryToken]
+        [HttpPost]
+        public ActionResult GiveSwitch(string mcode)
+        {
+            if(!CurrentUser.SmsGiveSwitch)
+            {
+                if(!sr.CheckSms(CurrentUser.Phone, mcode))
+                {
+                    ModelState.AddModelError("code", "请确认短信验证码");
+                    return View(CurrentUser);
+                }
+            }
+            CurrentUser.SmsGiveSwitch = !CurrentUser.SmsGiveSwitch;
+            ur.Update(CurrentUser);
+            return View(CurrentUser);
+        }
+
 
         public ActionResult Wallet()
         {
@@ -236,7 +257,10 @@ namespace GoldenFarm.Web.Controllers
 
         public ActionResult Withdraw()
         {
-            return View(CurrentUser);
+            var model = new UserWithdrawViewModel();
+            model.User = CurrentUser;
+            model.Withdraws = ur.GetWithdrawHistoryByUser(CurrentUser.Id);
+            return View(model);
         }
 
         public ActionResult FinanceDetail(UserScoreCriteria criteria)
@@ -336,12 +360,13 @@ namespace GoldenFarm.Web.Controllers
 
         public ActionResult Give()
         {
-            return View();
+            return View(CurrentUser);
         }
 
         public ActionResult GiveHistory()
         {
-            return View();
+            var history = ur.GetGiveHistoryByUser(CurrentUser.Id);
+            return View(history);
         }
 
 
@@ -369,12 +394,13 @@ namespace GoldenFarm.Web.Controllers
             CurrentUser.DisplayName = name;
             CurrentUser.IdNum = idnum;
             ur.Update(CurrentUser);
+            RefreshCurrentUser();
             return View(CurrentUser);
         }
 
         public ActionResult BindBankCard()
         {
-            var bankAccount = ur.GetBankAccount(CurrentUser.Id);
+            var bankAccount = CurrentUser.BankAccount;//ur.GetBankAccount(CurrentUser.Id);
             ViewBag.Name = CurrentUser.DisplayName;
             return View(bankAccount);
         }
@@ -383,7 +409,7 @@ namespace GoldenFarm.Web.Controllers
         [HttpPost]
         public ActionResult BindBankCard(string bank, string accountNum)
         {
-            var bankAccount = ur.GetBankAccount(CurrentUser.Id);
+            var bankAccount = CurrentUser.BankAccount; //ur.GetBankAccount(CurrentUser.Id);
             if (string.IsNullOrEmpty(bank) || string.IsNullOrEmpty(accountNum))
             {
                 ModelState.AddModelError("bank", "请输入银行和卡号");
@@ -402,6 +428,7 @@ namespace GoldenFarm.Web.Controllers
             bankAccount.AccountName = CurrentUser.DisplayName;
             
             ur.SaveBankAccount(bankAccount);
+            RefreshCurrentUser();
             return RedirectToAction("BindBankCard");
         }
 

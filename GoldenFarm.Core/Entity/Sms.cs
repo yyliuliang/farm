@@ -17,6 +17,7 @@ namespace GoldenFarm.Entity
 
         public string Message { get; set; }
 
+        public string Category { get; set; }
 
         public int Sender { get; set; }
 

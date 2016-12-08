@@ -7,29 +7,26 @@ using System.Threading.Tasks;
 
 namespace GoldenFarm.Entity
 {
-    [Table("UserBankAccount")]
+    [Table("UserWithdraw")]
     [Serializable]
-    public class UserBankAccount : EntityBase
+    public class UserWithdraw : EntityBase
     {
         public int UserId { get; set; }
-
-        //[Write(false)]
-        //public virtual User User { get; set; }
 
         public string Bank { get; set; }
 
         public string AccountNum { get; set; }
-
+        
         public string AccountName { get; set; }
 
+        public decimal Amount { get; set; }
+
+
+        public decimal ChargeFee { get; set; }
+
+
+        public int Status { get; set; }
 
         public DateTime CreateTime { get; set; }
-
-
-        public override string ToString()
-        {
-            return string.Format("{0} = {1} - {2}", Bank, AccountName, AccountNum);
-        }
-
     }
 }

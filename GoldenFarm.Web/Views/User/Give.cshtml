@@ -3,6 +3,254 @@
     ViewBag.Title = "用户中心";
     Layout = "~/Views/Shared/_UserCenterLayout.cshtml";
 }
+@model User
+<div class="uc-head uc-head-border">果实赠送</div>
+<!-- uc-form start -->
+<div class="uc-form">
 
-<h2>Give</h2>
+    <div class="form-group">
+        <div class="form-group-addon">赠送果实</div>
+        <div class="form-group-addon no-left-border form-group-addon-disabled stretch productinputshow clear" id="ProductNameText">请选择</div>
 
+        <div class="form-group-input">
+            <button class="no-left-border" onclick="return false;" toggle="#productstogglebox">选择 <i class="icon"></i></button>
+            <div class="togglebox togglebox-top togglebox-right productstogglebox" style="min-width: 220px; display: none;" id="productstogglebox">
+                <dl></dl>
+            </div>
+        </div>
+    </div>
+
+
+
+    <div class="form-group">
+        <div class="form-group-addon">接收对象</div>
+        <div class="form-group-input stretch">
+            <input class="stretch no-left-border" data-val="true" data-val-regex="请输入正确的接收人编号或手机号" data-val-regex-pattern="\d{5,}" data-val-required="请输入接收人编号或手机号" id="To" name="To" placeholder="请输入接收人ID或手机号" type="text" value="">
+        </div>
+    </div>
+    <span class="field-validation-valid" data-valmsg-for="To" data-valmsg-replace="true"></span>
+
+
+
+    <div class="form-group">
+        <div class="form-group-addon">赠送数量</div>
+        <div class="form-group-input stretch">
+            <input class="stretch no-left-border" data-val="true" data-val-number="字段 Number 必须是一个数字。" data-val-required="Number 字段是必需的。" id="Number" name="Number" placeholder="请输入赠送数量" type="text" value="">
+        </div>
+    </div>
+    <span class="field-validation-valid" data-valmsg-for="Number" data-valmsg-replace="true"></span>
+
+
+
+    <div class="form-group hide charge">
+        <div class="form-group-addon">手续费用</div>
+        <div class="form-group-addon no-left-border form-group-addon-disabled stretch clear" id="charge"></div>
+    </div>
+
+
+
+
+
+
+    <div class="form-group smscheck">
+        <div class="form-group-addon no-right-border">图片验证</div>
+        <div class="form-group-input stretch">
+            <input class="stretch" id="VCode" maxlength="4" name="VCode" type="text" value="">
+        </div>
+        <div class="form-group-addon no-left-border code">
+            <img src="/common/VerificationImgForm" title="点击图片换一张" onclick="this.src = '/common/VerificationImgForm?flag=' + Math.random()">
+        </div>
+    </div>
+    <div class="form-group smscheck">
+        <div class="form-group-addon no-right-border">短信验证</div>
+        <div class="form-group-input stretch">
+            <input class="stretch" id="MobileVCode" maxlength="6" name="MobileVCode" placeholder="" type="text" value="">
+        </div>
+        <div class="form-group-input">
+            <button class="no-left-border button-color-1" type="button" onclick="GetSMS()" id="Sms">获取手机验证码</button>
+        </div>
+    </div>
+
+
+
+    <div class="form-group">
+        <input type="button" class="button-color-1 button-stretch" value="提交" onclick="return Give();">
+    </div>
+    <span class="field-validation-valid" data-valmsg-for="Err" data-valmsg-replace="true"></span>
+</div>
+<!-- uc-form end -->
+
+<div class="message message-help">
+    温馨提示：<br>
+    <!--
+    1. 您可以选择索取接受方金币，也可以免费赠送！<br />
+    2. 接受方成功接受果实后，将按当前价格支付赠送果实总额的10%的手续费。<br />
+    -->
+    1. <span class="color-1">本功能仅用于果实赠送，请勿通过此功能进行线下交易，出现任何损失，责任自负。</span><br>
+    2. 接收对象可以是对方的ID或者手机号码。<br>
+    3. 赠送果实的数量必须是10的整倍。<br>
+    4. 接收方将支付赠送果实总额(按当前价格计算)10%的手续费。<br>
+    5. 如果接收方在次日0点前没有接受您的赠送，本次赠送将自动取消，果实将自动返回到您的账户上。<br>
+    6. 领取过大礼包的玩家，4级之前无法赠送。
+</div>
+
+<script type="text/javascript">
+
+    $(function () {
+        //总额小于并且开启免短信验证
+        if (parseFloat("0") < parseFloat("200") && "True" == "@Model.SmsGiveSwitch.ToString()") {
+            $(".smscheck").hide();
+        }
+    });
+
+    var intFormatFloat = 4;
+    if ($("#ProductCode").val() == '900001') {
+        intFormatFloat = 4;
+    }
+
+    function FormatIntValue(value) {
+        value = value.replace(/[^\d]/g, "");
+        return value;
+    }
+
+    function FormatFloatValue(value) {
+        value = value.replace(/[^\d.]/g, "");
+        value = value.replace(/^\./g, "");
+        value = value.replace(/\.{2,}/g, ".");
+        value = value.replace(".", "$#$").replace(/\./g, "").replace("$#$", ".");
+        if (value.indexOf(".") != -1) {
+            points = value.substring(value.indexOf("."));
+            value = value.replace(points, "");
+            if (points.length > intFormatFloat + 1) {
+                points = points.substring(0, intFormatFloat + 1);
+            }
+            value = value + points;
+        }
+        return value;
+    }
+
+
+    function ChargeFruits(id, price, code, name, count) {
+
+
+        $('#ProductId').val(id);
+        $('#Price').val(price);
+        $('#ProductCode').val(code);
+        $('#ProductName').val(name);
+        $('#Count').val(count);
+
+        if (parseInt(count) < parseInt($("#Number").val())) {
+            $("#Number").css('color', '#FF0000');
+            count = parseInt(count / 10) * 10;
+            $("#Number").val(count)
+        }
+
+        FlushCharge();
+    }
+
+    function FlushCharge() {
+        var price = parseFloat($("#Price").val());
+        var number = parseInt($("#Number").val());
+        var charge = price * number * parseFloat("0.1");
+
+        //只有开启免短信验证才有这操作
+        if ("True" == "@Model.SmsGiveSwitch.ToString()") {
+            if (price * number + parseFloat("0") >= parseFloat("200") || parseFloat("0") >= parseFloat("200")) {
+                $(".smscheck").show();
+            } else {
+                $(".smscheck").hide();
+            }
+        }
+
+        $("#charge").html(charge.toFixed(intFormatFloat));
+    }
+
+    $("#Number").keyup(function () {
+        $(this).val(FormatIntValue($(this).val()));
+
+        var count = $("#Count").val();
+
+        if (parseInt($(this).val()) > parseInt(count)) {
+            $(this).css('color', '#FF0000');
+            count = parseInt(count / 10) * 10;
+            $(this).val(count);
+        }
+
+        FlushCharge();
+
+    });
+
+    $("#Payment").keyup(function () {
+        $(this).val(FormatFloatValue($(this).val()));
+    });
+
+    function Give() {
+
+
+        if (typeof ($("#ProductNameText b").html()) == 'undefined') {
+            alert("请选择赠送果实.");
+            return false;
+        }
+
+        //前期只开放第二种
+        $("#Type").val('2');
+        if ($("#Type").val() == '0') {
+            alert("请选择赠送类型.");
+            return false;
+        }
+
+        if ($("#To").val() == '') {
+            alert("请输入赠送对象.");
+            return false;
+        }
+
+        if (isNaN($("#Number").val()) || $("#Number").val() == 0) {
+            alert("请输入赠送果实数量");
+            return false;
+        }
+
+        if ($("#Number").val() % 10 != 0) {
+            alert("果实赠送数量只能是10的倍数.");
+            return false;
+        }
+
+        var price = parseFloat($("#Price").val());
+        var number = parseInt($("#Number").val());
+
+        //开启达到条件 或者 没开启
+        if (price * number + parseFloat("0") >= parseFloat("200") || "@Model.SmsGiveSwitch.ToString()" == "False") {
+            if ($("#VCode").val() == "") {
+                alert("请输入图形验证码.");
+                return false;
+            }
+            if ($("#VCode").val().length != 4) {
+                alert("请输入正确的图形验证码.");
+                return false;
+            }
+            if ($("#MobileVCode").val() == "") {
+                alert("请输入短信验证码.");
+                return false;
+            }
+            if ($("#MobileVCode").val().length != 6) {
+                alert("请输入正确的短信验证码.");
+                return false;
+            }
+        }
+
+        //if (isNaN($("#Payment").val())) {
+        //    alert("请输入正确的索取金币数量");
+        //    return false;
+        //}
+
+        var message = "";
+        if ($("#Type").val() == 1) {
+            message = '您确定赠送 ' + $("#Number").val() + ' 个 ' + $("#ProductName").val() + ' 给用户 ' + $("#To").val() + ' 并支付 ' + $("#charge").html() + ' 金币';
+        } else {
+            message = '您确定赠送 ' + $("#Number").val() + ' 个 ' + $("#ProductName").val() + ' 给用户 ' + $("#To").val();
+        }
+
+        if (confirm(message)) {
+            $("form").submit();
+        }
+    }
+</script>

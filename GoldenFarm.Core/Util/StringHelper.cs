@@ -25,15 +25,15 @@ namespace GoldenFarm.Util
                         break;
                     case 2:
                         ch = onlyNumber ? r.Next(0, 9) : r.Next(65, 90);
-                        s = s + Convert.ToChar(ch).ToString();
+                        s = s + (onlyNumber ? ch.ToString() : Convert.ToChar(ch).ToString());
                         break;
                     case 3:
                         ch = onlyNumber ? r.Next(0, 9) : r.Next(97, 122);
-                        s = s + Convert.ToChar(ch).ToString();
+                        s = s + (onlyNumber ? ch.ToString() : Convert.ToChar(ch).ToString());
                         break;
                     default:
                         ch = onlyNumber ? r.Next(0, 9) : r.Next(97, 122);
-                        s = s + Convert.ToChar(ch).ToString();
+                        s = s + (onlyNumber ? ch.ToString() : Convert.ToChar(ch).ToString());
                         break;
                 }
                 r.NextDouble();

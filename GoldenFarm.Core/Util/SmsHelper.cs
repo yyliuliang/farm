@@ -34,6 +34,12 @@ namespace GoldenFarm.Util
             newStream.Close();
 
             HttpWebResponse myResponse = (HttpWebResponse)myRequest.GetResponse();
+            var stream = myResponse.GetResponseStream();
+
+            //StreamReader myStreamReader = new StreamReader(stream, Encoding.GetEncoding("UTF-8"));
+            //string retString = myStreamReader.ReadToEnd();
+            //myStreamReader.Close();
+            //stream.Close();
             if (myResponse.StatusCode == HttpStatusCode.OK)
             {
                 myResponse.Close();

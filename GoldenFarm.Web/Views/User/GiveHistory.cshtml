@@ -3,6 +3,43 @@
     ViewBag.Title = "用户中心";
     Layout = "~/Views/Shared/_UserCenterLayout.cshtml";
 }
+@model IEnumerable<UserGive>
 
-<h2>Give</h2>
-
+<div class="uc-head">赠送记录</div>
+<div class="tablebox">
+    <table>
+        <thead>
+            <tr>
+                <th></th>
+                <th>名称</th>
+                <th>数量</th>
+                <th>接收人</th>
+                <th>手续费</th>
+                <th>赠送时间</th>
+                @*<th>状态/操作</th>*@
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model == null || !Model.Any())
+            {
+                <tr>
+                    <td class="algin" colspan="6">没赠送记录</td>
+                </tr>
+            }
+            else
+            {
+                foreach (var g in Model)
+                {
+                    <tr>
+                        <td></td>
+                        <td>@g.Product.ProductName</td>
+                        <td>@g.Count</td>
+                        <td>@g.Receiver.DisplayName</td>
+                        <td>@g.ChargeFee</td>
+                        <td>@g.CreateTime</td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>

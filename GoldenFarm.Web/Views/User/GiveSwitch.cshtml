@@ -6,40 +6,44 @@
 @model GoldenFarm.Entity.User
 
 <div class="uc-head uc-head-border">小额果实赠送免短信验证开关</div>
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <div class="uc-form">
 
-<div class="uc-form">
-
-    <div class="form-group">
-        <div class="form-group-addon">开关状态</div>
-        <div class="form-group-addon no-left-border form-group-addon-disabled stretch">@(Model.SmsGiveSwitch ? "已开启" : "关闭")</div>
-    </div>
-
-    <div class="form-group">
-        <div class="form-group-addon no-right-border">图片验证</div>
-        <div class="form-group-input stretch">
-            <input class="stretch" id="VCode" maxlength="4" name="VCode" type="text" value="">
+        <div class="form-group">
+            <div class="form-group-addon">开关状态</div>
+            <div class="form-group-addon no-left-border form-group-addon-disabled stretch">@(Model.SmsGiveSwitch ? "已开启" : "关闭")</div>
         </div>
-        <div class="form-group-addon no-left-border code">
-            <img src="/common/VerificationImgForm" title="点击图片换一张" onclick="this.src = '/common/VerificationImgForm?flag=' + Math.random()">
-        </div>
-    </div>
-    <div class="form-group">
-        <div class="form-group-addon no-right-border">短信验证</div>
-        <div class="form-group-input stretch">
-            <input class="stretch" id="MobileVCode" maxlength="6" name="MobileVCode" placeholder="" type="text" value="">
-        </div>
-        <div class="form-group-input">
-            <button class="no-left-border button-color-1" type="button" onclick="GetSMS()" id="Sms">获取手机验证码</button>
-        </div>
-    </div>
+        @if (!Model.SmsGiveSwitch)
+        {
+            <div class="form-group">
+                <div class="form-group-addon no-right-border">图片验证</div>
+                <div class="form-group-input stretch">
+                    <input class="stretch" id="VCode" maxlength="4" name="vcode" type="text" value="">
+                </div>
+                <div class="form-group-addon no-left-border code">
+                    <img src="/common/VerificationImgForm" title="点击图片换一张" onclick="this.src = '/common/VerificationImgForm?flag=' + Math.random()">
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="form-group-addon no-right-border">短信验证</div>
+                <div class="form-group-input stretch">
+                    <input class="stretch" id="MobileVCode" maxlength="6" name="MobileVCode" placeholder="" type="text" value="">
+                </div>
+                <div class="form-group-input">
+                    <button class="no-left-border button-color-1" type="button" onclick="GetSMS()" id="Sms">获取手机验证码</button>
+                </div>
+            </div>
+        }
 
 
-    <div class="form-group">
-        <input type="submit" class="button-color-1 button-stretch" value="确认开启" onclick="return GiveSwitch()">
+        <div class="form-group">
+            <input type="submit" class="button-color-1 button-stretch" value="@(Model.SmsGiveSwitch ? "确认关闭" : "确认开启")" onclick="return GiveSwitch()">
+        </div>
+        <span class="field-validation-valid" data-valmsg-for="Err" data-valmsg-replace="true"></span>
     </div>
-    <span class="field-validation-valid" data-valmsg-for="Err" data-valmsg-replace="true"></span>
-</div>
-
+}
 <div class="message message-help">
     温馨提示：<br>
     1.小额果实赠送免短信验证开关<span class="color-1">[开启]</span>后，当天赠送累计小于200金币将<span class="color-1">不需要短信验证。</span><br>
@@ -47,3 +51,56 @@
     3.为了您账户的安全，请谨慎操作！
 </div>
 
+<script type="text/javascript">
+
+    function GiveSwitch() {
+        if ("@(Model.SmsGiveSwitch.ToString())" == "False") {
+            if ($("#VCode").val() == "") {
+                alert("请输入图形验证码.");
+                return false;
+            }
+            if ($("#VCode").val().length != 4) {
+                alert("请输入正确的图形验证码.");
+                return false;
+            }
+            if ($("#MobileVCode").val() == "") {
+                alert("请输入短信验证码.");
+                return false;
+            }
+            if ($("#MobileVCode").val().length != 6) {
+                alert("请输入正确的短信验证码.");
+                return false;
+            }
+        }
+    }
+
+    function GetSMS() {
+        $.post("/Common/GetSMS/Common", { phone: '@Model.Phone', vcode: $("#VCode").val() }, function (data, textStatus) {
+            if (data.result) {
+                showTime(180);
+            }
+            else
+                alert(data.msg);
+        });
+    }
+    function showTime(s) {
+        $("#Sec").val(s);
+        $("#Sms").text(s + "秒后重新获取");
+        $("#Sms").addClass("progress");
+        $("#Sms").attr("disabled", "disabled");
+
+        $("#Sec").val(s);
+        if (s != 0) {
+            s = s - 1;
+            setTimeout("showTime(" + s + ")", 1000);
+        }
+        else {
+            $("#Sec").val("");
+            $("#Sms").removeClass("progress");
+            $("#Sms").removeAttr("disabled");
+            $("#Sms").text("获取手机验证码");
+        }
+    }
+
+
+</script>

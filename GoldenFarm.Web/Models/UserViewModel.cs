@@ -23,4 +23,12 @@ namespace GoldenFarm.Web.Models
 
         public IEnumerable<User> RefUsers { get; set; }
     }
+
+
+    public class UserWithdrawViewModel
+    {
+        public User User { get; set; }
+
+        public IEnumerable<UserWithdraw> Withdraws { get; set; }
+    }
 }

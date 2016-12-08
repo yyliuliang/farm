@@ -9,7 +9,7 @@
         <ul class="side-menu-toggle-sub @(ucactions.Contains(action) ? "side-menu-toggle-sub-show" : string.Empty)">
             <li>@Html.ActionLink("账户概要", "Index", "User")</li>
             <li>@Html.ActionLink("安全设置", "Safe", "User")</li>
-            <li>@Html.ActionLink("果园钱包", "Wallet", "User")</li>
+            @*<li>@Html.ActionLink("果园钱包", "Wallet", "User")</li>*@
             <li>@Html.ActionLink("账户充值", "Deposit", "User")</li>
             <li>@Html.ActionLink("金币提现", "Withdraw", "User")</li>
             <li>@Html.ActionLink("金币明细", "FinanceDetail", "User")</li>

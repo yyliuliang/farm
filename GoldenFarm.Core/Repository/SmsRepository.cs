@@ -9,6 +9,11 @@ namespace GoldenFarm.Repository
 {
     public class SmsRepository : RepositoryBase<Sms>
     {
+        int expired = 10; //10 minutes
+        public bool CheckSms(string phone, string code, string category = "Common")
+        {
 
+            return true;
+        }
     }
 }

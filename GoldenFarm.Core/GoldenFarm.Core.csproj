@@ -68,8 +68,10 @@
     <Compile Include="Entity\User.cs" />
     <Compile Include="Entity\UserBankAccount.cs" />
     <Compile Include="Entity\UserBorrow.cs" />
+    <Compile Include="Entity\UserGive.cs" />
     <Compile Include="Entity\UserProduct.cs" />
     <Compile Include="Entity\UserScore.cs" />
+    <Compile Include="Entity\UserWithdraw.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="PageCriteria.cs" />
     <Compile Include="PageViewData.cs" />

@@ -2,7 +2,161 @@
 @{
     ViewBag.Title = "用户中心";
     Layout = "~/Views/Shared/_UserCenterLayout.cshtml";
+    bool hasAccount = Model.User.BankAccount != null;
 }
+@model UserWithdrawViewModel
 
-<h2>Deposit</h2>
+<div class="uc-head uc-head-border">金币提现</div>
+<div class="message message-info">
+    温馨提示：<br>
+    1. 最低限额100金币，且为整数，提现100~200(不含)金币手续费3%，200~500(不含)金币手续费2.9%，500~1000(不含)金币手续费2.5%，1000金币及以上手续费2%。<br>
+    2. 为了您的帐户安全，每次金币提现的最高限额为50000金币、如果您有更高的需求，请与网站客服联系。<br>
+    3. 提交申请后，我们会在2个工作日（不含节假日）审核，审核通过后交由银行转账，实际到帐时间根据提现银行可能会有所延时。<br>
+    4. <span class="color-1">请确保您的银行开户名与银行卡号是否对应,如不对应,请重新绑定您的提现账户!</span>
+</div>
+<!-- uc-form start -->
 
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <div class="uc-form">
+        <div class="form-group">
+            <div class="form-group-addon no-right-border">可用金币</div>
+            <div class="form-group-addon form-group-addon-disabled stretch" id="Balance">@(Model.User.TotalScore - Model.User.FrozenScore)</div>
+        </div>
+
+        <div class="form-group">
+            <div class="form-group-addon no-right-border">提现账户</div>
+            <div class="form-group-addon form-group-addon-disabled stretch">@(hasAccount ? Model.User.BankAccount.ToString() : string.Empty)</div>
+        </div>
+        <div class="form-group">
+            <div class="form-group-addon no-right-border">提现金币</div>
+            <div class="form-group-input stretch">
+                <input class="stretch" data-val="true" data-val-number="字段 Amount 必须是一个数字。" data-val-required="Amount 字段是必需的。" id="Amount" name="Amount" placeholder="提现金币" type="text" value="">
+
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="form-group-addon no-right-border">图片验证</div>
+            <div class="form-group-input stretch">
+                <input class="stretch" data-val="true" data-val-required="请填写图片验证码" id="VCode" maxlength="4" name="vcode" type="text" value="">
+            </div>
+            <div class="form-group-addon no-left-border code">
+                <img src="/common/VerificationImgForm" title="点击图片换一张" onclick="this.src = '/common/VerificationImgForm?flag=' + Math.random()">
+            </div>
+        </div>
+        <span class="field-validation-valid" data-valmsg-for="VCode" data-valmsg-replace="true"></span>
+        <div class="form-group">
+            <div class="form-group-addon no-right-border">短信验证</div>
+            <div class="form-group-input stretch">
+                <input class="stretch" data-val="true" data-val-required="请填写短信验证码" id="MCode" maxlength="6" name="mcode" placeholder="" type="text" value="">
+            </div>
+            <div class="form-group-input">
+                <button class="no-left-border button-color-1" type="button" onclick="GetSMS()" id="Sms">获取手机验证码</button>
+            </div>
+        </div>
+        <span class="field-validation-valid" data-valmsg-for="MCode" data-valmsg-replace="true"></span>
+        <div class="form-group">
+            <input type="button" class="button button-color-1 button-stretch" value="提交" onclick="return PreSubmit()">
+        </div>
+        <span class="field-validation-valid" data-valmsg-for="Err" data-valmsg-replace="true"></span>
+    </div>
+}
+<!-- uc-form end -->
+<div class="uc-head">提现记录</div>
+<div class="tablebox">
+    <table>
+        <thead>
+            <tr>
+                @*<th>编号</th>*@
+                <th>提现时间</th>
+                <th>收款账户</th>
+                <th>提现金额(金币)</th>
+                <th>手续费(金币)</th>
+                <th>状态</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.Withdraws == null || !Model.Withdraws.Any())
+            {
+                <tr>
+                    <td class="algin" colspan="5">没有找到相关记录</td>
+                </tr>
+            }
+            else
+            {
+                foreach (var w in Model.Withdraws)
+                {
+                    <tr>
+                        <td>@w.CreateTime</td>
+                        <td>@(string.Format("{0} - {1} - {2}", w.Bank, w.AccountName, w.AccountNum))</td>
+                        <td>@w.Amount</td>
+                        <td>@w.ChargeFee</td>
+                        <td>@w.Status</td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>
+
+
+<script type="text/javascript">
+    function GetSMS() {
+        $.post("/Common/GetSMS/Withdraw", { phone: '@Model.User.Phone', vcode: $("#VCode").val() }, function (data, textStatus) {
+            if (data.result) {
+                showTime(180);
+            }
+            else
+                alert(data.msg);
+        });
+    }
+
+    function showTime(s) {
+        $("#Sec").val(s);
+        $("#Sms").text(s + "秒后重新获取");
+        $("#Sms").addClass("progress");
+        $("#Sms").attr("disabled", "disabled");
+
+        $("#Sec").val(s);
+        if (s != 0) {
+            s = s - 1;
+            setTimeout("showTime(" + s + ")", 1000);
+        }
+        else {
+            $("#Sec").val("");
+            $("#Sms").removeClass("progress");
+            $("#Sms").removeAttr("disabled");
+            $("#Sms").text("获取手机验证码");
+        }
+    }
+
+
+
+    function FormatIntValue(value) {
+        value = value.replace(/[^\d]/g, "");
+        return value;
+    }
+
+    $("#Amount").keyup(function () {
+        $(this).val(FormatIntValue($(this).val()));
+
+        if ($(this).val() - $("#Balance").html() > 0) {
+            $(this).css('color', '#FF0000');
+            $(this).val(parseInt($("#Balance").html()));
+        } else {
+            $(this).css('color', '#888');
+        }
+    });
+
+    function PreSubmit() {
+        if ($("#Amount").val() - 100 < 0) {
+            alert("提现的最低限额为100金币");
+            return false;
+        }
+        $("form").submit();
+    }
+
+
+
+</script>

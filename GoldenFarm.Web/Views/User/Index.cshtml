@@ -18,15 +18,15 @@
         </div>
         <div class="cert clear">
             <cite>
-                <a href="/User/Certificated"><i class="icon color"></i></a>
+                <a href="/User/Certificated"><i class="icon @(!string.IsNullOrEmpty(Model.User.IdNum) ? "color" : string.Empty)"></i></a>
                 <span>实名认证</span>
             </cite>
             <cite>
-                <a href="/User/BindBankCard"><i class="icon"></i></a>
+                <a href="/User/BindBankCard"><i class="icon @(Model.User.BankAccount != null ? "color" : string.Empty)"></i></a>
                 <span>提现账户</span>
             </cite>
             <cite>
-                <a href="/User/Institution"><i class="icon"></i></a>
+                <a href="#"><i class="icon"></i></a>
                 <span>普通会员</span>
             </cite>
         </div>

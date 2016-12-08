@@ -37,7 +37,7 @@ namespace GoldenFarm.Web.Controllers
 
         [NonAction]
         protected void _Logout()
-        {
+        {            
             cache.Remove(LoginUserGuid.ToString());
             Response.Cookies["gyuid"].Value = null;
         }
@@ -45,6 +45,7 @@ namespace GoldenFarm.Web.Controllers
         [NonAction]
         protected void _Login(User user, bool rememberMe)
         {
+            _Logout();
             DateTime date = rememberMe ? DateTime.Now.AddDays(30) : DateTime.Now.AddHours(24);
             Response.Cookies["gyuid"].Value = user.UserGuid.ToString();
             Response.Cookies["gyuid"].Expires = date;
@@ -52,6 +53,16 @@ namespace GoldenFarm.Web.Controllers
             user.LastLoginIP = Request.UserIP();
             user.LastLoginTime = DateTime.Now;
             ur.Update(user);
+        }
+
+        public void RefreshCurrentUser()
+        {
+            cache.Remove(LoginUserGuid.ToString());
+            var user = ur.GetByUserGuid(LoginUserGuid);
+            if (user != null)
+            {
+                cache.Insert(LoginUserGuid.ToString(), user);
+            }
         }
 
         public User CurrentUser
