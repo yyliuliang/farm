@@ -29,11 +29,11 @@ a:focus { outline: none; }
 
 @font-face {
   font-family: 'icon';
-  src: url('../font/font_1477280014_116184.eot'); /* IE9*/
-  src: url('../font/font_1477280014_116184.eot') format('embedded-opentype'), /* IE6-IE8 */
-  url('../font/font_1477280014_116184.woff') format('woff'), /* chrome、firefox */
-  url('../font/font_1477280014_116184.ttf') format('truetype'), /* chrome、firefox、opera、Safari, Android, iOS 4.2+*/
-  url('../font/font_1477280014_116184.svg') format('svg'); /* iOS 4.1- */
+  src: url('/content/font/font_1477280014_116184.eot'); /* IE9*/
+  src: url('/content/font/font_1477280014_116184.eot') format('embedded-opentype'), /* IE6-IE8 */
+  url('/content/font/font_1477280014_116184.woff') format('woff'), /* chrome、firefox */
+  url('/content/font/font_1477280014_116184.ttf') format('truetype'), /* chrome、firefox、opera、Safari, Android, iOS 4.2+*/
+  url('/content/font/font_1477280014_116184.svg') format('svg'); /* iOS 4.1- */
 }
                     
                     
