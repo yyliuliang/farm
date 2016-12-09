@@ -8,6 +8,7 @@ using System.Web.Mvc;
 using System.Web.Security;
 using GoldenFarm.Web.Models;
 using System.IO;
+using GoldenFarm.Util;
 
 namespace GoldenFarm.Web.Controllers
 {
@@ -144,6 +145,9 @@ namespace GoldenFarm.Web.Controllers
             //}
             ur.Update(user);
             _Login(user, false);
+
+            string sms = "恭喜您注册成功农场物语账号，祝您开心玩游戏，天天赚大钱。";
+            SmsHelper.SendSms(user.Phone, sms);
             return RedirectToAction("Index");
         }
 
