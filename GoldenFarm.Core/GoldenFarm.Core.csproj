@@ -57,6 +57,7 @@
     <Compile Include="Entity\EntityBase.cs" />
     <Compile Include="Entity\Entrust.cs" />
     <Compile Include="Entity\ProductRebirth.cs" />
+    <Compile Include="Entity\SysLog.cs" />
     <Compile Include="Entity\Transaction.cs" />
     <Compile Include="Entity\News.cs" />
     <Compile Include="Entity\NewsCategory.cs" />
@@ -81,6 +82,7 @@
     <Compile Include="Repository\ProductRepository.cs" />
     <Compile Include="Repository\RepositoryBase.cs" />
     <Compile Include="Repository\SmsRepository.cs" />
+    <Compile Include="Repository\SysLogRepository.cs" />
     <Compile Include="Repository\UserRepository.cs" />
     <Compile Include="Util\RandomImage.cs" />
     <Compile Include="Util\SmsHelper.cs" />

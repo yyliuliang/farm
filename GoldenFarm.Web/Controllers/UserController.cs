@@ -7,6 +7,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
 using GoldenFarm.Web.Models;
+using System.IO;
 
 namespace GoldenFarm.Web.Controllers
 {
@@ -179,6 +180,17 @@ namespace GoldenFarm.Web.Controllers
             return View();
         }
 
+        [HttpPost]
+        public ActionResult UploadPortrait(HttpPostedFileBase image)
+        {
+            string filename = Path.Combine(Server.MapPath("/Content/portrait/"), CurrentUser.Id.ToString()+".jpg");
+            image.SaveAs(filename);
+            CurrentUser.Avatar = string.Format("/Content/portrait/{0}.jpg", CurrentUser.Id);
+            ur.Update(CurrentUser);
+            RefreshCurrentUser();
+            return Json(new { success = true, image = CurrentUser.Avatar });
+        }
+
         public ActionResult FindPassword()
         {
             return View();
@@ -241,6 +253,7 @@ namespace GoldenFarm.Web.Controllers
             }
             CurrentUser.SmsGiveSwitch = !CurrentUser.SmsGiveSwitch;
             ur.Update(CurrentUser);
+            RefreshCurrentUser();
             return View(CurrentUser);
         }
 

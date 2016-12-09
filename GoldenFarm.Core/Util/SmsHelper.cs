@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GoldenFarm.Repository;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
@@ -14,11 +15,12 @@ namespace GoldenFarm.Util
         static string url = ConfigurationManager.AppSettings["WebReference.Service.PostUrl"];
         static string user = ConfigurationManager.AppSettings["WebReference.Service.User"];
         static string pwd = ConfigurationManager.AppSettings["WebReference.Service.Pwd"];
+        static string sign = ConfigurationManager.AppSettings["WebReference.Service.Sign"];
 
         public static bool SendSms(string phone, string message)
         {
             string postStrTpl = "un={0}&pw={1}&phone={2}&msg={3}&rd=1";
-
+            message = sign + message;
             UTF8Encoding encoding = new UTF8Encoding();
             byte[] postData = encoding.GetBytes(string.Format(postStrTpl, user, pwd, phone, message));
             HttpWebRequest myRequest = (HttpWebRequest)HttpWebRequest.Create(url);
@@ -40,6 +42,10 @@ namespace GoldenFarm.Util
             //string retString = myStreamReader.ReadToEnd();
             //myStreamReader.Close();
             //stream.Close();
+
+            //string log = string.Format("phone:{0}, message:{1}, response: {2}", phone, message, retString);
+            //new SysLogRepository().Create(new Entity.SysLog { Log = log, CreateTime = DateTime.Now });
+
             if (myResponse.StatusCode == HttpStatusCode.OK)
             {
                 myResponse.Close();

@@ -1,4 +1,6 @@
 ﻿using GoldenFarm.Entity;
+using Dapper;
+using Dapper.Contrib.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,11 +11,15 @@ namespace GoldenFarm.Repository
 {
     public class SmsRepository : RepositoryBase<Sms>
     {
-        int expired = 10; //10 minutes
+        int expired = 60; //60 minutes
         public bool CheckSms(string phone, string code, string category = "Common")
         {
-
-            return true;
+            string sql = @"SELECT TOP 1 * 
+                           FROM Sms 
+                           WHERE Phone = @phone AND Category = @category AND Code = @code AND DATEDIFF(MINUTE, CreateTime, GETDATE()) <= @minute 
+                           ORDER BY Id DESC";
+            var sms = Conn.QuerySingleOrDefault<Sms>(sql, new { phone = phone, category = category, code = code, minute = expired });
+            return sms != null;
         }
     }
 }

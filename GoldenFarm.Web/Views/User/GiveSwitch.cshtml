@@ -29,14 +29,14 @@
             <div class="form-group">
                 <div class="form-group-addon no-right-border">短信验证</div>
                 <div class="form-group-input stretch">
-                    <input class="stretch" id="MobileVCode" maxlength="6" name="MobileVCode" placeholder="" type="text" value="">
+                    <input class="stretch" id="MobileVCode" maxlength="6" name="mcode" placeholder="" type="text" value="">
                 </div>
                 <div class="form-group-input">
                     <button class="no-left-border button-color-1" type="button" onclick="GetSMS()" id="Sms">获取手机验证码</button>
                 </div>
             </div>
         }
-
+        @Html.ValidationMessage("code", new { @class = "field-validation-valid" })
 
         <div class="form-group">
             <input type="submit" class="button-color-1 button-stretch" value="@(Model.SmsGiveSwitch ? "确认关闭" : "确认开启")" onclick="return GiveSwitch()">

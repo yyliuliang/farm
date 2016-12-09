@@ -2,14 +2,22 @@
 @{
     ViewBag.Title = "用户中心";
     Layout = "~/Views/Shared/_UserCenterLayout.cshtml";
+
+    string avatar = "/Content/images/user.png";
+    if (!string.IsNullOrEmpty(Model.User.Avatar))
+    {
+        avatar = Model.User.Avatar;
+    }
 }
 @model UserIndexViewModel
+<form action="/User" enctype="multipart/form-data" id="form" method="post">
+
     <div class="uc-head uc-head-border">个人首页</div>
     <div class="uc-home clear">
 
         <div class="face">
-            <div class="img"><img id="face" src="http://www.taojingy.com/img/Default/user.Png"></div>
-            <div class="cov"><span>修改</span><input type="file" id="Image" name="Image" title="请自行准备宽高1:1的图片,系统会自动切割图片."></div>
+            <div class="img"><img id="face" src="@avatar"></div>
+            <div class="cov"><span>修改</span><input type="file" id="Image" name="image" title="请自行准备宽高1:1的图片,系统会自动切割图片."></div>
         </div>
         <div class="text">
             <h1>您好 <span class="color-1">@(!string.IsNullOrEmpty(Model.User.DisplayName) ? Model.User.DisplayName : Model.User.Phone)</span> <cite id="Hello">，吃饭去吧！</cite></h1>
@@ -86,9 +94,9 @@
             <tbody>
                 @if (Model.UserProducts == null || !Model.UserProducts.Any())
                 {
-                <tr>
-                    <td class="algin" colspan="5">没有持有任何产品</td>
-                </tr>
+                    <tr>
+                        <td class="algin" colspan="5">没有持有任何产品</td>
+                    </tr>
                 }
                 else
                 {
@@ -107,4 +115,111 @@
             </tbody>
         </table>
     </div>
+</form>
+<script type="text/javascript" src="~/Content/js/jquery.form.js"></script>
+<script type="text/javascript">
 
+    $(document).on("change", "#Image", function () {
+        var lock = true;
+        $('#form').submit(function () {
+            if (lock) {
+                var jqUpload = $(this);
+                $('#form').ajaxSubmit({
+                    type: 'post',
+                    url: '/User/UploadPortrait',
+                    dataType: 'text',
+                    beforeSend: function () {
+                        $("#face").addClass("spinning");
+                    },
+                    complete: function () {
+                        lock = false;
+                        $("#face").removeClass("spinning");
+                    },
+                    success: function (json) {
+                        $("#face").removeClass("spinning");
+                        json = eval('(' + json + ')');
+                        if (json.success) {
+                            $("#face").attr("src", json.image + "?" + Math.random());
+                            $("#Image").remove();
+                            $(".cov").append("<input type=\"file\" id=\"Image\" name=\"Image\" title=\"请自行准备宽高1:1的图片,系统会自动切割图片.\" />");
+                        }
+                        else {
+                            alert(json.message);
+                        }
+                    },
+                    error: function (msg) {
+                        $("#face").removeClass("spinning");
+                        alert("文件上传失败");
+                    }
+                });
+            }
+            return false;
+        });
+        $("#form").submit();
+
+    });
+
+
+
+
+    $(function () {
+        Hello();
+        if ("" != "") {
+            alert("");
+        }
+    });
+
+    function Hello() {
+        var now = new Date();
+        var hr = now.getHours();
+        if (hr == 0)
+        { $("#Hello").html("，晚安！明天早些起床哦！") }
+        if (hr == 1)
+        { $("#Hello").html("，午夜1点多了，还在干什么啊？") }
+        if (hr == 2)
+        { $("#Hello").html("，是不是该睡觉了？") }
+        if (hr == 3)
+        { $("#Hello").html("，还不睡！小心变熊猫！") }
+        if (hr == 4)
+        { $("#Hello").html("，您是一夜未睡还是刚起床呀？") }
+        if (hr == 5)
+        { $("#Hello").html("，您这么早起床有事吗？") }
+        if (hr == 6)
+        { $("#Hello").html("，您已经准备要刷牙洗脸了？") }
+        if (hr == 7)
+        { $("#Hello").html("，您准备要去上班或上课了吗？") }
+        if (hr == 8)
+        { $("#Hello").html("，早餐吃了沒呀?已经开始上班了吗？") }
+        if (hr == 9)
+        { $("#Hello").html("，来杯咖啡，好好上班。") }
+        if (hr == 10)
+        { $("#Hello").html("，现在是上午10点了！困吗？") }
+        if (hr == 11)
+        { $("#Hello").html("，再忍耐一下，就快午休了！") }
+        if (hr == 12)
+        { $("#Hello").html("，吃饭去吧！") }
+        if (hr == 13)
+        { $("#Hello").html("，想不想要睡个午觉呀？") }
+        if (hr == 14)
+        { $("#Hello").html("，不要边打瞌睡边流口水哦！") }
+        if (hr == 15)
+        { $("#Hello").html("，来杯热茶，让精神抖擞起来？") }
+        if (hr == 16)
+        { $("#Hello").html("，再忍一下...就快下班了！") }
+        if (hr == 17)
+        { $("#Hello").html("，准备好下班了吗？") }
+        if (hr == 18)
+        { $("#Hello").html("，终于下班了！") }
+        if (hr == 19)
+        { $("#Hello").html("，吃饭了吗?不要虐待自己喔！") }
+        if (hr == 20)
+        { $("#Hello").html("，晚安!看完新闻，看看书吧？") }
+        if (hr == 21)
+        { $("#Hello").html("，来杯热茶，让精神抖擞起来！") }
+        if (hr == 22)
+        { $("#Hello").html("，来杯热茶，让精神抖擞起来！") }
+        if (hr == 23)
+        { $("#Hello").html("，哇!又是一天过去了，准备上床睡觉了！") }
+    }
+
+</script>
