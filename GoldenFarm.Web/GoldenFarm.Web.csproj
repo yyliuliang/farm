@@ -200,6 +200,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Areas\Admin\AdminAreaRegistration.cs" />
+    <Compile Include="Areas\Admin\Controllers\AdminController.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\CommonController.cs" />
@@ -432,8 +433,8 @@
     <Content Include="Views\Market\Detail.cshtml" />
     <Content Include="Views\Market\_Detail_Chart.cshtml" />
     <Content Include="Views\Market\_Detail_Nav.cshtml" />
-    <Content Include="Views\Market\_Detail_Delegate.cshtml" />
-    <Content Include="Views\Market\_Detail_DelegateList.cshtml" />
+    <Content Include="Views\Market\_Detail_Entrust.cshtml" />
+    <Content Include="Views\Market\_Detail_EntrustList.cshtml" />
     <Content Include="Views\User\Index.cshtml" />
     <Content Include="Views\User\Login.cshtml" />
     <Content Include="Views\User\Reg.cshtml" />
@@ -479,8 +480,8 @@
     <Content Include="Views\User\GiveHistory.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Areas\Admin\Controllers\" />
     <Folder Include="Areas\Admin\Models\" />
+    <Folder Include="Areas\Admin\Views\Admin\" />
     <Folder Include="Areas\Admin\Views\Shared\" />
     <Folder Include="Content\portrait\" />
   </ItemGroup>

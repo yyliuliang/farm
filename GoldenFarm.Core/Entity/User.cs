@@ -12,7 +12,6 @@ namespace GoldenFarm.Entity
     public class User : EntityBase
     {
        
-
         public Guid UserGuid { get; set; }
 
         public string UserName { get; set; }
@@ -48,5 +47,7 @@ namespace GoldenFarm.Entity
         public virtual UserBankAccount BankAccount { get; set; }
 
         public bool Deleted { get; set; }
+        
+        public bool IsAdmin { get; set; }
     }
 }

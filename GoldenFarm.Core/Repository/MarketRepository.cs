@@ -9,8 +9,13 @@ using Dapper.Contrib.Extensions;
 
 namespace GoldenFarm.Repository
 {
+    public class EntrustRepository : RepositoryBase<Entrust> { }
+
+    public class TransactionRepository : RepositoryBase<Transaction> { }
+
     public class MarketRepository : RepositoryBase<Market>
     {
+        
         Func<Market, Product, Market> mpMapper = (market, product) =>
         {
             market.Product = product;
@@ -59,12 +64,23 @@ namespace GoldenFarm.Repository
         public IEnumerable<Entrust> GetEntrusts(MarketCriteria criteria)
         {
             string sql = @"SELECT * FROM Entrust e INNER JOIN Product p on e.ProductId = p.Id 
-                           WHERE e.UserId = @userId AND e.CreateTime BETWEEN @start AND @end";
+                           WHERE e.UserId = @userId";
 
             var parameters = new DynamicParameters();
             parameters.Add("userId", criteria.UserId);
-            parameters.Add("start", criteria.StartDate);
-            parameters.Add("end", criteria.EndDate);
+
+            if(criteria.StartDate.HasValue)
+            {
+                sql += " AND CreateTime >= @start";
+                parameters.Add("start", criteria.StartDate.Value);
+            }
+
+            if (criteria.EndDate.HasValue)
+            {
+                sql += " AND CreateTime < @end";
+                parameters.Add("end", criteria.EndDate.Value);
+            }
+
             if (criteria.ProductId > 0)
             {
                 sql += " AND e.ProductId = @pid";
@@ -75,10 +91,26 @@ namespace GoldenFarm.Repository
                 sql += " AND e.IsBuy = @buy";
                 parameters.Add("buy", criteria.IsBuy);
             }
+            if (criteria.Cancelled > -1)
+            {
+                sql += " AND e.Cancelled = @cancelled";
+                parameters.Add("cancelled", criteria.Cancelled);
+            }
+
 
             return Conn.Query<Entrust, Product, Entrust>(sql, (e, p) => { e.Product = p; return e; }, parameters);
         }
 
+        public int CreateEntrust(Entrust entrust)
+        {
+            return new EntrustRepository().Create(entrust);
+        }
+
+        public int CreateTransaction(Transaction transaction)
+        {
+            return new TransactionRepository().Create(transaction);
+        }
+        
 
         public IEnumerable<Transaction> GetTransactions(MarketCriteria criteria)
         {

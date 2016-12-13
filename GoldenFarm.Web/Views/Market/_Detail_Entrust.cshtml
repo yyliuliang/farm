@@ -47,7 +47,7 @@
                 </div>
                 <div class="form-group clear">
                     <div class="text-left">
-                        可用额:<span class="color-1" id="hasmoney">0.00000</span>金币
+                        可用额:<span class="color-1" id="hasmoney">@(Model.User.TotalScore - Model.User.FrozenScore)</span>金币
                     </div>
                     <div class="text-right">
                         手续费:<span class="color-1" id="buychargemoney">无</span>

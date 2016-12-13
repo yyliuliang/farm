@@ -19,17 +19,21 @@ namespace GoldenFarm.Web.Controllers
         // GET: Market
         public ActionResult Index()
         {
+
             var markets = mr.GeTodayMarkets();
             return View(markets);
-
         }
 
         [CheckLogin]
         public ActionResult Detail(string id)
         {
             var model = new MarketDetailViewModel();
+            var entrusts = mr.GetEntrusts(new MarketCriteria { IsBuy = -1, Cancelled = -1, UserId = CurrentUser.Id });
             model.MarketDetail = mr.GetTodayProductMarket(id);
             model.Products = pr.GetAllProducts();
+            model.User = CurrentUser;
+            model.CurrentEntrusts = entrusts.Where(e => !e.Cancelled);
+            model.HistoryEntrusts = entrusts.Where(e => e.Cancelled);
             return View(model);
         }
 
@@ -111,6 +115,15 @@ namespace GoldenFarm.Web.Controllers
         {
             var history = ur.GetRebirthHistoryByUser(CurrentUser.Id);
             return View(history);
+        }
+
+
+
+        [CheckLogin]
+        [HttpPost]
+        public ActionResult PostEntrust(Entrust entrust)
+        {
+            return View();
         }
 
 

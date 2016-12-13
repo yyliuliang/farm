@@ -9,6 +9,7 @@ using System.Web.Security;
 using GoldenFarm.Web.Models;
 using System.IO;
 using GoldenFarm.Util;
+using GoldenFarm.Web.Filter;
 
 namespace GoldenFarm.Web.Controllers
 {
@@ -19,7 +20,8 @@ namespace GoldenFarm.Web.Controllers
         private ProductRepository pr = new ProductRepository();
         private SmsRepository sr = new SmsRepository();
 
-        // GET: User
+       
+        [CheckLogin]
         public ActionResult Index()
         {
             var model = new UserIndexViewModel();

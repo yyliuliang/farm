@@ -1,0 +1,93 @@
+﻿@model MarketDetailViewModel
+<div class="container">
+    <div class="trade-entrust-my">
+        <h3 class="color-1">当前委托</h3>
+        <div class="tablebox">
+            <table>
+                <thead>
+                    <tr>
+                        <th>委托时间</th>
+                        <th>产品</th>
+                        <th>类型</th>
+                        <th>价格</th>
+                        <th>委托量</th>
+                        <th>已成交</th>
+                        <th>状态</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody id="MyEntrust0">
+                    @if (Model.CurrentEntrusts == null || !Model.CurrentEntrusts.Any())
+                    {
+                        <tr><td class="algin" colspan="8">没有查询到任何数据</td></tr>
+                    }
+                    else
+                    {
+                        foreach (var e in Model.CurrentEntrusts)
+                        {
+                            <tr>
+                                <td>@e.CreateTime</td>
+                                <td>@e.Product.ProductName</td>
+                                <td>@(e.IsBuy ? "买入" : "卖出")</td>
+                                <td>@e.Price</td>
+                                <td>@e.Count</td>
+                                <td>@e.DealedCount</td>
+                                <td>@e.StatusText</td>
+                                <td>撤销</td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <div class="thepager clear" id="thepager0" style="display: none;"></div>
+
+
+    </div>
+
+    <div class="trade-entrust-my" style="padding-top:0;">
+        <h3 class="color-1">历史委托</h3>
+        <div class="tablebox">
+            <table>
+                <thead>
+                    <tr>
+                        <th>委托时间</th>
+                        <th>产品</th>
+                        <th>类型</th>
+                        <th>价格</th>
+                        <th>委托量</th>
+                        <th>已成交</th>
+                        <th>状态</th>
+                    </tr>
+                </thead>
+
+                <tbody id="MyEntrust1">
+                    @if (Model.HistoryEntrusts == null || !Model.HistoryEntrusts.Any())
+                    {
+                        <tr><td class="algin" colspan="7">没有查询到任何数据</td></tr>
+                    }
+                    else
+                    {
+                        foreach (var e in Model.HistoryEntrusts)
+                        {
+                            <tr>
+                                <td>@e.CreateTime</td>
+                                <td>@e.Product.ProductName</td>
+                                <td>@(e.IsBuy ? "买入" : "卖出")</td>
+                                <td>@e.Price</td>
+                                <td>@e.Count</td>
+                                <td>@e.DealedCount</td>
+                                <td>@e.StatusText</td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <div class="thepager clear" id="thepager1" style="display: none;"></div>
+
+    </div>
+
+</div>
