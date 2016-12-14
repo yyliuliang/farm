@@ -13,10 +13,10 @@ namespace GoldenFarm.Entity
         public int ProductId { get; set; }
 
 
-        public int IsBuy { get; set; }
+        public int? IsBuy { get; set; }
 
-
-        public int Cancelled { get; set; }
+        
+        public int? Cancelled { get; set; }
 
 
         public DateTime? StartDate { get; set; }

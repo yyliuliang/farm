@@ -47,7 +47,7 @@ namespace GoldenFarm.Repository
         public IEnumerable<Transaction> GetTodayTransactions(string productCode)
         {
             DateTime date = DateTime.Today;
-            string sql = "SELECT * FROM MarketTransaction mt INNER JOIN Product p ON mt.ProductId = p.Id WHERE p.productcode=@code AND mt.Date=@date";
+            string sql = "SELECT * FROM [Transaction] mt INNER JOIN Product p ON mt.ProductId = p.Id WHERE p.productcode=@code AND mt.Date=@date";
             return Conn.Query<Transaction, Product, Transaction>(sql, mtpMapper, new { code = productCode, date = date });
         }
         #endregion
@@ -58,8 +58,19 @@ namespace GoldenFarm.Repository
             string sql = "SELECT * FROM Market m INNER JOIN Product p ON m.ProductId = p.Id WHERE p.productcode=@code";
             return Conn.Query<Market, Product, Market>(sql, mpMapper, new { code = productCode});
         }
+               
 
-
+        public IEnumerable<dynamic> GetTop5Entrusts(int productId, bool buy)
+        {
+            DateTime date = DateTime.Today;
+            DateTime start = DateTime.Parse(date.ToString("yyyy-MM-dd 0:0:0"));
+            DateTime end = DateTime.Parse(date.ToString("yyyy-MM-dd 23:59:59"));
+            string sql = @"SELECT TOP 5 Price, SUM(Count) Number FROM Entrust 
+                           WHERE ProductId = @pid AND Cancelled = 0 AND CreateTime >= @start AND CreateTime <@end AND Status IN (0, 2) AND IsBuy = @buy
+                           GROUP BY Price
+                           ORDER BY Price DESC";
+            return Conn.Query(sql, new { pid = productId, buy = buy, start = start, end = end }).Select(e => new { Price = e.Price, Number = e.Number });
+        }
 
         public IEnumerable<Entrust> GetEntrusts(MarketCriteria criteria)
         {
@@ -71,13 +82,13 @@ namespace GoldenFarm.Repository
 
             if(criteria.StartDate.HasValue)
             {
-                sql += " AND CreateTime >= @start";
+                sql += " AND e.CreateTime >= @start";
                 parameters.Add("start", criteria.StartDate.Value);
             }
 
             if (criteria.EndDate.HasValue)
             {
-                sql += " AND CreateTime < @end";
+                sql += " AND e.CreateTime < @end";
                 parameters.Add("end", criteria.EndDate.Value);
             }
 
@@ -86,24 +97,61 @@ namespace GoldenFarm.Repository
                 sql += " AND e.ProductId = @pid";
                 parameters.Add("pid", criteria.ProductId);
             }
-            if(criteria.IsBuy > -1)
+            if(criteria.IsBuy.HasValue && criteria.IsBuy.Value > -1)
             {
                 sql += " AND e.IsBuy = @buy";
                 parameters.Add("buy", criteria.IsBuy);
             }
-            if (criteria.Cancelled > -1)
+            if (criteria.Cancelled.HasValue && criteria.Cancelled.Value > -1)
             {
                 sql += " AND e.Cancelled = @cancelled";
                 parameters.Add("cancelled", criteria.Cancelled);
             }
 
-
+            sql += " ORDER BY e.Id DESC";
             return Conn.Query<Entrust, Product, Entrust>(sql, (e, p) => { e.Product = p; return e; }, parameters);
+        }
+
+        public int PostEntrust(Entrust entrust)
+        {
+            int dealedCount = 0;
+            CreateEntrust(entrust);
+
+            return dealedCount;
+        }
+
+
+        public Entrust GetEntrustById(int id)
+        {
+            return new EntrustRepository().Get(id);
+        }
+
+        public void CancelEntrust(Entrust entrust)
+        {
+            if(entrust != null)
+            {
+                if (entrust.Status == 0)
+                {
+                    entrust.Status = 9;
+                }
+                else if(entrust.Status == 2)
+                {
+                    entrust.Status = 3;
+                }
+
+                entrust.Cancelled = true;
+                new EntrustRepository().Update(entrust);
+            }
         }
 
         public int CreateEntrust(Entrust entrust)
         {
             return new EntrustRepository().Create(entrust);
+        }
+
+        public void UpdateEntrust(Entrust entrust)
+        {
+            Conn.Update<Entrust>(entrust);
         }
 
         public int CreateTransaction(Transaction transaction)

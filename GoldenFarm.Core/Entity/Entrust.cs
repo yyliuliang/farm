@@ -11,6 +11,8 @@ namespace GoldenFarm.Entity
     [Serializable]
     public class Entrust : EntityBase
     {
+        public int TargetId { get; set; }
+
         public int UserId { get; set; }
         
         public int ProductId { get; set; }
@@ -24,10 +26,14 @@ namespace GoldenFarm.Entity
 
         public int DealedCount { get; set; }
 
+
+        public decimal DealedAmount { get; set; }
+
+
         public bool IsBuy { get; set; }
 
         /// <summary>
-        /// 0: 未成交   1:已成交  2: 部分成交   3: 部分撤销
+        /// 0: 未成交   1:已成交  2: 部分成交   3: 部分撤销  9: 已撤销
         /// </summary>
         public int Status { get; set; }
 
@@ -46,6 +52,7 @@ namespace GoldenFarm.Entity
                     case 1: return "已成交";
                     case 2: return "部分成交";
                     case 3: return "部分撤销";
+                    case 9: return "已撤销";
                     default: return "未知";
                 }
             }

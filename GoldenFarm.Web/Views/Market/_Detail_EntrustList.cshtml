@@ -33,7 +33,7 @@
                                 <td>@e.Count</td>
                                 <td>@e.DealedCount</td>
                                 <td>@e.StatusText</td>
-                                <td>撤销</td>
+                                <td><a href="javascript:void(0); " onclick="if(confirm('确定撤销?')) Revoke('@e.Id')">撤销</a></td>
                             </tr>
                         }
                     }

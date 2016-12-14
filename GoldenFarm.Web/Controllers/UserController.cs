@@ -88,7 +88,7 @@ namespace GoldenFarm.Web.Controllers
 
         [ValidateAntiForgeryToken]
         [HttpPost]
-        public ActionResult Reg(string phone, string password, string passwordc, string vcode, int? refuid)
+        public ActionResult Reg(string phone, string password, string passwordc, string vcode, string mcode, int? refCode)
         {
             if (string.IsNullOrEmpty(phone) || string.IsNullOrEmpty(password))
             {
@@ -102,10 +102,16 @@ namespace GoldenFarm.Web.Controllers
                 return View();
             }
 
-            string code = (string)TempData[CommonController.CaptchaImageText];
-            if (string.Compare(vcode, code, StringComparison.InvariantCultureIgnoreCase) != 0)
+            //string code = (string)TempData[CommonController.CaptchaImageText];
+            //if (string.Compare(vcode, code, StringComparison.InvariantCultureIgnoreCase) != 0)
+            //{
+            //    ModelState.AddModelError("reg", "验证码错误");
+            //    return View();
+            //}
+
+            if(!sr.CheckSms(phone, mcode, "Reg"))
             {
-                ModelState.AddModelError("reg", "验证码错误");
+                ModelState.AddModelError("reg", "短信验证码错误");
                 return View();
             }
 
@@ -125,12 +131,12 @@ namespace GoldenFarm.Web.Controllers
             user.LastLoginIP = Request.UserIP();
             user.LastLoginTime = DateTime.Now;
             user.CreateTime = DateTime.Now;
-            if(refuid.HasValue)
+            if(refCode.HasValue)
             {
-                refUser = ur.Get(refuid.Value);
+                refUser = ur.Get(refCode.Value);
                 if (refUser != null)
                 {
-                    user.RefUserId = refuid.Value;
+                    user.RefUserId = refCode.Value;
                     refPath = refUser.RefUserPath;
                 }                
             }

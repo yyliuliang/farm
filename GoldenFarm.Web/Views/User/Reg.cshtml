@@ -60,10 +60,10 @@
                 </div>
                 @*<span class="field-validation-valid"></span>*@
 
-                @*<div class="form-group">
+                <div class="form-group">
                     <div class="form-group-addon no-right-border">短信验证</div>
                     <div class="form-group-input stretch">
-                        <input class="stretch" id="MobileVCode" maxlength="6" name="MobileVCode" placeholder="" type="text" value="">
+                        <input class="stretch" id="MobileVCode" maxlength="6" name="mcode" placeholder="" type="text" value="">
                     </div>
                     <div class="form-group-input">
                         <button class="no-left-border button-color-2" type="button" onclick="GetSMS()" id="Sms">获取手机验证码</button>
@@ -76,10 +76,10 @@
                     <div class="form-group-input stretch">
                         <input class="stretch" id="RefCode" name="RefCode" placeholder="请输入推荐码" type="text" value="">
                     </div>
-                </div>*@
+                </div>
                 @Html.ValidationMessage("reg", new { @class = "field-validation-valid" })
                 <div class="form-group">
-                    <input type="button" class="button button-color-1 button-stretch" id="btnReg" value="我已阅读并同意相关协议">
+                    <input type="button" class="button button-color-1 button-stretch" id="btnReg" value="我已阅读并同意相关协议" onclick="return PreSubmit();">
                     @*<div class="validation-summary-valid">
                         <ul>
                             <li style="display:none"></li>
@@ -99,9 +99,63 @@
     </div>
 </div>
 <script type="text/javascript">
-    $(document).ready(function () {
-        $('#btnReg').click(function () {
-            $('form').submit();
-        });
-    });
+   
+
+    function GetSMS() {
+            if (checkMobile($("#Phone").val())) {
+
+                $.post("/Common/GetSMS/Reg", { phone: $("#Phone").val(), vcode: $("#VCode").val() }, function (data, textStatus) {
+                    if (data.result) {
+                        showTime(180);
+                    }
+                    else
+                        alert(data.msg);
+                });
+            }
+            else {
+                alert('请输入正确的手机号码');
+            }
+        }
+
+        function checkMobile(str) {
+            var re = /^1\d{10}$/
+            if (re.test(str)) {
+            return true;
+            } else {
+            return false;
+            }
+        }
+
+        function showTime(s) {
+            $("#Sec").val(s);
+            $("#Sms").text(s + "秒后重新获取");
+            $("#Sms").addClass("progress");
+            $("#Sms").attr("disabled", "disabled");
+
+            $("#Sec").val(s);
+            if (s != 0) {
+                s = s - 1;
+                setTimeout("showTime(" + s + ")", 1000);
+            }
+            else {
+                $("#Sec").val("");
+                $("#Sms").removeClass("progress");
+                $("#Sms").removeAttr("disabled");
+                $("#Sms").text("获取手机验证码");
+            }
+        }
+
+        function PreSubmit() {
+            if ($("#PasswordText").val() != "" && $("#RePasswordText").val() != "") {
+               // $("#Password").val(md5($("#PasswordText").val() + $("#PasswordText").val()));
+               // $("#RePassword").val(md5($("#RePasswordText").val() + $("#RePasswordText").val()))
+                $("form").submit();
+            } else {
+                alert("请输入完整的表单信息");
+                return false;
+            }
+        }
+
+</script>
+
 </script>

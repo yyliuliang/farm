@@ -14,7 +14,7 @@ namespace GoldenFarm.Web.Models
 
         public IEnumerable<Product> Products { get; set; }
 
-        public IEnumerable<UserProduct> UserProducts { get; set; }
+        public UserProduct UserProduct { get; set; }
 
 
         public IEnumerable<Entrust> CurrentEntrusts { get; set; }

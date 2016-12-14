@@ -1,9 +1,10 @@
 ﻿@model MarketDetailViewModel
 <div class="container clear">
-
+    <input id="SubmitType" name="submitType" type="hidden" value="" />
+    <input id="EId" name="EId" type="hidden" value="" />
     <div class="trade-form">
         <dl class="headbox clear">
-
+            
             <dd><span>产品：</span><em class="color-4">@Model.MarketDetail.Product.ProductName</em></dd>
             <dd><span>现价：</span><em class="color-4" id="FlushPrice2">@Model.MarketDetail.CurrentPrice</em></dd>
             <dd><span>涨停：</span><em id="limitUp">@(Model.MarketDetail.PrevDayPrice * (decimal)1.1)</em></dd>
@@ -15,7 +16,7 @@
                 <div class="form-group">
                     <div class="form-group-addon">买入价格</div>
                     <div class="form-group-input stretch">
-                        <input class="no-left-border no-right-border stretch" data-val="true" data-val-number="字段 BuyPrice 必须是一个数字。" data-val-required="BuyPrice 字段是必需的。" id="BuyPrice" name="BuyPrice" type="text" value="0" maxlength="7">
+                        <input class="no-left-border no-right-border stretch" data-val="true" data-val-number="字段 BuyPrice 必须是一个数字。" data-val-required="BuyPrice 字段是必需的。" id="BuyPrice" name="BuyPrice" type="text" value="@Model.MarketDetail.CurrentPrice" maxlength="7">
                     </div>
                     <div class="form-group-addon no-left-border form-group-addon-white">金币</div>
                 </div>
@@ -66,7 +67,7 @@
                 <div class="form-group">
                     <div class="form-group-addon">卖出价格</div>
                     <div class="form-group-input stretch">
-                        <input class="no-left-border no-right-border stretch" data-val="true" data-val-number="字段 SalePrice 必须是一个数字。" data-val-required="SalePrice 字段是必需的。" id="SalePrice" name="SalePrice" type="text" value="0" maxlength="7">
+                        <input class="no-left-border no-right-border stretch" data-val="true" data-val-number="字段 SalePrice 必须是一个数字。" data-val-required="SalePrice 字段是必需的。" id="SalePrice" name="SalePrice" type="text" value="@Model.MarketDetail.CurrentPrice" maxlength="7">
                     </div>
                     <div class="form-group-addon no-left-border form-group-addon-white">金币</div>
                 </div>
@@ -94,7 +95,7 @@
                 </div>
                 <div class="form-group clear">
                     <div class="text-left">
-                        持有量:<span class="color-1" id="hasnumber">0</span>个
+                        持有量:<span class="color-1" id="hasnumber">@(Model.UserProduct != null ? Model.UserProduct.TotalCount - Model.UserProduct.FrozenCount : 0)</span>个
                     </div>
                     <div class="text-right">
                         手续费:<span class="color-1" id="salechargemoney">0.000</span>金币
@@ -122,54 +123,54 @@
                 <tbody id="entrust">
                     <tr class="bgsale" style="cursor: pointer;">
                         <td class="color-4">卖五</td>
-                        <td class="color-1"><em class="flipy">0.01670</em></td>
-                        <td><em class="flipy">34900</em></td>
+                        <td class="color-1"><em class="flipy"></em></td>
+                        <td><em class="flipy"></em></td>
                     </tr>
                     <tr class="bgsale" style="cursor: pointer;">
                         <td class="color-4">卖四</td>
-                        <td class="color-1"><em class="flipy">0.01648</em></td>
-                        <td><em class="flipy">61600</em></td>
+                        <td class="color-1"><em class="flipy"></em></td>
+                        <td><em class="flipy"></em></td>
                     </tr>
                     <tr class="bgsale" style="cursor: pointer;">
                         <td class="color-4">卖三</td>
-                        <td class="color-1"><em class="flipy">0.01628</em></td>
-                        <td><em class="flipy">49400</em></td>
+                        <td class="color-1"><em class="flipy"></em></td>
+                        <td><em class="flipy"></em></td>
                     </tr>
                     <tr class="bgsale" style="cursor: pointer;">
                         <td class="color-4">卖二</td>
-                        <td class="color-4"><em class="flipy">0.01600</em></td>
-                        <td><em class="flipy">99500</em></td>
+                        <td class="color-4"><em class="flipy"></em></td>
+                        <td><em class="flipy"></em></td>
                     </tr>
                     <tr class="bgsale" style="cursor: pointer;">
                         <td class="color-4">卖一</td>
-                        <td class="color-4"><em class="flipy">0.01590</em></td>
-                        <td><em class="flipy">33600</em></td>
+                        <td class="color-4"><em class="flipy"></em></td>
+                        <td><em class="flipy"></em></td>
                     </tr>
 
                     <tr class="bgbuy" style="cursor: pointer;">
                         <td class="color-1">买一</td>
-                        <td class="color-4"><em class="flipy">0.01589</em></td>
-                        <td><em class="flipy">300</em></td>
+                        <td class="color-4"><em class="flipy"></em></td>
+                        <td><em class="flipy"></em></td>
                     </tr>
                     <tr class="bgbuy" style="cursor: pointer;">
                         <td class="color-1">买二</td>
-                        <td class="color-4"><em class="flipy">0.01588</em></td>
-                        <td><em class="flipy">6400</em></td>
+                        <td class="color-4"><em class="flipy"></em></td>
+                        <td><em class="flipy"></em></td>
                     </tr>
                     <tr class="bgbuy" style="cursor: pointer;">
                         <td class="color-1">买三</td>
-                        <td class="color-4"><em class="flipy">0.01581</em></td>
-                        <td><em class="flipy">1200</em></td>
+                        <td class="color-4"><em class="flipy"></em></td>
+                        <td><em class="flipy"></em></td>
                     </tr>
                     <tr class="bgbuy" style="cursor: pointer;">
                         <td class="color-1">买四</td>
-                        <td class="color-4"><em class="flipy">0.01580</em></td>
-                        <td><em class="flipy">200</em></td>
+                        <td class="color-4"><em class="flipy"></em></td>
+                        <td><em class="flipy"></em></td>
                     </tr>
                     <tr class="bgbuy" style="cursor: pointer;">
                         <td class="color-1">买五</td>
-                        <td class="color-4"><em class="flipy">0.01573</em></td>
-                        <td><em class="flipy">1000</em></td>
+                        <td class="color-4"><em class="flipy"></em></td>
+                        <td><em class="flipy"></em></td>
                     </tr>
                 </tbody>
             </table>

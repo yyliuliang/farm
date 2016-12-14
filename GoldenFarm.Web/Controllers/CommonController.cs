@@ -52,7 +52,7 @@ namespace GoldenFarm.Web.Controllers
                 Phone = phone,
                 Code = code,
                 Message = msg,
-                Sender = CurrentUser.Id,
+                Sender = (CurrentUser != null) ? CurrentUser.Id : 0,
                 Category = category,
                 CreateTime = DateTime.Now
             };

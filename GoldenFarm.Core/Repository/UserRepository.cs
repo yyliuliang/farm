@@ -69,6 +69,11 @@ namespace GoldenFarm.Repository
             return Conn.Query<UserProduct, Product, UserProduct>(sql, (u, p) => { u.Product = p; return u; }, new { userId = userId });
         }
 
+        public void UpdateUserProduct(UserProduct up)
+        {
+            Conn.Update<UserProduct>(up);
+        }
+
         #endregion
 
 
