@@ -41,7 +41,7 @@
                             <td><a href="/Market/Detail/@m.Product.ProductCode"><img src="@m.Product.ImageUrl" width="30"></a></td>
                             <td>@Html.ActionLink(m.Product.ProductName, "Detail", new { id = m.Product.ProductCode })</td>
                             <td class="color-1">@m.CurrentPrice</td>
-                            <td class="color-1">@m.RaisedRate %</td>
+                            <td class="color-1">@((m.RaisedRate*100).ToString("f2")) %</td>
                             <td class="color-1">@m.Raised</td>
                             <td>@m.OpenPrice</td>
                             <td class="color-1">@m.TopPrice</td>

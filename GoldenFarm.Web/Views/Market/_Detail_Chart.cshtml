@@ -7,7 +7,7 @@
                 <div class="price" id="FlushPrice1">@Model.MarketDetail.CurrentPrice</div>
                 <div class="rise">
                     <cite>涨额：<em id="FlushIncrease">@Model.MarketDetail.Raised</em></cite>
-                    <cite>涨幅：<em id="FlushIncreaseRate">@Model.MarketDetail.RaisedRate %</em></cite>
+                    <cite>涨幅：<em id="FlushIncreaseRate">@((Model.MarketDetail.RaisedRate*100).ToString("f2")) %</em></cite>
                 </div>
             </dt>
 

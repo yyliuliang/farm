@@ -110,7 +110,7 @@
        // Minute('@Model.MarketDetail.Product.ProductCode', '/Market/Minute');
         Candle('@Model.MarketDetail.Product.ProductCode', '/Market/Candle')
 
-        //FlushEntrust();
+        FlushEntrust();
         setInterval("Flush()", 5000);
         setInterval("FlushEntrust()", 5000);
 

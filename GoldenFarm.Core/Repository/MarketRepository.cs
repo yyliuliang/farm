@@ -15,7 +15,7 @@ namespace GoldenFarm.Repository
 
     public class MarketRepository : RepositoryBase<Market>
     {
-        
+
         Func<Market, Product, Market> mpMapper = (market, product) =>
         {
             market.Product = product;
@@ -56,9 +56,9 @@ namespace GoldenFarm.Repository
         public IEnumerable<Market> GetProductMarkets(string productCode)
         {
             string sql = "SELECT * FROM Market m INNER JOIN Product p ON m.ProductId = p.Id WHERE p.productcode=@code";
-            return Conn.Query<Market, Product, Market>(sql, mpMapper, new { code = productCode});
+            return Conn.Query<Market, Product, Market>(sql, mpMapper, new { code = productCode });
         }
-               
+
 
         public IEnumerable<dynamic> GetTop5Entrusts(int productId, bool buy)
         {
@@ -80,7 +80,7 @@ namespace GoldenFarm.Repository
             var parameters = new DynamicParameters();
             parameters.Add("userId", criteria.UserId);
 
-            if(criteria.StartDate.HasValue)
+            if (criteria.StartDate.HasValue)
             {
                 sql += " AND e.CreateTime >= @start";
                 parameters.Add("start", criteria.StartDate.Value);
@@ -97,7 +97,7 @@ namespace GoldenFarm.Repository
                 sql += " AND e.ProductId = @pid";
                 parameters.Add("pid", criteria.ProductId);
             }
-            if(criteria.IsBuy.HasValue && criteria.IsBuy.Value > -1)
+            if (criteria.IsBuy.HasValue && criteria.IsBuy.Value > -1)
             {
                 sql += " AND e.IsBuy = @buy";
                 parameters.Add("buy", criteria.IsBuy);
@@ -128,13 +128,13 @@ namespace GoldenFarm.Repository
 
         public void CancelEntrust(Entrust entrust)
         {
-            if(entrust != null)
+            if (entrust != null)
             {
                 if (entrust.Status == 0)
                 {
                     entrust.Status = 9;
                 }
-                else if(entrust.Status == 2)
+                else if (entrust.Status == 2)
                 {
                     entrust.Status = 3;
                 }
@@ -158,14 +158,14 @@ namespace GoldenFarm.Repository
         {
             return new TransactionRepository().Create(transaction);
         }
-        
+
 
         public IEnumerable<Transaction> GetTransactions(MarketCriteria criteria)
         {
             return null;
         }
 
-        
+
 
         public void PrepareMarketsTestData()
         {
@@ -174,18 +174,60 @@ namespace GoldenFarm.Repository
 
             DateTime today = DateTime.Today;
             DateTime start = DateTime.Now.AddMonths(-3);
+
             int days = (today - start).Days;
             Random r = new Random();
-            for(int i=0; i < days; i++ )
+            var products = new ProductRepository().GetAllProducts();
+            foreach (var p in products)
             {
-                string date = today.AddDays(-i).ToString("yyyy-MM-dd");
-                var products = new ProductRepository().GetAllProducts();
-
-                foreach(var p in products)
+                double prevClosePrice = 0D;
+                for (int i = 0; i < days; i++)
                 {
+
+                    
+
+                    bool tag = DateTime.Now.Ticks % 2 == 0;
+                    string date = today.AddDays(-i).ToString("yyyy-MM-dd");
+
+                    var openPrice = 0D;
+                    var topPrice = 0D;
+                    var bottomPrice = 0D;
+
+                    if (prevClosePrice == 0)
+                    {
+                        openPrice = r.NextDouble();
+                    }
+                    else
+                    {
+                        openPrice = prevClosePrice;
+                    }
+                    var currentPrice = 0D;
+                    var closePrice = 0D;
+                    if (tag)
+                    {
+                        currentPrice = openPrice * (1 + (double)r.Next(0, 10000) / (double)100000);
+                    }
+                    else
+                    {
+                        currentPrice = openPrice * (1 - (double)r.Next(0, 10000) / (double)100000);
+                    }
+
+                    if (tag)
+                    {
+                        closePrice = openPrice * (1 + (double)r.Next(0, 10000) / (double)100000);
+                    }
+                    else
+                    {
+                        closePrice = openPrice * (1 - (double)r.Next(0, 10000) / (double)100000);
+                    }
+                    var max = Math.Max(currentPrice, openPrice);
+                    var min = Math.Min(currentPrice, openPrice);
+                    topPrice = max * (1 + (double)r.Next(0, 10000) / (double)100000);
+                    bottomPrice = min * (1 - (double)r.Next(0, 10000) / (double)100000);
+                    prevClosePrice = closePrice;
                     sql = @"INSERT INTO Market( ProductId, CurrentPrice, PrevDayPrice, OpenPrice, ClosePrice, TopPrice, BottomPrice, Volume, [Date])
                             VALUES({0}, {1}, {2}, {3}, {4}, {5}, {6}, {7}, '{8}')";
-                    sql = string.Format(sql, p.Id, r.NextDouble(), r.NextDouble(), r.NextDouble(), r.NextDouble(), r.NextDouble(), r.NextDouble(), r.Next(999999), date);
+                    sql = string.Format(sql, p.Id, currentPrice, openPrice, openPrice, closePrice, topPrice, bottomPrice, r.Next(999999), date);
                     Conn.Execute(sql);
                 }
             }
@@ -204,14 +246,14 @@ namespace GoldenFarm.Repository
             for (int i = 0; i < minutes; i++)
             {
                 string time = start.AddMinutes(i).ToString("yyyy-MM-dd HH:mm:ss");
-                
+
                 var products = new ProductRepository().GetAllProducts();
 
                 foreach (var p in products)
                 {
                     sql = @"INSERT INTO [Transaction]( TransactionId, ProductId, UserId, IsBuy, [Count], ChargeFee, Price, [Date], CreateTime)
                             VALUES(NEWID(), {0}, 0, 1, {1}, {2}, {3}, '{4}', '{5}')";
-                    sql = string.Format(sql, p.Id, r.Next(999999), r.NextDouble(), r.NextDouble(),  date, time);
+                    sql = string.Format(sql, p.Id, r.Next(999999), r.NextDouble(), r.NextDouble(), date, time);
                     Conn.Execute(sql);
                 }
             }

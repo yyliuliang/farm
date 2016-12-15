@@ -44,12 +44,12 @@ namespace GoldenFarm.Entity
         }
 
         [Write(false)]
-        public string RaisedRate
+        public decimal RaisedRate
         {
             get
             {
-                if (OpenPrice == 0) return "100";
-                return ((Raised / OpenPrice) * 100).ToString("f2");
+                if (OpenPrice == 0) return 1;
+                return ((Raised / OpenPrice));//.ToString("f2");
             }
         }
 
