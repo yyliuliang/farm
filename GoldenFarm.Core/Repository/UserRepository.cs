@@ -69,9 +69,21 @@ namespace GoldenFarm.Repository
             return Conn.Query<UserProduct, Product, UserProduct>(sql, (u, p) => { u.Product = p; return u; }, new { userId = userId });
         }
 
+        public UserProduct GetProductByUser(int productId, int userId)
+        {
+            string sql = "SELECT TOP 1 * FROM [User] u INNER JOIN UserProduct p on u.Id = p.UserId WHERE u.Id = @userId AND p.ProductId = @pid";
+            var r = Conn.Query<UserProduct, Product, UserProduct>(sql, (u, p) => { u.Product = p; return u; }, new { userId = userId, pid = productId });
+            return r.FirstOrDefault();
+        }
+
         public void UpdateUserProduct(UserProduct up)
         {
             Conn.Update<UserProduct>(up);
+        }
+
+        public int CreateUserProduct(UserProduct up)
+        {
+            return (int)Conn.Insert(up);
         }
 
         #endregion

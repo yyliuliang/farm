@@ -107,11 +107,11 @@
             }
         });
 
-        Minute('@Model.MarketDetail.Product.ProductCode', '/Market/Minute');
+       // Minute('@Model.MarketDetail.Product.ProductCode', '/Market/Minute');
         Candle('@Model.MarketDetail.Product.ProductCode', '/Market/Candle')
 
         //FlushEntrust();
-       // setInterval("Flush()", 5000);
+        setInterval("Flush()", 5000);
         setInterval("FlushEntrust()", 5000);
 
         //GetMyEntrust(0, 10, 1);

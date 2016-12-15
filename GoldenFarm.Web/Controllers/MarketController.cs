@@ -64,51 +64,58 @@ namespace GoldenFarm.Web.Controllers
                             ProductId = pid,
                             CreateTime = DateTime.Now
                         };
-                        
-                        
+
+
                         int eid = mr.CreateEntrust(entrust);
                         decimal dealedAmount = 0M;
 
                         //冻结用户委托金额
                         CurrentUser.FrozenScore += (count * price);
 
+                        #region 处理交易
                         var saleEntrusts = mr.GetEntrusts(new MarketCriteria { IsBuy = 0, ProductId = pid, Cancelled = 0, StartDate = start, EndDate = end })
                             .Where(e => e.Price <= price).OrderBy(e => e.Price).ThenByDescending(e => e.Id);
 
                         if (saleEntrusts != null && saleEntrusts.Any())
                         {
-                            foreach(var e in saleEntrusts)
+                            foreach (var e in saleEntrusts)
                             {
                                 decimal amount = 0M;
+                                Guid tid = Guid.NewGuid();
+                                int acutalCount = 0; 
                                 // 80,  100 - 30 or 0
-                                if((e.Count - e.DealedCount) >= (entrust.Count - entrust.DealedCount)) //此笔交易可完成
+                                if ((e.Count - e.DealedCount) >= (entrust.Count - entrust.DealedCount)) //此笔交易可完成
                                 {
-                                    amount = (entrust.Count - entrust.DealedCount) * e.Price;
-                                    e.DealedAmount += (entrust.Count - entrust.DealedCount) * e.Price;
+                                    acutalCount = entrust.Count - entrust.DealedCount;
+                                    amount = (acutalCount) * e.Price;
+                                    e.DealedAmount += (acutalCount) * e.Price;
                                     dealedAmount += e.DealedAmount;
-                                    e.DealedCount += (entrust.Count - entrust.DealedCount);
-                                    entrust.DealedAmount += (entrust.Count - entrust.DealedCount) * e.Price;
-                                    entrust.DealedCount = entrust.Count;                                    
+                                    e.DealedCount += (acutalCount);
+                                    entrust.DealedAmount += (acutalCount) * e.Price;
+                                    entrust.DealedCount = entrust.Count;
                                     entrust.Status = 1;
                                     if (e.DealedCount == e.Count)
                                     {
-                                        e.Status = 1;                                        
+                                        e.Status = 1;
                                     }
                                     else
                                     {
                                         e.Status = 2;
-                                    }
+                                    }                                    
 
                                     mr.UpdateEntrust(e);
+                                    
+                                    
                                     break;
                                 }
                                 else //需更多笔交易
                                 {
-                                    amount = (e.Count - e.DealedCount) * e.Price;
-                                    entrust.DealedAmount += (e.Count - e.DealedCount) * e.Price;
-                                    dealedAmount += (e.Count - e.DealedCount) * e.Price;
-                                    entrust.DealedCount += (e.Count - e.DealedCount);
-                                    e.DealedAmount += (e.Count - e.DealedCount) * e.Price;
+                                    acutalCount = e.Count - e.DealedCount;
+                                    amount = (acutalCount) * e.Price;
+                                    entrust.DealedAmount += acutalCount * e.Price;
+                                    dealedAmount += acutalCount * e.Price;
+                                    entrust.DealedCount += acutalCount;
+                                    e.DealedAmount += acutalCount * e.Price;
                                     e.DealedCount = e.Count;
 
                                     e.Status = 1;
@@ -117,25 +124,46 @@ namespace GoldenFarm.Web.Controllers
                                     mr.UpdateEntrust(e);
                                 }
                                 var user = ur.Get(e.UserId);
-                                if(user != null)
+                                if (user != null)
                                 {
                                     user.TotalScore += amount;
                                     ur.Update(user);
+                                    var uup = ur.GetProductByUser(e.ProductId, e.UserId);
+                                    uup.FrozenCount -= acutalCount;
+                                    uup.TotalCount -= acutalCount;
+
+                                    ur.UpdateUserProduct(uup);
                                 }
-                                var t1 = new Transaction
+                                var tbuy = new Transaction
                                 {
-
+                                    Count = acutalCount,
+                                    IsBuy = true,
+                                    UserId = entrust.UserId,
+                                    CreateTime = DateTime.Now,
+                                    Date = DateTime.Today,
+                                    Price = e.Price,
+                                    ProductId = e.ProductId,
+                                    ChargeFee = 0,
+                                    TransactionId = tid
                                 };
-                                var t2 = new Transaction
+                                var tsell = new Transaction
                                 {
-
+                                    Count = acutalCount,
+                                    IsBuy = false,
+                                    UserId = e.UserId,
+                                    CreateTime = DateTime.Now,
+                                    Date = DateTime.Today,
+                                    Price = e.Price,
+                                    ProductId = e.ProductId,
+                                    ChargeFee = 0,
+                                    TransactionId = tid
                                 };
-                                mr.CreateTransaction(t1);
-                                mr.CreateTransaction(t2);
+                                mr.CreateTransaction(tbuy);
+                                mr.CreateTransaction(tsell);
                             }
                             mr.UpdateEntrust(entrust);
                         }
-                        if(entrust.Status == 1)
+                        if (entrust.Status == 1)
                         {
                             CurrentUser.FrozenScore -= (count * price);
                         }
@@ -143,9 +171,30 @@ namespace GoldenFarm.Web.Controllers
                         {
                             CurrentUser.FrozenScore -= dealedAmount;
                         }
+                        var up = ur.GetProductByUser(entrust.ProductId, CurrentUser.Id);
+                        if(up == null)
+                        {
+                            up = new UserProduct
+                            {
+                                ProductId = entrust.ProductId,
+                                FrozenCount = 0,
+                                UserId = CurrentUser.Id,
+                                TotalCount = entrust.DealedCount,
+                                CreateTime = DateTime.Now,
+                                UpdateTime = DateTime.Now
+                            };
+                            ur.CreateUserProduct(up);
+                        }
+                        else
+                        {
+                            up.TotalCount += entrust.DealedCount;
+                            up.UpdateTime = DateTime.Now;
+                            ur.UpdateUserProduct(up);
+                        }
+                        #endregion
 
                         CurrentUser.TotalScore -= dealedAmount;
-                       
+
                         ur.Update(CurrentUser);
                         RefreshCurrentUser();
                     }
@@ -155,6 +204,7 @@ namespace GoldenFarm.Web.Controllers
                         int count = int.Parse(Request.Form["SaleCount"]);
                         int pid = int.Parse(Request.Form["pid"]);
                         decimal price = decimal.Parse(Request.Form["SalePrice"]);
+                        int dealedCount = 0;
                         var entrust = new Entrust()
                         {
                             IsBuy = buy,
@@ -168,8 +218,117 @@ namespace GoldenFarm.Web.Controllers
                         //冻结用户委托产品
                         var up = ur.GetProductsByUser(CurrentUser.Id).First(p => p.Product.ProductCode == id);
                         up.FrozenCount += count;
-                        ur.UpdateUserProduct(up);
+                        
                         int eid = mr.CreateEntrust(entrust);
+
+                        #region 处理交易
+
+                        var buyEntrusts = mr.GetEntrusts(new MarketCriteria { IsBuy = 1, ProductId = pid, Cancelled = 0, StartDate = start, EndDate = end })
+                            .Where(e => e.Price >= price).OrderByDescending(e => e.Price).ThenByDescending(e => e.Id);
+
+                        if (buyEntrusts != null && buyEntrusts.Any())
+                        {
+                            foreach (var e in buyEntrusts)
+                            {
+                                decimal amount = 0M;
+                                Guid tid = Guid.NewGuid();
+                                int acutalCount = 0;
+                                // 80,  100 - 30 or 0
+                                if ((e.Count - e.DealedCount) >= (entrust.Count - entrust.DealedCount)) //此笔交易可完成
+                                {
+                                    acutalCount = entrust.Count - entrust.DealedCount;
+                                    amount = (acutalCount) * e.Price;
+                                    e.DealedAmount += (acutalCount) * e.Price;
+                                    dealedCount += acutalCount;
+                                    e.DealedCount += (acutalCount);
+                                    entrust.DealedAmount += (acutalCount) * e.Price;
+                                    entrust.DealedCount = entrust.Count;
+                                    entrust.Status = 1;
+                                    if (e.DealedCount == e.Count)
+                                    {
+                                        e.Status = 1;
+                                    }
+                                    else
+                                    {
+                                        e.Status = 2;
+                                    }
+                                   
+                                    mr.UpdateEntrust(e);
+
+
+                                    break;
+                                }
+                                else //需更多笔交易
+                                {
+                                    acutalCount = e.Count - e.DealedCount;
+                                    amount = (acutalCount) * e.Price;
+                                    entrust.DealedAmount += acutalCount * e.Price;
+                                    dealedCount += acutalCount;
+                                    entrust.DealedCount += acutalCount;
+                                    e.DealedAmount += acutalCount * e.Price;
+                                    e.DealedCount = e.Count;
+
+                                    e.Status = 1;
+                                    entrust.Status = 2;
+
+                                    mr.UpdateEntrust(e);
+                                }
+                                var user = ur.Get(e.UserId);
+                                if (user != null)
+                                {
+                                    user.FrozenScore -= amount;
+                                    user.TotalScore -= amount;
+                                    ur.Update(user);
+                                    var uup = ur.GetProductByUser(e.ProductId, e.UserId);
+                                    //uup.FrozenCount -= acutalCount;
+                                    uup.TotalCount += acutalCount;
+
+                                    ur.UpdateUserProduct(uup);
+                                }
+                                var tbuy = new Transaction
+                                {
+                                    Count = acutalCount,
+                                    IsBuy = true,
+                                    UserId = e.UserId,
+                                    CreateTime = DateTime.Now,
+                                    Date = DateTime.Today,
+                                    Price = e.Price,
+                                    ProductId = e.ProductId,
+                                    ChargeFee = 0,
+                                    TransactionId = tid
+                                };
+                                var tsell = new Transaction
+                                {
+                                    Count = acutalCount,
+                                    IsBuy = false,
+                                    UserId = entrust.UserId,
+                                    CreateTime = DateTime.Now,
+                                    Date = DateTime.Today,
+                                    Price = e.Price,
+                                    ProductId = e.ProductId,
+                                    ChargeFee = 0,
+                                    TransactionId = tid
+                                };
+                                mr.CreateTransaction(tbuy);
+                                mr.CreateTransaction(tsell);
+                            }
+                            mr.UpdateEntrust(entrust);
+                        }
+                        if (entrust.Status == 1)
+                        {
+                            //CurrentUser.FrozenScore += (count * price);
+                        }
+                        else
+                        {
+                            //CurrentUser.FrozenScore += dealedAmount;
+                        }
+                        
+                        #endregion
+
+                        up.FrozenCount -= dealedCount;
+                        ur.UpdateUserProduct(up);
+                        ur.Update(CurrentUser);
+                        RefreshCurrentUser();
                     }
                     break;
                 case "REVOKE":
