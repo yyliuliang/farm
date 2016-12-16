@@ -680,10 +680,10 @@ a.button-stretch { display:block; width:100%; }
 
 
 .uc-form .paymode { padding:10px 0; }
-.uc-form .paymode dd { background:url(..//content/images/check-01.png) right bottom no-repeat; float:left; margin-bottom:20px; margin-right:20px; padding:2px 24px 2px 5px; border:1px solid #EFEFEF; cursor:pointer; }
-.uc-form .paymode dd:hover { background:url(..//content/images/check-02.png) right bottom no-repeat; border:1px solid #FF6600; }
-.uc-form .paymode .select { background:url(..//content/images/check-02.png) right bottom no-repeat; border:1px solid #FF6600; }
-.uc-form .paymode dd cite { display:block; float:left; width:120px; height:35px; background:url(..//content/images/pay.png) no-repeat; }
+.uc-form .paymode dd { background:url(/content/images/check-01.png) right bottom no-repeat; float:left; margin-bottom:20px; margin-right:20px; padding:2px 24px 2px 5px; border:1px solid #EFEFEF; cursor:pointer; }
+.uc-form .paymode dd:hover { background:url(/content/images/check-02.png) right bottom no-repeat; border:1px solid #FF6600; }
+.uc-form .paymode .select { background:url(/content/images/check-02.png) right bottom no-repeat; border:1px solid #FF6600; }
+.uc-form .paymode dd cite { display:block; float:left; width:120px; height:35px; background:url(/content/images/pay.png) no-repeat; }
 .uc-form .paymode dt { height:45px; position:relative; }
 .uc-form .paymode dt i { position:absolute; display:block; width:100%; height:20px; border-bottom:1px solid #EFEFEF; }
 .uc-form .paymode dt b { position:absolute; display:block; height:20px; line-height:20px; padding:0 10px; background:#FFF; top:10px; left:20px; }

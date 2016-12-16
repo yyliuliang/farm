@@ -180,12 +180,13 @@ namespace GoldenFarm.Repository
             var products = new ProductRepository().GetAllProducts();
             foreach (var p in products)
             {
+                bool isrose = p.ProductCode == "800008";
                 double prevClosePrice = 0D;
                 for (int i = 0; i < days; i++)
                 {
+                    var rate = (double)r.Next(0, 10000) / (double)100000;
 
                     
-
                     bool tag = DateTime.Now.Ticks % 2 == 0;
                     string date = today.AddDays(-i).ToString("yyyy-MM-dd");
 
@@ -205,30 +206,68 @@ namespace GoldenFarm.Repository
                     var closePrice = 0D;
                     if (tag)
                     {
-                        currentPrice = openPrice * (1 + (double)r.Next(0, 10000) / (double)100000);
+                        
+                        if (isrose)
+                        {
+                            currentPrice = openPrice * (1 + (double)r.Next(0, 60000) / (double)100000);
+                        }
+                        else
+                        {
+                            currentPrice = openPrice * (1 + (double)r.Next(0, 10000) / (double)100000);
+                        }
                     }
                     else
                     {
-                        currentPrice = openPrice * (1 - (double)r.Next(0, 10000) / (double)100000);
+                        if (isrose)
+                        {
+                            currentPrice = openPrice * (1 - (double)r.Next(0, 60000) / (double)100000);
+                        }
+                        else
+                        {
+                            currentPrice = openPrice * (1 - (double)r.Next(0, 10000) / (double)100000);
+                        }
                     }
 
                     if (tag)
                     {
-                        closePrice = openPrice * (1 + (double)r.Next(0, 10000) / (double)100000);
+                        if (isrose)
+                        {
+                            closePrice = openPrice * (1 + (double)r.Next(0, 60000) / (double)100000);
+                        }
+                        else
+                        {
+                            closePrice = openPrice * (1 + (double)r.Next(0, 10000) / (double)100000);
+                        }
                     }
                     else
                     {
-                        closePrice = openPrice * (1 - (double)r.Next(0, 10000) / (double)100000);
+                        if (isrose)
+                        {
+                            closePrice = openPrice * (1 - (double)r.Next(0, 60000) / (double)100000);
+                        }
+                        else
+                        {
+                            closePrice = openPrice * (1 - (double)r.Next(0, 10000) / (double)100000);
+                        }
                     }
                     var max = Math.Max(currentPrice, openPrice);
                     var min = Math.Min(currentPrice, openPrice);
-                    topPrice = max * (1 + (double)r.Next(0, 10000) / (double)100000);
-                    bottomPrice = min * (1 - (double)r.Next(0, 10000) / (double)100000);
-                    prevClosePrice = closePrice;
+                    if (isrose)
+                    {
+                        topPrice = max * (1 + (double)r.Next(0, 60000) / (double)100000);
+                        bottomPrice = min * (1 - (double)r.Next(0, 60000) / (double)100000);
+                    }
+                    else
+                    {
+                        topPrice = max * (1 + (double)r.Next(0, 10000) / (double)100000);
+                        bottomPrice = min * (1 - (double)r.Next(0, 10000) / (double)100000);
+                    }
+                    
                     sql = @"INSERT INTO Market( ProductId, CurrentPrice, PrevDayPrice, OpenPrice, ClosePrice, TopPrice, BottomPrice, Volume, [Date])
                             VALUES({0}, {1}, {2}, {3}, {4}, {5}, {6}, {7}, '{8}')";
-                    sql = string.Format(sql, p.Id, currentPrice, openPrice, openPrice, closePrice, topPrice, bottomPrice, r.Next(999999), date);
+                    sql = string.Format(sql, p.Id, currentPrice, prevClosePrice == 0 ? openPrice : prevClosePrice, openPrice, closePrice, topPrice, bottomPrice, r.Next(999999), date);
                     Conn.Execute(sql);
+                    prevClosePrice = closePrice;
                 }
             }
         }
