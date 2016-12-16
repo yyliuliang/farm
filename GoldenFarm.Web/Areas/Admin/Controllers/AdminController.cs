@@ -1,4 +1,6 @@
-﻿using System;
+﻿using GoldenFarm.Web.Controllers;
+using GoldenFarm.Web.Filter;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -6,7 +8,9 @@ using System.Web.Mvc;
 
 namespace GoldenFarm.Web.Areas.Admin.Controllers
 {
-    public class AdminController : Controller
+
+    [CheckAdmin]
+    public class AdminController : BaseController
     {
         // GET: Admin/Admin
         public ActionResult Index()

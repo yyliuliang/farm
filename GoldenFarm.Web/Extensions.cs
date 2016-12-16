@@ -15,5 +15,11 @@ namespace GoldenFarm.Web
             var controller = (BaseController)helper.ViewContext.Controller;
             return controller.CurrentUser != null;
         }
+
+        public static bool IsAdmin(this HtmlHelper helper)
+        {
+            var controller = (BaseController)helper.ViewContext.Controller;
+            return controller.CurrentUser != null && controller.CurrentUser.IsAdmin;
+        }
     }
 }

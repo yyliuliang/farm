@@ -1,0 +1,44 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+@model IEnumerable<Product>
+
+<div class="uc-head">产品列表</div>
+<div class="tablebox">
+    <table>
+        <thead>
+            <tr>
+                <th></th>
+                <th>产品名称</th>
+                <th>编码</th>
+                <th style="width:100px;">时间</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model == null || !Model.Any())
+            {
+                <tr>
+                    <td class="algin" colspan="6">没有重生记录</td>
+                </tr>
+            }
+            else
+            {
+                foreach (var p in Model)
+                {
+                    <tr>
+                        <td></td>
+                        <td><img src="@p.ImageUrl" width="30" />
+                            @Html.ActionLink(p.ProductName, "Detail", new { id = p.Id })
+                        </td>
+                        <td>@p.ProductCode</td>
+                        <td>@p.CreateTime</td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+
+</div>
+

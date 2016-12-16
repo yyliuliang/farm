@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title - 农场物语</title>
+    <title>农场物语</title>
     @Styles.Render("~/Content/sitecss")
     @Scripts.Render("~/bundles/sitejs")
     <script type="text/javascript">
@@ -17,8 +17,8 @@
     <div class="subbanner-small subbanner-user" style="position: relative; z-index: 0; background: none;">
         <div class="subbanner-inner">
             <div class="container">
-                <h1>用户中心</h1>
-                <h2>User Center</h2>
+                <h1>农场物语</h1>
+                <h2>管理平台</h2>
             </div>
         </div>
         <div class="backstretch" style="left: 0px; top: 0px; overflow: hidden; margin: 0px; padding: 0px; height: 120px; width: 1423px; z-index: -999998; position: absolute;">
@@ -27,7 +27,7 @@
     </div>
 
     <div class="container clear">
-        <div class="side">@Html.Partial("_UCSideMenu")</div>
+        <div class="side">@Html.Partial("_AdminSideMenu")</div>
         <div class="main">@RenderBody()</div>
     </div>
         

@@ -17,7 +17,6 @@ namespace GoldenFarm.Web
             this.ShowFirstLast = false;
             this.AutoHide = true;
             this.PageIndexParameterName = "page";
-            this.AutoHide = false;
             this.CurrentPagerItemTemplate = "<a class=current>{0}</a>";
         }
     }

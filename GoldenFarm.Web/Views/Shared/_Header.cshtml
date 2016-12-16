@@ -2,20 +2,24 @@
     <div class="container clear">
         <a href="index.html" class="logo"></a>
         <ul class="menu clear" id="menu">
-            <li class="select"><i class="icon"></i>@Html.ActionLink("首页", "Index", "Home")</li>
-            <li><i class="icon"></i>@Html.ActionLink("实时行情", "Index", "Market")</li>
-            <li><i class="icon"></i>@Html.ActionLink("游戏公告", "Index", "News")</li>
-            <li><i class="icon"></i>@Html.ActionLink("攻略资料", "Index", "Strategy")</li>
-            <li><i class="icon"></i>@Html.ActionLink("帮助中心", "Faq", "Static")</li>
-            <li><i class="icon"></i>@Html.ActionLink("关于我们", "About", "Static")</li>
+            <li class="select"><i class="icon"></i>@Html.ActionLink("首页", "Index", "Home", new { area = string.Empty }, null)</li>
+            <li><i class="icon"></i>@Html.ActionLink("实时行情", "Index", "Market", new { area = string.Empty }, null)</li>
+            <li><i class="icon"></i>@Html.ActionLink("游戏公告", "Index", "News", new { area = string.Empty }, null)</li>
+            <li><i class="icon"></i>@Html.ActionLink("攻略资料", "Index", "Strategy", new { area = string.Empty }, null)</li>
+            <li><i class="icon"></i>@Html.ActionLink("帮助中心", "Faq", "Static", new { area = string.Empty }, null)</li>
+            <li><i class="icon"></i>@Html.ActionLink("关于我们", "About", "Static", new { area = string.Empty }, null)</li>
             <li><i class="icon"></i><a href="#">进入游戏</a></li>
         </ul>
 
         <div class="link clear">
             @if (Html.IsLogined())
             {
-                @Html.ActionLink("用户中心", "Index", "User")
-                @Html.ActionLink("退出", "Logout", "User")
+                if (Html.IsAdmin())
+                {
+                    @Html.ActionLink("管理后台", "Index", "Admin", new { area = "Admin" }, null)
+                }
+                @Html.ActionLink("用户中心", "Index", "User", new { area = string.Empty }, null)
+                @Html.ActionLink("退出", "Logout", "User", new { area = string.Empty }, null)
             }
             else
             {
@@ -27,3 +31,4 @@
         <div class="switch" id="switch"><i></i></div>
     </div>
 </div>
+ 
