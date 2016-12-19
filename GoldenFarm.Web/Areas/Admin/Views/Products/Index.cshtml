@@ -27,7 +27,7 @@
             {
                 foreach (var p in Model)
                 {
-                    <tr>
+                    <tr style="cursor:pointer;" onclick="location = '/Admin/Products/Detail/@p.Id'">
                         <td></td>
                         <td><img src="@p.ImageUrl" width="30" />
                             @Html.ActionLink(p.ProductName, "Detail", new { id = p.Id })

@@ -1,39 +1,46 @@
 ﻿
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "用户中心";
     Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
 }
-@model PageViewData<User>
+}
+@model PageViewData<Transaction>
 
-<div class="uc-head">用户列表</div>
-
+<div class="uc-head">交易记录</div>
 
 @using (Html.BeginForm())
 {
     <dl class="uc-search">
+
+
         <dd>
             <div class="form-group">
-                <div class="form-group-addon no-right-border">ID</div>
-                <div class="form-group-input stretch">
-                    @Html.TextBox("UserId", null, new { @class = "stretch" })
+                <div class="form-group-addon no-right-border">产品</div>
+                <div class="form-group-addon form-group-addon-white stretch">
+                    @Html.DropDownList("ProductId", (IEnumerable<SelectListItem>)ViewBag.Products, "全部")
                 </div>
             </div>
         </dd>
 
         <dd>
             <div class="form-group">
-                <div class="form-group-addon no-right-border">用户名/手机</div>
-                <div class="form-group-input stretch">
-                    @Html.TextBox("Phone", null, new { @class = "stretch" })
+                <div class="form-group-addon no-right-border">类别</div>
+                <div class="form-group-addon form-group-addon-white stretch">
+                    <select id="IsBuy" name="IsBuy">
+
+                        <option value="-1" selected="">全部</option>
+                        <option value="1">买入</option>
+                        <option value="0">卖出</option>
+
+                    </select>
                 </div>
             </div>
         </dd>
-
         <dd>
             <div class="form-group">
-                <div class="form-group-addon no-right-border">创建于</div>
+                <div class="form-group-addon no-right-border">开始</div>
                 <div class="form-group-input stretch">
-                    @Html.TextBox("StartDate", null, new { @class="stretch", onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})", name= "StartDate" })
+                    @Html.TextBox("StartDate", null, new { @class = "stretch", onfocus = "WdatePicker({dateFmt:'yyyy-MM-dd'})", name = "StartDate" })
                     @*<input class="stretch" id="StartDate" name="StartDate" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" type="text" value="@ViewBag.StartDate">*@
                 </div>
             </div>
@@ -54,43 +61,44 @@
         </dd>
     </dl>
 }
+
 <div class="tablebox">
+
     <table>
         <thead>
             <tr>
                 <th></th>
-                <th>ID</th>
-                <th>用户名</th>
-                <th>手机号</th>
-                <th>可用积分</th>
-                <th>最后登录时间</th>
-                <th>创建日期</th>
-                <th>管理员</th>
-                <th>状态</th>
+                <th>用户</th>
+                <th>产品</th>
+                <th>交易时间</th>
+                <th>类型</th>
+                <th>成交价</th>
+                <th>成交量</th>
+                <th>成交额</th>
+                <th>手续费</th>
             </tr>
         </thead>
         <tbody>
             @if (Model.Items == null || !Model.Items.Any())
             {
                 <tr>
-                    <td class="algin" colspan="9">没有查询到相关用户</td>
+                    <td class="algin" colspan="9">没有查询到相关数据</td>
                 </tr>
             }
             else
             {
-                foreach (var u in Model.Items)
+                foreach (var t in Model.Items)
                 {
-                    <tr style="cursor:pointer;" onclick="location = '/Admin/Users/Detail/@u.Id'">
+                    <tr>
                         <td></td>
-                        <td>@u.Id</td>
-                        <td>@u.DisplayName</td>
-                        <td>@u.Phone</td>
-                        <td>@(u.TotalScore - u.FrozenScore)</td>
-                        <td>@u.LastLoginTime</td>
-                        <td>@u.CreateTime</td>
-                        <td>@(u.IsAdmin ? "是" : "否")</td>
-                        <td>@(u.Deleted ? "已禁用" : "正常")</td>
-                        
+                        <td>@t.UserId</td>
+                        <td>@t.Product.ProductName</td>
+                        <td>@t.CreateTime</td>
+                        <td>@(t.IsBuy ? "买入" : "卖出")</td>
+                        <td>@t.Price</td>
+                        <td>@t.Count</td>
+                        <td>@(t.Price * t.Count)</td>
+                        <td>@t.ChargeFee</td>
                     </tr>
                 }
             }
@@ -112,4 +120,5 @@
             }
         }
     }
+
 </script>

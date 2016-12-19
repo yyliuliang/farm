@@ -12,10 +12,16 @@ namespace GoldenFarm
 
         public int PageSize { get; set; }
 
+        public string Fields { get; set; }
+
+
+        public string Table { get; set; }
+
         public string Where { get; set; }
 
         public object Parameter { get; set; }
 
         public string Order { get; set; }
+        
     }
 }

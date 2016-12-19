@@ -9,6 +9,8 @@ using Dapper.Contrib.Extensions;
 
 namespace GoldenFarm.Repository
 {
+    public class ProductRebirthRepository : RepositoryBase<ProductRebirth> { }
+
     public class ProductRepository : RepositoryBase<Product>
     {
         public IEnumerable<Product> GetAllProducts()
