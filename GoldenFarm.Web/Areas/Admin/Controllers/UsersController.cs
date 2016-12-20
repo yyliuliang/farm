@@ -152,5 +152,79 @@ namespace GoldenFarm.Web.Areas.Admin.Controllers
             ViewBag.Products = pr.GetAllProducts().Select(p => new SelectListItem { Text = p.ProductName, Value = p.Id.ToString() });
             return View(model);
         }
+
+
+        public ActionResult BorrowHistory(UserCriteria criteria)
+        {
+            StringBuilder where = new StringBuilder();
+            DynamicParameters parameter = new DynamicParameters();
+            int uid = 0;
+            int.TryParse(criteria.UserId, out uid);
+            where.Append(" 1=1 ");
+            if (uid > 0)
+            {
+                where.Append(" AND u.UserId = @userId");
+                parameter.Add("userId", uid);
+            }
+            if (criteria.StartDate.HasValue)
+            {
+                where.Append(" AND u.CreateTime >= @start");
+                parameter.Add("start", criteria.StartDate.Value);
+            }
+            if (criteria.EndDate.HasValue)
+            {
+                where.Append(" AND u.CreateTime < @end");
+                parameter.Add("end", criteria.EndDate.Value);
+            }
+            var pc = new PageCriteria()
+            {
+                Table = "UserBorrow u INNER JOIN Product p ON u.ProductId = p.Id",
+                Order = "u.Id DESC",
+                Where = where.ToString(),
+                Parameter = parameter,
+                PageIndex = CurrentPageIndex,
+                PageSize = PageSize
+            };
+            var model = new UserBorrowRepository().GetPagedData<UserBorrow, Product, UserBorrow>(pc, (u, p) => { u.Product = p; return u; });
+            return View(model);
+        }
+
+
+        public ActionResult GiveHistory(UserCriteria criteria)
+        {
+            StringBuilder where = new StringBuilder();
+            DynamicParameters parameter = new DynamicParameters();
+            int uid = 0;
+            int.TryParse(criteria.UserId, out uid);
+            where.Append(" 1=1 ");
+            if (uid > 0)
+            {
+                where.Append(" AND u.UserId = @userId");
+                parameter.Add("userId", uid);
+            }
+            if (criteria.StartDate.HasValue)
+            {
+                where.Append(" AND u.CreateTime >= @start");
+                parameter.Add("start", criteria.StartDate.Value);
+            }
+            if (criteria.EndDate.HasValue)
+            {
+                where.Append(" AND u.CreateTime < @end");
+                parameter.Add("end", criteria.EndDate.Value);
+            }
+            var pc = new PageCriteria()
+            {
+                Table = "UserGive u INNER JOIN Product p ON u.ProductId = p.Id",
+                Order = "u.Id DESC",
+                Where = where.ToString(),
+                Parameter = parameter,
+                PageIndex = CurrentPageIndex,
+                PageSize = PageSize
+            };
+            var model = new UserGiveRepository().GetPagedData<UserGive, Product, UserGive>(pc, (u, p) => { u.Product = p; return u; });
+            return View(model);
+        }
+
+
     }
 }

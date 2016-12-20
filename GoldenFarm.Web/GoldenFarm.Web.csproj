@@ -383,6 +383,8 @@
     <Content Include="Areas\Admin\Views\Users\Entrust.cshtml" />
     <Content Include="Areas\Admin\Views\Users\TradeHistory.cshtml" />
     <Content Include="Areas\Admin\Views\Markets\RebirthHistory.cshtml" />
+    <Content Include="Areas\Admin\Views\Users\BorrowHistory.cshtml" />
+    <Content Include="Areas\Admin\Views\Users\GiveHistory.cshtml" />
     <None Include="Properties\PublishProfiles\local.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />

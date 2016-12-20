@@ -31,7 +31,7 @@ namespace GoldenFarm.Web.Controllers
         {
             get
             {
-                return 5;
+                return 20;
             }
         }
 

@@ -9,6 +9,11 @@ using Dapper.Contrib.Extensions;
 
 namespace GoldenFarm.Repository
 {
+    public class UserBorrowRepository : RepositoryBase<UserBorrow> { }
+
+    public class UserGiveRepository : RepositoryBase<UserGive> { }
+
+
     public class UserRepository : RepositoryBase<User>
     {
 
