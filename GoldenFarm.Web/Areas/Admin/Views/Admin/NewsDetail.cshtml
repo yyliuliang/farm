@@ -1,0 +1,93 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+@model News
+
+<div class="uc-head">新闻详情</div>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(n => n.Id)
+    <div class="uc-form">
+        @*<div class="form-group">
+                <div class="form-group-addon no-right-border">可用金币</div>
+                <div class="form-group-addon form-group-addon-disabled stretch" id="Balance">@(Model.User.TotalScore - Model.User.FrozenScore)</div>
+            </div>
+
+            <div class="form-group">
+                <div class="form-group-addon no-right-border">提现账户</div>
+                <div class="form-group-addon form-group-addon-disabled stretch">@(hasAccount ? Model.User.BankAccount.ToString() : string.Empty)</div>
+            </div>*@
+        <div class="form-group">
+            <div class="form-group-addon no-right-border">类别</div>
+            <div class="form-group-addon form-group-addon-white stretch">
+                @Html.DropDownListFor(n => n.CategoryId, (IEnumerable<SelectListItem>)ViewBag.NewsCategories, "全部")
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="form-group-addon no-right-border">标题</div>
+            <div class="form-group-input stretch">
+                @Html.TextBoxFor(n => n.Title, new { @class = "stretch" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="form-group-addon no-right-border">作者</div>
+            <div class="form-group-input stretch">
+                @Html.TextBoxFor(n => n.Author, new { @class = "stretch" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="form-group-addon no-right-border">来源</div>
+            <div class="form-group-input stretch">
+                @Html.TextBoxFor(n => n.Source, new { @class = "stretch" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="form-group-addon no-right-border">预览</div>
+            <div class="form-group-input stretch">
+                @Html.TextBoxFor(n => n.PreviewContent, new { @class = "stretch" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="form-group-addon no-right-border">内容</div>
+            <div class="form-group-input stretch">
+                @Html.TextAreaFor(n => n.Content, new { @class = "stretch" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <input type="button" class="button button-color-1 button-stretch" value="保存" onclick="return PreSubmit()">
+        </div>
+    </div>
+}
+
+<script type="text/javascript" src="~/Scripts/tinymce/tinymce.min.js"></script>
+
+<script type="text/javascript">
+    tinymce.init({
+        selector: 'textarea',  // change this value according to your HTML
+        language: 'zh_CN',
+        menubar: false,
+        height: 300,
+        plugins: [
+    'advlist autolink lists link image charmap print preview anchor',
+    'searchreplace visualblocks code fullscreen',
+    'insertdatetime media table contextmenu paste code'
+        ],
+        toolbar: 'undo redo | insert | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image'
+    });
+
+
+    function PreSubmit()
+    {
+        $('form').submit();
+    }
+</script>

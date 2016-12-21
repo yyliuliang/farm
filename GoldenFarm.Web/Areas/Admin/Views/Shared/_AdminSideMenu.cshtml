@@ -1,5 +1,5 @@
 ﻿@{
-    string[] ucactions = new string[] { "index", "detail" };
+    string[] ucactions = new string[] { "index", "detail", "news", "newsdetail", "createnews" };
     string[] tradeactions = new string[] { "tradecenter", "entrust", "tradehistory", "rebirth", "rebirthhistory", "borrow", "borrowhistory", "give", "givehistory" };
     string action = ViewContext.RouteData.Values["action"].ToString().ToLower();
 }
@@ -7,8 +7,9 @@
     <li @(ucactions.Contains(action) ? "class=open" : string.Empty)>
         <div class="link">农场物语</div>
         <ul class="side-menu-toggle-sub @(ucactions.Contains(action) ? "side-menu-toggle-sub-show" : string.Empty)">
-            <li>@Html.ActionLink("产品列表", "Index", "Products")</li>
             <li>@Html.ActionLink("用户列表", "Index", "Users")</li>
+            <li>@Html.ActionLink("产品列表", "Index", "Products")</li>
+            <li>@Html.ActionLink("新闻列表", "News", "Admin")</li>
         </ul>
     </li>
 

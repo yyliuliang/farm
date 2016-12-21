@@ -53,6 +53,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Entity\Criteria\MarketCriteria.cs" />
+    <Compile Include="Entity\Criteria\NewsCriteria.cs" />
     <Compile Include="Entity\Criteria\UserCriteria.cs" />
     <Compile Include="Entity\Criteria\UserScoreCriteria.cs" />
     <Compile Include="Entity\EntityBase.cs" />
