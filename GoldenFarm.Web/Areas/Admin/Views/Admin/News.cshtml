@@ -1,6 +1,6 @@
 ﻿
 @{
-    ViewBag.Title = "Index";
+
     Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
 }
 @model PageViewData<News>
@@ -31,7 +31,7 @@
 
         <dd>
             <div class="form-group">
-                <div class="form-group-addon no-right-border">创建于</div>
+                <div class="form-group-addon no-right-border">开始</div>
                 <div class="form-group-input stretch">
                     @Html.TextBox("StartDate", null, new { @class = "stretch", onfocus = "WdatePicker({dateFmt:'yyyy-MM-dd'})", name = "StartDate" })
                     @*<input class="stretch" id="StartDate" name="StartDate" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" type="text" value="@ViewBag.StartDate">*@
@@ -48,13 +48,9 @@
             </div>
         </dd>
         <dd>
-            <div class="form-group">
-                <input type="submit" class="button button-color-1" value="查询" onclick="return check()">
+            <input type="submit" class="button-color-1" value="查询" onclick="return check()">
 
-            </div>
-            <div class="form-group">
-                <input type="button" class="button button-color-1" value="添加" onclick="location = '/Admin/Admin/CreateNews'" />
-            </div>
+            <input type="button" class="button-color-1" value="添加" onclick="location = '/Admin/Admin/CreateNews'" />
         </dd>
     </dl>
 }

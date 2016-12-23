@@ -114,7 +114,8 @@ namespace GoldenFarm.Web.Areas.Admin.Controllers
             var news = nr.Get(id);
             if(news != null)
             {
-                nr.Delete(news);
+                news.Deleted = true;
+                nr.Update(news);
             }
             return Content("1");
         }

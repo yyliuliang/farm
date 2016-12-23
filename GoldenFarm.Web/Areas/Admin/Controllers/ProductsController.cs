@@ -31,7 +31,26 @@ namespace GoldenFarm.Web.Areas.Admin.Controllers
         [HttpPost]
         public ActionResult Detail(Product product)
         {
-            return RedirectToAction("Detail", new { id = product.Id });
+            Product origin = pr.Get(product.Id);
+
+            if (origin == null)
+            {
+                origin = new Product();
+                origin.CreateTime = DateTime.Now;
+            }
+            origin.ProductName = product.ProductName;
+            origin.ProductCode = product.ProductCode;
+            origin.Description = product.Description;
+
+            if (origin.Id > 0)
+            {
+                pr.Update(origin);
+            }
+            else
+            {
+                pr.Create(origin);
+            }
+            return RedirectToAction("Index");
         }
     }
 }

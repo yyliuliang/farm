@@ -7,7 +7,7 @@
 
 <div class="uc-head">新闻详情</div>
 
-@using (Html.BeginForm())
+@using (Html.BeginForm("NewsDetail", "Admin", FormMethod.Post))
 {
     @Html.AntiForgeryToken()
     @Html.HiddenFor(n => n.Id)
@@ -64,7 +64,11 @@
         </div>
 
         <div class="form-group">
-            <input type="button" class="button button-color-1 button-stretch" value="保存" onclick="return PreSubmit()">
+            @if (Model.Id > 0)
+            {
+                <input type="button" class="button-color-4" value="删除" onclick="return Del()">
+            }
+            <input type="button" class="button-color-1" value="保存" onclick="return PreSubmit()">
         </div>
     </div>
 }
@@ -86,8 +90,16 @@
     });
 
 
-    function PreSubmit()
-    {
+    function PreSubmit() {
         $('form').submit();
+    }
+
+    function Del() {
+        if (confirm('确认删除?')) {
+            $.post('@Url.Action("DeleteNews", "Admin")', { id: @Model.Id }, function(){ 
+                location.href = '@Url.Action("News", "Admin")';
+            });
+        }
+        return false;
     }
 </script>
