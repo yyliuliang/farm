@@ -14,30 +14,52 @@
     <div class="uc-form">
 
         <div class="form-group">
-            <div class="form-group-addon no-right-border">名称</div>
-            <div class="form-group-input stretch">
-                @Html.TextBoxFor(n => n.ProductName, new { @class = "stretch" })
+            <div class="form-group-addon no-right-border">用户ID</div>
+            <div class="form-group-addon form-group-addon-disabled stretch">
+                @Model.Id
             </div>
         </div>
 
         <div class="form-group">
-            <div class="form-group-addon no-right-border">编号</div>
+            <div class="form-group-addon no-right-border">用户名</div>
             <div class="form-group-input stretch">
-                @Html.TextBoxFor(n => n.ProductCode, new { @class = "stretch" })
+                @Html.TextBoxFor(n => n.DisplayName, new { @class = "stretch" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="form-group-addon no-right-border">电话</div>
+            <div class="form-group-input stretch">
+                @Html.TextBoxFor(n => n.Phone, new { @class = "stretch" })
             </div>
         </div>
 
 
 
         <div class="form-group">
-            <div class="form-group-addon no-right-border">描述</div>
+            <div class="form-group-addon no-right-border">积分</div>
             <div class="form-group-input stretch">
-                @Html.TextBoxFor(n => n.Description, new { @class = "stretch" })
+                @Html.TextBoxFor(n => n.TotalScore, new { @class = "stretch" })
             </div>
         </div>
 
         <div class="form-group">
-            <input type="button" class="button button-color-1 button-stretch" value="保存" onclick="return PreSubmit()">
+            <div class="form-group-addon no-right-border">身份证</div>
+            <div class="form-group-input stretch">
+                @Html.TextBoxFor(n => n.IdNum, new { @class = "stretch" })
+            </div>
+        </div>
+
+        @*<div class="form-group">
+            <div class="form-group-addon no-right-border">状态</div>
+            <div class="form-group-input stretch">
+                @Html.CheckBoxFor(n => n.Deleted, new { @class = "stretch" })
+            </div>
+        </div>*@
+
+        <div class="form-group">
+            <input type="button" class="button-color-4" value="删除" onclick="return Del()">
+            <input type="button" class="button-color-1" value="保存" onclick="return PreSubmit()">
         </div>
     </div>
 }
@@ -48,5 +70,14 @@
     function PreSubmit()
     {
         $('form').submit();
+    }
+
+    function Del()
+    {
+        if(confirm('确认删除?')){
+            $.post('/admin/users/delete', { id: @Model.Id }, function(){
+                location = '/Admin/Users';
+            });
+        }
     }
 </script>

@@ -26,7 +26,7 @@ namespace GoldenFarm.Web.Areas.Admin.Controllers
         {
             StringBuilder where = new StringBuilder();
             DynamicParameters parameter = new DynamicParameters();
-            where.Append(" 1 = 1 ");
+            where.Append(" Deleted = 0 ");
             if(!string.IsNullOrEmpty(uc.UserId))
             {
                 where.Append(" AND Id = @id");
@@ -52,7 +52,7 @@ namespace GoldenFarm.Web.Areas.Admin.Controllers
                 PageSize = PageSize,
                 PageIndex = CurrentPageIndex,
                 Where = where.ToString(),
-                Order = "ID DESC",
+                Order = "Deleted ASC, ID DESC",
                 Parameter = parameter
             };
             var model = ur.GetPagedData(criteria);
@@ -70,6 +70,18 @@ namespace GoldenFarm.Web.Areas.Admin.Controllers
         public ActionResult Detail(User user)
         {
             return RedirectToAction("Details", new { id = user.Id });
+        }
+
+        [HttpPost]
+        public ActionResult Delete(int id)
+        {
+            var user = ur.Get(id);
+            if (user != null)
+            {
+                ur.Delete(user);
+            }
+            return Content("1");
+            ///return RedirectToAction("Details", new { id = user.Id });
         }
 
 
