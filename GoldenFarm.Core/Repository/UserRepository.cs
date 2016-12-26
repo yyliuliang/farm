@@ -13,6 +13,10 @@ namespace GoldenFarm.Repository
 
     public class UserGiveRepository : RepositoryBase<UserGive> { }
 
+    public class UserScoreRepository : RepositoryBase<UserScore> { }
+
+    public class UserDepositRepository : RepositoryBase<UserDeposit> { }
+
 
     public class UserRepository : RepositoryBase<User>
     {
@@ -70,13 +74,14 @@ namespace GoldenFarm.Repository
 
         public IEnumerable<UserProduct> GetProductsByUser(int userId)
         {
-            string sql = "SELECT * FROM [User] u INNER JOIN UserProduct p on u.Id = p.UserId WHERE u.Id = @userId";
+            string sql = "SELECT * FROM UserProduct u INNER JOIN Product p on p.Id = u.ProductId WHERE u.UserId = @userId";
             return Conn.Query<UserProduct, Product, UserProduct>(sql, (u, p) => { u.Product = p; return u; }, new { userId = userId });
         }
+        
 
         public UserProduct GetProductByUser(int productId, int userId)
         {
-            string sql = "SELECT TOP 1 * FROM [User] u INNER JOIN UserProduct p on u.Id = p.UserId WHERE u.Id = @userId AND p.ProductId = @pid";
+            string sql = "SELECT TOP 1 * FROM Product p INNER JOIN UserProduct u on p.Id = u.ProductId WHERE u.UserId = @userId AND p.ProductId = @pid";
             var r = Conn.Query<UserProduct, Product, UserProduct>(sql, (u, p) => { u.Product = p; return u; }, new { userId = userId, pid = productId });
             return r.FirstOrDefault();
         }
@@ -112,7 +117,13 @@ namespace GoldenFarm.Repository
             return Conn.Query<User>(sql, new { userId = userId + "%" });
         }
 
-        public IEnumerable<UserScore> GetRefUserScores(UserScoreCriteria criteria)
+        public void CreateUserScore(UserScore score)
+        {
+            new UserScoreRepository().Create(score);
+        }
+
+
+        public IEnumerable<UserScore> GetRefUserRewardScores(UserScoreCriteria criteria)
         {
             string sql = @"SELECT * FROM UserScore us INNER JOIN [User] u on us.UserId = u.Id 
                                 WHERE TypeId IN (4, 10, 20) AND us.UserPath LIKE @path AND us.CreateTime BETWEEN @start AND @end";
@@ -120,10 +131,20 @@ namespace GoldenFarm.Repository
             return Conn.Query<UserScore, User, UserScore>(sql, (us, u) => { us.User = u; return us; }, new { path = criteria.RefUserId + "%", start = criteria.StartDate, end = criteria.EndDate });
         }
 
-        public IEnumerable<UserScore> GetUserScores(UserScoreCriteria criteria)
+        
+        public IEnumerable<UserScore> GetUserRewardScores(UserScoreCriteria criteria)
         {
             string sql = @"SELECT * FROM UserScore us INNER JOIN [User] u on us.UserId = u.Id 
                                 WHERE TypeId IN (4, 10, 20) AND us.UserId = @userId AND us.CreateTime BETWEEN @start AND @end";
+
+            return Conn.Query<UserScore, User, UserScore>(sql, (us, u) => { us.User = u; return us; }, new { userId = criteria.RefUserId, start = criteria.StartDate, end = criteria.EndDate });
+        }
+
+
+        public IEnumerable<UserScore> GetScoresByUser(UserScoreCriteria criteria)
+        {
+            string sql = @"SELECT * FROM UserScore us INNER JOIN [User] u on us.UserId = u.Id 
+                                WHERE us.UserId = @userId AND us.CreateTime BETWEEN @start AND @end";
 
             return Conn.Query<UserScore, User, UserScore>(sql, (us, u) => { us.User = u; return us; }, new { userId = criteria.RefUserId, start = criteria.StartDate, end = criteria.EndDate });
         }
@@ -156,5 +177,15 @@ namespace GoldenFarm.Repository
         }
 
 
+        public void CreateDeposity(UserDeposit deposit)
+        {
+            new UserDepositRepository().Create(deposit);
+        }
+
+        public IEnumerable<UserDeposit> GetDepositsByUser(int userId)
+        {
+            string sql = "SELECT * FROM UserDeposit WHERE UserId = @userId";
+            return Conn.Query<UserDeposit>(sql, new { userId = userId });
+        }
     }
 }

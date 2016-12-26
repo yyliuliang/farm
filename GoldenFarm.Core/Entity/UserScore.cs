@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace GoldenFarm.Entity
 {
-
+    [Table("UserScore")]
     [Serializable]
     public class UserScore : EntityBase
     {

@@ -47,7 +47,7 @@
             <div class="form-group">
                 <div class="form-group-addon no-right-border">开始</div>
                 <div class="form-group-input stretch">
-                    <input class="stretch" id="StartDate" name="StartDate" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" type="text" value="@ViewBag.StartDate">
+                    @Html.TextBox("StartDate", null, new { @class = "stretch", onfocus = "WdatePicker({dateFmt:'yyyy-MM-dd'})", name = "StartDate" })
                 </div>
             </div>
         </dd>
@@ -55,7 +55,7 @@
             <div class="form-group">
                 <div class="form-group-addon no-right-border">结束</div>
                 <div class="form-group-input stretch">
-                    <input class="stretch" id="EndDate" name="EndDate" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" type="text" value="@ViewBag.EndDate">
+                    @Html.TextBox("EndDate", null, new { @class = "stretch", onfocus = "WdatePicker({dateFmt:'yyyy-MM-dd'})", name = "EndDate" })
                 </div>
             </div>
         </dd>

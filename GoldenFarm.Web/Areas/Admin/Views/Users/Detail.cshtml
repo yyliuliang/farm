@@ -2,6 +2,8 @@
 @{
     ViewBag.Title = "Index";
     Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+
+    var products = (IEnumerable<UserProduct>)ViewBag.Products;
 }
 @model User
 
@@ -63,6 +65,45 @@
         </div>
     </div>
 }
+
+<div class="uc-head">持有的产品</div>
+<div class="tablebox">
+    <table class="table">
+        <thead>
+            <tr>
+                <th></th>
+                <th>名称</th>
+                <th>持有量</th>
+                <th>冻结量</th>
+                <th>市值</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (products == null || !products.Any())
+            {
+                <tr>
+                    <td class="algin" colspan="5">没有持有任何产品</td>
+                </tr>
+            }
+            else
+            {
+                foreach (var p in products)
+                {
+                    <tr>
+                        <td></td>
+                        <td>@p.Product.ProductName</td>
+                        <td>@p.TotalCount</td>
+                        <td>@p.FrozenCount</td>
+                        <td>@p.TotalCount</td>
+                    </tr>
+                }
+
+            }
+        </tbody>
+    </table>
+</div>
+
+
 
 <script type="text/javascript">
 

@@ -62,14 +62,15 @@ namespace GoldenFarm.Web.Areas.Admin.Controllers
         public ActionResult Detail(int id)
         {
             var user = ur.Get(id);
+            ViewBag.Products = ur.GetProductsByUser(id);
             return View(user);
         }
 
-
+        [ValidateAntiForgeryToken]
         [HttpPost]
         public ActionResult Detail(User user)
         {
-            return RedirectToAction("Details", new { id = user.Id });
+            return RedirectToAction("Index");
         }
 
         [HttpPost]

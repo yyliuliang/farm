@@ -16,7 +16,7 @@
             {
                 if (Html.IsAdmin())
                 {
-                    @Html.ActionLink("管理后台", "Index", "Admin", new { area = "Admin" }, null)
+                    @Html.ActionLink("管理后台", "Index", "Users", new { area = "Admin" }, null)
                 }
                 @Html.ActionLink("用户中心", "Index", "User", new { area = string.Empty }, null)
                 @Html.ActionLink("退出", "Logout", "User", new { area = string.Empty }, null)

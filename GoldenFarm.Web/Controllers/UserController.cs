@@ -277,7 +277,34 @@ namespace GoldenFarm.Web.Controllers
 
         public ActionResult Deposit()
         {
-            return View(CurrentUser);
+            var deposits = ur.GetDepositsByUser(CurrentUser.Id);
+            return View(deposits);
+        }
+
+        [ValidateAntiForgeryToken]
+        [HttpPost]
+        public ActionResult Deposit(string gateway, decimal amount)
+        {
+            string url = string.Empty;
+            var deposit = new UserDeposit();
+            deposit.UserId = CurrentUser.Id;
+            deposit.IP = Request.UserIP();
+            deposit.Amount = amount;
+            deposit.Gateway = gateway;
+            deposit.FlowNum = DateTime.Now.ToString("yyyyMMdd") + CurrentUser.Id + DateTime.Now.Ticks;
+            if (gateway == "alipay")
+            {
+                url = PaymentHelper.Alipay(deposit);
+            }
+            else if (gateway == "wechatpay")
+            {
+                url = PaymentHelper.Weixin(deposit);
+            }
+            if(string.IsNullOrEmpty(url))
+            {
+                return View();
+            }
+            return Redirect(url);
         }
 
         public ActionResult Withdraw()
@@ -291,32 +318,19 @@ namespace GoldenFarm.Web.Controllers
         public ActionResult FinanceDetail(UserScoreCriteria criteria)
         {
             IEnumerable<UserScore> scores = null;
+            criteria.RefUserId = CurrentUser.Id;
             decimal total = 0.00000M;
             if (!criteria.StartDate.HasValue)
             {
                 criteria.StartDate = DateTime.Now.AddYears(-5);
             }
-            else
-            {
-                ViewBag.StartDate = criteria.StartDate.Value.ToString("yyyy-MM-dd");
-            }
+            
             if (!criteria.EndDate.HasValue)
             {
                 criteria.EndDate = DateTime.Now.AddYears(5);
             }
-            else
-            {
-                ViewBag.EndDate = criteria.EndDate.Value.ToString("yyyy-MM-dd");
-            }
-            if (criteria.RefUserId > 0)
-            {
-                scores = ur.GetUserScores(criteria);
-            }
-            else
-            {
-                criteria.RefUserId = CurrentUser.Id;
-                scores = ur.GetRefUserScores(criteria);
-            }
+            scores = ur.GetScoresByUser(criteria);
+            
             if (criteria.TypeId > 0)
             {
                 scores = scores.Where(s => s.TypeId == criteria.TypeId);
@@ -483,26 +497,19 @@ namespace GoldenFarm.Web.Controllers
             {
                 criteria.StartDate = DateTime.Now.AddYears(-5);
             }
-            else
-            {
-                ViewBag.StartDate = criteria.StartDate.Value.ToString("yyyy-MM-dd");
-            }
+            
             if (!criteria.EndDate.HasValue)
             {
                 criteria.EndDate = DateTime.Now.AddYears(5);
-            }
-            else
-            {
-                ViewBag.EndDate = criteria.EndDate.Value.ToString("yyyy-MM-dd");
-            }
+            }           
             if (criteria.RefUserId > 0)
             {
-                scores = ur.GetUserScores(criteria);
+                scores = ur.GetUserRewardScores(criteria);
             }
             else
             {
                 criteria.RefUserId = CurrentUser.Id;
-                scores = ur.GetRefUserScores(criteria);
+                scores = ur.GetRefUserRewardScores(criteria);
             }
             if(criteria.TypeId > 0)
             {

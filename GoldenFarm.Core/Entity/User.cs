@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 
 namespace GoldenFarm.Entity
 {
+    [Serializable]
     [Table("[User]")]
     public class User : EntityBase
     {

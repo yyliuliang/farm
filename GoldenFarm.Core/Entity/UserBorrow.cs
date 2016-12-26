@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace GoldenFarm.Entity
 {
+    [Serializable]
     [Table("UserBorrow")]
     public class UserBorrow : EntityBase
     {

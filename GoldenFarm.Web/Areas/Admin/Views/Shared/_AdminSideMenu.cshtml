@@ -10,6 +10,7 @@
             <li>@Html.ActionLink("用户列表", "Index", "Users")</li>
             <li>@Html.ActionLink("产品列表", "Index", "Products")</li>
             <li>@Html.ActionLink("新闻列表", "News", "Admin")</li>
+            <li><a id="gdata" href="javascript:void(0);">生成每日数据</a></li>
         </ul>
     </li>
 
@@ -70,6 +71,20 @@
         }
 
         var toggle = new Toggle($('#side-menu-toggle'), false);
+
+        $('#gdata').click(function () {
+
+            if (confirm('是否生成市场行情数据？')) {
+                $.post('/market/__preparetestdata', {}, function (r) {
+                    if (r == 'ok') {
+                        alert('生成成功!');
+                    }
+                    else {
+                        alert('生成失败,请联系管理员');
+                    }
+                });
+            }
+        });
 
     });
 </script>

@@ -4,43 +4,48 @@
     Layout = "~/Views/Shared/_UserCenterLayout.cshtml";
 }
 
+@model IEnumerable<UserDeposit>
 <div class="uc-head uc-head-border">账户充值</div>
 <div class="uc-form">
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        <input type="hidden" name="gateway" id="gateway" value="alipay" />
+        <div class="form-group">
+            <div class="form-group-addon no-right-border">充值金额</div>
+            <div class="form-group-input stretch">
+                <input class="stretch" data-val="true" data-val-number="字段 Amount 必须是一个数字。" data-val-range="最低充值金额为10金币" data-val-range-max="2147483647" data-val-range-min="10" data-val-required="请填写金额" id="Amount" name="amount" placeholder="充值金额" type="text" value="">
+            </div>
+            <div class="form-group-addon form-group-addon-white no-left-border">金币</div>
 
-    <div class="form-group">
-        <div class="form-group-addon no-right-border">充值金额</div>
-        <div class="form-group-input stretch">
-            <input class="stretch" data-val="true" data-val-number="字段 Amount 必须是一个数字。" data-val-range="最低充值金额为10金币" data-val-range-max="2147483647" data-val-range-min="10" data-val-required="请填写金额" id="Amount" name="Amount" placeholder="充值金额" type="text" value="">
         </div>
-        <div class="form-group-addon form-group-addon-white no-left-border">金币</div>
+        <span class="field-validation-valid" data-valmsg-for="Amount" data-valmsg-replace="true"></span>
 
-    </div>
-    <span class="field-validation-valid" data-valmsg-for="Amount" data-valmsg-replace="true"></span>
+        <dl class="paymode clear">
+            <dt><i></i><b>第三方支付平台</b></dt>
+            <dd cid="wechatpay" class="select"><cite class="wechatpay" title="微信支付"></cite></dd>
+            <dd cid="alipay"><cite class="alipay" title="支付宝"></cite></dd>
+        </dl>
 
-    <dl class="paymode clear">
-        <dt><i></i><b>第三方支付平台</b></dt>
-        <dd cid="1" class="select"><cite class="wechatpay" title="微信支付"></cite></dd>
-        <dd cid="4"><cite class="alipay" title="支付宝"></cite></dd>
-    </dl>
+        @*<dl class="paymode clear">
+                <dt><i></i><b>银行支付</b><em onclick="$('.hidebank').toggle();">更多银行</em></dt>
+                <dd cid="1041000"><cite class="boc" title="中国银行"></cite></dd>
+                <dd cid="1031000"><cite class="abc" title="中国农业银行"></cite></dd>
+                <dd cid="1021000"><cite class="icbc" title="中国工商银行"></cite></dd>
+                <dd cid="1051000"><cite class="ccb" title="建设银行"></cite></dd>
+                <dd cid="3085840" class="hidebank"><cite class="cmb" title="招商银行"></cite></dd>
+                <dd cid="3012900" class="hidebank"><cite class="comm" title="交通银行"></cite></dd>
+                <dd cid="3093910" class="hidebank"><cite class="cib" title="兴业银行"></cite></dd>
+                <dd cid="3021000" class="hidebank"><cite class="citic" title="中信银行"></cite></dd>
+                <dd cid="3051000" class="hidebank"><cite class="cmbc" title="中国民生银行"></cite></dd>
+                <dd cid="4031000" class="hidebank"><cite class="psbc" title="中国邮政储蓄银行"></cite></dd>
+            </dl>*@
 
-    @*<dl class="paymode clear">
-        <dt><i></i><b>银行支付</b><em onclick="$('.hidebank').toggle();">更多银行</em></dt>
-        <dd cid="1041000"><cite class="boc" title="中国银行"></cite></dd>
-        <dd cid="1031000"><cite class="abc" title="中国农业银行"></cite></dd>
-        <dd cid="1021000"><cite class="icbc" title="中国工商银行"></cite></dd>
-        <dd cid="1051000"><cite class="ccb" title="建设银行"></cite></dd>
-        <dd cid="3085840" class="hidebank"><cite class="cmb" title="招商银行"></cite></dd>
-        <dd cid="3012900" class="hidebank"><cite class="comm" title="交通银行"></cite></dd>
-        <dd cid="3093910" class="hidebank"><cite class="cib" title="兴业银行"></cite></dd>
-        <dd cid="3021000" class="hidebank"><cite class="citic" title="中信银行"></cite></dd>
-        <dd cid="3051000" class="hidebank"><cite class="cmbc" title="中国民生银行"></cite></dd>
-        <dd cid="4031000" class="hidebank"><cite class="psbc" title="中国邮政储蓄银行"></cite></dd>
-    </dl>*@
-
-    <div class="form-group">
-        <input type="submit" class="button button-color-1 button-stretch" value="确认充值">
-    </div>
-    <span class="field-validation-valid" data-valmsg-for="Err" data-valmsg-replace="true"></span>
+        <div class="form-group">
+            <input type="submit" class="button button-color-1 button-stretch" value="确认充值">
+        </div>
+        <span class="field-validation-valid" data-valmsg-for="Err" data-valmsg-replace="true"></span>
+    }
 </div>
 
 
@@ -64,10 +69,25 @@
             </tr>
         </thead>
         <tbody>
-            <tr>
-                <td class="algin" colspan="5">没有找到相关记录</td>
-            </tr>
-
+            @if (Model == null || !Model.Any())
+            {
+                <tr>
+                    <td class="algin" colspan="5">没有找到相关记录</td>
+                </tr>
+            }
+            else
+            {
+                foreach (var d in Model)
+                {
+                    <tr>
+                        <td>@d.FlowNum</td>
+                        <td>@d.CreateTime</td>
+                        <td>@d.Amount</td>
+                        <td>@d.Gateway</td>
+                        <td>@(d.Status == 1 ? "成功" : "待确认")</td>
+                    </tr>
+                }
+            }
         </tbody>
 
     </table>
@@ -76,7 +96,7 @@
     $(".paymode dd").click(function () {
         $(".paymode dd").removeClass("select");
         $(this).addClass("select");
-        $("#ChannelId").val($(this).attr("cid"))
+        $("#gateway").val($(this).attr("cid"))
     });
 </script>
 

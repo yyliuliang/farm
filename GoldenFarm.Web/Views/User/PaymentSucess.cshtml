@@ -1,0 +1,43 @@
+﻿
+@{
+    ViewBag.Title = "用户中心";
+    Layout = "~/Views/Shared/_UserCenterLayout.cshtml";
+    bool filed = Model.RefUserId > 0;
+}
+@model GoldenFarm.Entity.User
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="uc-head uc-head-border">补填推广码</div>
+
+    <div class="message message-info">
+        温馨提示：<br>
+        请仔细核对您的推广码，一但确定将不能修改！
+    </div>
+    <div class="uc-form">
+
+        <div class="form-group">
+            <div class="form-group-addon no-right-border">推广码</div>
+            @if (!filed)
+            {
+                <div class="form-group-input stretch">
+                    <input class="stretch" data-val="true" data-val-regex="请输入正确的推广码" data-val-regex-pattern="\d{5,}" data-val-required="请输入推广码" id="ReferId" name="referId" placeholder="请填写推广码" type="text" value="">
+                </div>
+            }
+            else
+            {
+                <div class="form-group-addon form-group-addon-disabled stretch">@Model.RefUserId</div>
+            }
+        </div>
+        @Html.ValidationMessage("refid", new { @class = "field-validation-valid" })
+        @if (!filed)
+        {
+            <div class="form-group">
+                <input type="submit" class="button button-color-1 button-stretch" value="提交">
+            </div>
+        }
+
+    </div>
+}

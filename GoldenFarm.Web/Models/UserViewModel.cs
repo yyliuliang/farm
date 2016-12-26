@@ -10,8 +10,7 @@ namespace GoldenFarm.Web.Models
     {
         public User User { get; set; }
 
-        public IEnumerable<UserProduct> UserProducts { get; set;
-        }
+        public IEnumerable<UserProduct> UserProducts { get; set; }
     }
 
 

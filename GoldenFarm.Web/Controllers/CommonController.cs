@@ -59,5 +59,8 @@ namespace GoldenFarm.Web.Controllers
             sr.Create(sms);
             return Json(new { result = true, msg = string.Empty });
         }
+
+
+        
     }
 }

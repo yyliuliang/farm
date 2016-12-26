@@ -72,6 +72,7 @@
     <Compile Include="Entity\UserBankAccount.cs" />
     <Compile Include="Entity\UserBorrow.cs" />
     <Compile Include="Entity\UserGive.cs" />
+    <Compile Include="Entity\UserDeposit.cs" />
     <Compile Include="Entity\UserProduct.cs" />
     <Compile Include="Entity\UserScore.cs" />
     <Compile Include="Entity\UserWithdraw.cs" />
@@ -86,6 +87,7 @@
     <Compile Include="Repository\SmsRepository.cs" />
     <Compile Include="Repository\SysLogRepository.cs" />
     <Compile Include="Repository\UserRepository.cs" />
+    <Compile Include="Util\PaymentHelper.cs" />
     <Compile Include="Util\RandomImage.cs" />
     <Compile Include="Util\SmsHelper.cs" />
     <Compile Include="Util\StringHelper.cs" />
