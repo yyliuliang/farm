@@ -462,8 +462,54 @@ namespace GoldenFarm.Web.Controllers
 
         public ActionResult Rebirth()
         {
-            var products = ur.GetProductsByUser(CurrentUser.Id).Where(p => p.TotalCount > 0);
+            var products = ur.GetProductsByUser(CurrentUser.Id).Where(p => p.TotalCount > 0 && p.ProductId != 800008 && p.ProductId != 800001); //玫瑰不能重生
             return View(products);
+        }
+
+        [HttpPost]
+        public ActionResult Rebirth(int pid, int count)
+        {
+            var product = ur.GetProductByUser(pid, CurrentUser.Id);
+            int seedId = 800001;
+            if (product != null)
+            {
+                product.TotalCount -= count;
+                product.UpdateTime = DateTime.Now;
+                ur.UpdateUserProduct(product);
+
+                var seed = ur.GetProductByUser(seedId, CurrentUser.Id);
+                if(seed == null || seed.Id != seedId)
+                {
+                    seed = new UserProduct()
+                    {
+                        ProductId = seedId,
+                        TotalCount = count,
+                        FrozenCount = 0,
+                        UserId = CurrentUser.Id,
+                        UpdateTime = DateTime.Now,
+                        CreateTime = DateTime.Now
+                    };
+                    ur.CreateUserProduct(seed);
+                }
+                else
+                {
+                    seed.TotalCount += count;
+                    seed.UpdateTime = DateTime.Now;
+                    ur.UpdateUserProduct(seed);
+                }
+                var pr = new ProductRebirth
+                {
+                    ProductId = pid,
+                    UserId = CurrentUser.Id,
+                    RebirthCount = count,
+                    SeedCount = count,
+                    ChargeFee = 0,
+                    CreateTime = DateTime.Now
+                };
+                new ProductRebirthRepository().Create(pr);
+            }            
+
+            return Content("1");
         }
 
 

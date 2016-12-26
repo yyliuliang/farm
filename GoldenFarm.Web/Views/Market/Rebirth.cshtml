@@ -31,7 +31,7 @@
                         <td></td>
                         <td>@p.Product.ProductName</td>
                         <td>@p.TotalCount</td>
-                        <td>重生</td>
+                        <td><a href="javascript:void(0);" onclick="rebirth('@p.ProductId', @p.TotalCount);">重生</a></td>
                     </tr>
                 }
             }
@@ -44,3 +44,15 @@
         3. 玫瑰不能进行重生。
     </div>
 </div>
+
+<script type="text/javascript">
+    function rebirth(pid, count)
+    {
+        if (confirm('确定重生?')) {
+            $.post('/Market/Rebirth', { pid: pid, count: count }, function () {
+                alert('重生成功!');
+                location.reload();
+            });
+        }
+    }
+</script>

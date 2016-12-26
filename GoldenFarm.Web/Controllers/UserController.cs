@@ -446,6 +446,13 @@ namespace GoldenFarm.Web.Controllers
             return View(CurrentUser);
         }
 
+
+        [HttpPost]
+        public ActionResult Give(UserGive give)
+        {
+            return View(CurrentUser);
+        }
+
         public ActionResult GiveHistory()
         {
             var history = ur.GetGiveHistoryByUser(CurrentUser.Id);

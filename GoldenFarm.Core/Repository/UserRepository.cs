@@ -75,13 +75,14 @@ namespace GoldenFarm.Repository
         public IEnumerable<UserProduct> GetProductsByUser(int userId)
         {
             string sql = "SELECT * FROM UserProduct u INNER JOIN Product p on p.Id = u.ProductId WHERE u.UserId = @userId";
-            return Conn.Query<UserProduct, Product, UserProduct>(sql, (u, p) => { u.Product = p; return u; }, new { userId = userId });
+            var result = Conn.Query<UserProduct, Product, UserProduct>(sql, (u, p) => { u.Product = p; return u; }, new { userId = userId });
+            return result;
         }
         
 
         public UserProduct GetProductByUser(int productId, int userId)
         {
-            string sql = "SELECT TOP 1 * FROM Product p INNER JOIN UserProduct u on p.Id = u.ProductId WHERE u.UserId = @userId AND p.Id = @pid";
+            string sql = "SELECT TOP 1 * FROM UserProduct u INNER JOIN  Product p  on p.Id = u.ProductId WHERE u.UserId = @userId AND p.Id = @pid";
             var r = Conn.Query<UserProduct, Product, UserProduct>(sql, (u, p) => { u.Product = p; return u; }, new { userId = userId, pid = productId });
             return r.FirstOrDefault();
         }
@@ -95,6 +96,8 @@ namespace GoldenFarm.Repository
         {
             return (int)Conn.Insert(up);
         }
+
+        
 
         #endregion
 
