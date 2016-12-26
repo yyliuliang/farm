@@ -3,7 +3,7 @@
     ViewBag.Title = "用户中心";
     Layout = "~/Views/Shared/_UserCenterLayout.cshtml";
 }
-@model IEnumerable<Transaction>
+@model PageViewData<Transaction>
 
 <div class="uc-head">交易记录</div>
 
@@ -40,7 +40,7 @@
             <div class="form-group">
                 <div class="form-group-addon no-right-border">开始</div>
                 <div class="form-group-input stretch">
-                    <input class="stretch" id="StartDate" name="StartDate" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" type="text" value="">
+                    @Html.TextBox("StartDate", null, new { @class = "stretch", onfocus = "WdatePicker({dateFmt:'yyyy-MM-dd'})", name = "StartDate" })                    
                 </div>
             </div>
         </dd>
@@ -48,7 +48,7 @@
             <div class="form-group">
                 <div class="form-group-addon no-right-border">结束</div>
                 <div class="form-group-input stretch">
-                    <input class="stretch" id="EndDate" name="EndDate" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" type="text" value="">
+                    @Html.TextBox("EndDate", null, new { @class = "stretch", onfocus = "WdatePicker({dateFmt:'yyyy-MM-dd'})", name = "EndDate" })
                 </div>
             </div>
         </dd>
@@ -76,7 +76,7 @@
             </tr>
         </thead>
         <tbody>
-            @if (Model == null || !Model.Any())
+            @if (Model == null || !Model.Items.Any())
             {
                 <tr>
                     <td class="algin" colspan="8">没有查询到相关数据</td>
@@ -84,7 +84,7 @@
             }
             else
             {
-                foreach (var t in Model)
+                foreach (var t in Model.Items)
                 {
                     <tr>
                         <td></td>
@@ -101,6 +101,9 @@
         </tbody>
     </table>
 </div>
+
+@Html.Pager(Model.TotalCount, Model.PageSize, Model.PageIndex, new GFPagerOptions())
+
 @section Scripts {
     <script type="text/javascript" src="~/Content/js/datetime/WdatePicker.js"></script>
 }

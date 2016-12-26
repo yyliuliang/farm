@@ -350,6 +350,10 @@ namespace GoldenFarm.Web.Controllers
                             ur.UpdateUserProduct(up);
                         }
                         mr.CancelEntrust(e);
+                        if(Request.IsAjaxRequest())
+                        {
+                            return Content("1");
+                        }
                     }
                     break;
                 default: break;
@@ -458,7 +462,7 @@ namespace GoldenFarm.Web.Controllers
 
         public ActionResult Rebirth()
         {
-            var products = ur.GetProductsByUser(CurrentUser.Id);
+            var products = ur.GetProductsByUser(CurrentUser.Id).Where(p => p.TotalCount > 0);
             return View(products);
         }
 

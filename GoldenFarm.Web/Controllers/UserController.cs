@@ -10,6 +10,8 @@ using GoldenFarm.Web.Models;
 using System.IO;
 using GoldenFarm.Util;
 using GoldenFarm.Web.Filter;
+using Dapper;
+using System.Text;
 
 namespace GoldenFarm.Web.Controllers
 {
@@ -25,7 +27,7 @@ namespace GoldenFarm.Web.Controllers
         {
             return View();
         }
-       
+
         [CheckLogin]
         public ActionResult Index()
         {
@@ -57,7 +59,7 @@ namespace GoldenFarm.Web.Controllers
         [HttpPost]
         public ActionResult Login(string phone, string password, string vcode, bool rememberMe = false)
         {
-            if(string.IsNullOrEmpty(phone) || string.IsNullOrEmpty(password))
+            if (string.IsNullOrEmpty(phone) || string.IsNullOrEmpty(password))
             {
                 ModelState.AddModelError("login", "请填写手机和密码");
                 return View();
@@ -70,7 +72,7 @@ namespace GoldenFarm.Web.Controllers
             }
             password = password.MD5Hash();
             var user = ur.Login(phone, password);
-            if(user == null)
+            if (user == null)
             {
                 ModelState.AddModelError("login", "用户名或密码错误");
                 return View();
@@ -84,7 +86,7 @@ namespace GoldenFarm.Web.Controllers
             }
             return RedirectToAction("Index");
         }
-        
+
 
         public ActionResult Reg()
         {
@@ -101,7 +103,7 @@ namespace GoldenFarm.Web.Controllers
                 return View();
             }
 
-            if(password != passwordc)
+            if (password != passwordc)
             {
                 ModelState.AddModelError("reg", "请确认密码");
                 return View();
@@ -114,13 +116,13 @@ namespace GoldenFarm.Web.Controllers
             //    return View();
             //}
 
-            if(!sr.CheckSms(phone, mcode, "Reg"))
+            if (!sr.CheckSms(phone, mcode, "Reg"))
             {
                 ModelState.AddModelError("reg", "短信验证码错误");
                 return View();
             }
 
-            if(ur.UserExists(phone))
+            if (ur.UserExists(phone))
             {
                 ModelState.AddModelError("reg", "此号码系统中已存在");
                 return View();
@@ -136,18 +138,18 @@ namespace GoldenFarm.Web.Controllers
             user.LastLoginIP = Request.UserIP();
             user.LastLoginTime = DateTime.Now;
             user.CreateTime = DateTime.Now;
-            if(refCode.HasValue)
+            if (refCode.HasValue)
             {
                 refUser = ur.Get(refCode.Value);
                 if (refUser != null)
                 {
                     user.RefUserId = refCode.Value;
                     refPath = refUser.RefUserPath;
-                }                
+                }
             }
-            
+
             int uid = ur.Create(user);
-            if(refUser != null)
+            if (refUser != null)
             {
                 user.RefUserPath = refPath + ";" + uid;
             }
@@ -173,7 +175,7 @@ namespace GoldenFarm.Web.Controllers
         [HttpPost]
         public ActionResult ChangePwd(string oldpassword, string newpassword, string newpasswordc)
         {
-            if(string.IsNullOrEmpty(oldpassword) || string.IsNullOrEmpty(newpassword) || string.IsNullOrEmpty(newpasswordc))
+            if (string.IsNullOrEmpty(oldpassword) || string.IsNullOrEmpty(newpassword) || string.IsNullOrEmpty(newpasswordc))
             {
                 ModelState.AddModelError("changepwd", "请填写密码");
                 return View();
@@ -200,7 +202,7 @@ namespace GoldenFarm.Web.Controllers
         [HttpPost]
         public ActionResult UploadPortrait(HttpPostedFileBase image)
         {
-            string filename = Path.Combine(Server.MapPath("/Content/portrait/"), CurrentUser.Id.ToString()+".jpg");
+            string filename = Path.Combine(Server.MapPath("/Content/portrait/"), CurrentUser.Id.ToString() + ".jpg");
             image.SaveAs(filename);
             CurrentUser.Avatar = string.Format("/Content/portrait/{0}.jpg", CurrentUser.Id);
             ur.Update(CurrentUser);
@@ -260,9 +262,9 @@ namespace GoldenFarm.Web.Controllers
         [HttpPost]
         public ActionResult GiveSwitch(string mcode)
         {
-            if(!CurrentUser.SmsGiveSwitch)
+            if (!CurrentUser.SmsGiveSwitch)
             {
-                if(!sr.CheckSms(CurrentUser.Phone, mcode))
+                if (!sr.CheckSms(CurrentUser.Phone, mcode))
                 {
                     ModelState.AddModelError("code", "请确认短信验证码");
                     return View(CurrentUser);
@@ -305,7 +307,7 @@ namespace GoldenFarm.Web.Controllers
             {
                 url = PaymentHelper.Weixin(deposit);
             }
-            if(string.IsNullOrEmpty(url))
+            if (string.IsNullOrEmpty(url))
             {
                 return View();
             }
@@ -329,13 +331,13 @@ namespace GoldenFarm.Web.Controllers
             {
                 criteria.StartDate = DateTime.Now.AddYears(-5);
             }
-            
+
             if (!criteria.EndDate.HasValue)
             {
                 criteria.EndDate = DateTime.Now.AddYears(5);
             }
             scores = ur.GetScoresByUser(criteria);
-            
+
             if (criteria.TypeId > 0)
             {
                 scores = scores.Where(s => s.TypeId == criteria.TypeId);
@@ -350,50 +352,87 @@ namespace GoldenFarm.Web.Controllers
 
         public ActionResult Entrust(MarketCriteria criteria)
         {
+            var parameter = new DynamicParameters();
+            var where = new StringBuilder();
             criteria.UserId = CurrentUser.Id;
-            if (!criteria.StartDate.HasValue)
+            where.Append(" e.UserId = @userId ");
+            parameter.Add("userId", CurrentUser.Id);
+            if (criteria.StartDate.HasValue)
             {
-                criteria.StartDate = DateTime.Now.AddYears(-5);
+                where.Append(" AND e.CreateTime >= @start");
+                parameter.Add("start", criteria.StartDate.Value);
             }
-            else
+            if (criteria.EndDate.HasValue)
             {
-                ViewBag.StartDate = criteria.StartDate.Value.ToString("yyyy-MM-dd");
+                where.Append(" AND e.CreateTime < @end");
+                parameter.Add("end", criteria.EndDate.Value);
             }
-            if (!criteria.EndDate.HasValue)
+            if(criteria.ProductId > 0)
             {
-                criteria.EndDate = DateTime.Now.AddYears(5);
+                where.Append(" AND e.ProductId = @pid");
+                parameter.Add("pid", criteria.ProductId);
             }
-            else
+            if(criteria.IsBuy.HasValue && criteria.IsBuy >-1)
             {
-                ViewBag.EndDate = criteria.EndDate.Value.ToString("yyyy-MM-dd");
+                where.Append(" AND e.IsBuy = @buy");
+                parameter.Add("buy", criteria.IsBuy);
             }
-            var entrusts = mr.GetEntrusts(criteria);
+            var pc = new PageCriteria
+            {
+                Where = where.ToString(),
+                PageIndex = CurrentPageIndex,
+                PageSize = PageSize,
+                Parameter = parameter,
+                Table = "Entrust e INNER JOIN Product p ON e.ProductId = p.Id",
+                Order = "e.Id DESC"
+            };
+
+            //var entrusts = mr.GetEntrusts(criteria);
+            var model = new EntrustRepository().GetPagedData<Entrust, Product, Entrust>(pc, (e, p) => { e.Product = p; return e; });
             ViewBag.Products = pr.GetAllProducts().Select(p => new SelectListItem { Text = p.ProductName, Value = p.Id.ToString() });
-            return View(entrusts);
+            return View(model);
         }
 
         public ActionResult TradeHistory(MarketCriteria criteria)
         {
+            var parameter = new DynamicParameters();
+            var where = new StringBuilder();
             criteria.UserId = CurrentUser.Id;
-            if (!criteria.StartDate.HasValue)
+            where.Append(" e.UserId = @userId ");
+            parameter.Add("userId", CurrentUser.Id);
+            if (criteria.StartDate.HasValue)
             {
-                criteria.StartDate = DateTime.Now.AddYears(-5);
+                where.Append(" AND e.CreateTime >= @start");
+                parameter.Add("start", criteria.StartDate.Value);
             }
-            else
+            if (criteria.EndDate.HasValue)
             {
-                ViewBag.StartDate = criteria.StartDate.Value.ToString("yyyy-MM-dd");
+                where.Append(" AND e.CreateTime < @end");
+                parameter.Add("end", criteria.EndDate.Value);
             }
-            if (!criteria.EndDate.HasValue)
+            if (criteria.ProductId > 0)
             {
-                criteria.EndDate = DateTime.Now.AddYears(5);
+                where.Append(" AND e.ProductId = @pid");
+                parameter.Add("pid", criteria.ProductId);
             }
-            else
+            if (criteria.IsBuy.HasValue && criteria.IsBuy > -1)
             {
-                ViewBag.EndDate = criteria.EndDate.Value.ToString("yyyy-MM-dd");
+                where.Append(" AND e.IsBuy = @buy");
+                parameter.Add("buy", criteria.IsBuy);
             }
-            var transactions = mr.GetTransactions(criteria);
+            var pc = new PageCriteria
+            {
+                Where = where.ToString(),
+                PageIndex = CurrentPageIndex,
+                PageSize = PageSize,
+                Parameter = parameter,
+                Table = "[Transaction] e INNER JOIN Product p ON e.ProductId = p.Id",
+                Order = "e.Id DESC"
+            };
+            
+            var model = new TransactionRepository().GetPagedData<Transaction, Product, Transaction>(pc, (t, p) => { t.Product = p; return t; });
             ViewBag.Products = pr.GetAllProducts().Select(p => new SelectListItem { Text = p.ProductName, Value = p.Id.ToString() });
-            return View(transactions);
+            return View(model);
         }
 
         public ActionResult BorrowHistory()
@@ -423,13 +462,13 @@ namespace GoldenFarm.Web.Controllers
         [HttpPost]
         public ActionResult Certificated(string name, string idnum)
         {
-            if(string.IsNullOrEmpty(name))
+            if (string.IsNullOrEmpty(name))
             {
                 ModelState.AddModelError("cert", "请输入姓名");
                 return View(CurrentUser);
             }
 
-            if(string.IsNullOrEmpty(idnum))
+            if (string.IsNullOrEmpty(idnum))
             {
                 ModelState.AddModelError("cert", "请输入身份证号");
                 return View(CurrentUser);
@@ -459,18 +498,18 @@ namespace GoldenFarm.Web.Controllers
                 ModelState.AddModelError("bank", "请输入银行和卡号");
                 return View(bankAccount);
             }
-            
+
             if (bankAccount == null)
             {
                 bankAccount = new UserBankAccount();
                 bankAccount.UserId = CurrentUser.Id;
-                bankAccount.CreateTime = DateTime.Now;                
+                bankAccount.CreateTime = DateTime.Now;
             }
 
             bankAccount.Bank = bank;
             bankAccount.AccountNum = accountNum;
             bankAccount.AccountName = CurrentUser.DisplayName;
-            
+
             ur.SaveBankAccount(bankAccount);
             RefreshCurrentUser();
             return RedirectToAction("BindBankCard");
@@ -502,11 +541,11 @@ namespace GoldenFarm.Web.Controllers
             {
                 criteria.StartDate = DateTime.Now.AddYears(-5);
             }
-            
+
             if (!criteria.EndDate.HasValue)
             {
                 criteria.EndDate = DateTime.Now.AddYears(5);
-            }           
+            }
             if (criteria.RefUserId > 0)
             {
                 scores = ur.GetUserRewardScores(criteria);
@@ -516,7 +555,7 @@ namespace GoldenFarm.Web.Controllers
                 criteria.RefUserId = CurrentUser.Id;
                 scores = ur.GetRefUserRewardScores(criteria);
             }
-            if(criteria.TypeId > 0)
+            if (criteria.TypeId > 0)
             {
                 scores = scores.Where(s => s.TypeId == criteria.TypeId);
             }
@@ -538,7 +577,7 @@ namespace GoldenFarm.Web.Controllers
         public ActionResult FillReferId(int referId)
         {
             var user = ur.Get(referId);
-            if(user == null)
+            if (user == null)
             {
                 ModelState.AddModelError("refid", "推广码错误");
                 return View(CurrentUser);

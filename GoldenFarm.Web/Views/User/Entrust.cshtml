@@ -3,7 +3,7 @@
     ViewBag.Title = "用户中心";
     Layout = "~/Views/Shared/_UserCenterLayout.cshtml";
 }
-@model IEnumerable<Entrust>
+@model PageViewData<Entrust>
 <div class="uc-head">委托记录</div>
 
 
@@ -15,7 +15,7 @@
         <dd>
             <div class="form-group">
                 <div class="form-group-addon no-right-border">产品</div>
-                <div class="form-group-addon form-group-addon-white stretch">                  
+                <div class="form-group-addon form-group-addon-white stretch">
                     @Html.DropDownList("ProductId", (IEnumerable<SelectListItem>)ViewBag.Products, "全部")
                 </div>
             </div>
@@ -40,7 +40,7 @@
             <div class="form-group">
                 <div class="form-group-addon no-right-border">开始</div>
                 <div class="form-group-input stretch">
-                    <input class="stretch" id="StartDate" name="StartDate" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" type="text" value="@ViewBag.StartDate">
+                    @Html.TextBox("StartDate", null, new { @class = "stretch", onfocus = "WdatePicker({dateFmt:'yyyy-MM-dd'})", name = "StartDate" })
                 </div>
             </div>
         </dd>
@@ -48,7 +48,7 @@
             <div class="form-group">
                 <div class="form-group-addon no-right-border">结束</div>
                 <div class="form-group-input stretch">
-                    <input class="stretch" id="EndDate" name="EndDate" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" type="text" value="@ViewBag.StartDate">
+                    @Html.TextBox("EndDate", null, new { @class = "stretch", onfocus = "WdatePicker({dateFmt:'yyyy-MM-dd'})", name = "EndDate" })
                 </div>
             </div>
         </dd>
@@ -75,7 +75,7 @@
             </tr>
         </thead>
         <tbody>
-            @if (Model == null || !Model.Any())
+            @if (Model.Items == null || !Model.Items.Any())
             {
                 <tr>
                     <td class="algin" colspan="9">没有查询到相关数据</td>
@@ -83,7 +83,7 @@
             }
             else
             {
-                foreach (var e in Model)
+                foreach (var e in Model.Items)
                 {
                     <tr>
                         <td></td>
@@ -94,7 +94,7 @@
                         <td>@e.Count</td>
                         <td>@e.DealedCount</td>
                         <td>@(e.StatusText)</td>
-                        <td></td>
+                        <td>@Html.Raw((!e.Cancelled ? "<a href='javascript:void(0);' onclick='if(confirm(\"确定撤销?\")) Revoke(\"" + e.Id + "\");'>撤销</a>" : string.Empty))</td>
                     </tr>
                 }
             }
@@ -103,7 +103,7 @@
 
 </div>
 
-
+@Html.Pager(Model.TotalCount, Model.PageSize, Model.PageIndex, new GFPagerOptions())
 @section Scripts {
     <script type="text/javascript" src="~/Content/js/datetime/WdatePicker.js"></script>
 }
@@ -115,6 +115,16 @@
                 return false;
             }
         }
+    }
+
+
+    function Revoke(eId) {
+        $("#EId").val(eId);
+        $("#SubmitType").val("REVOKE");
+
+        $.post('/Market/Detail', { EId: eId, SubmitType: 'REVOKE' }, function () {
+            location.reload();
+        });
     }
 
 </script>

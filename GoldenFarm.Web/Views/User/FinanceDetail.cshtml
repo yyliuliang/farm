@@ -103,10 +103,10 @@
                     <tr>
                         <td>@s.Num</td>
                         <td>@((ScoreType)s.TypeId)</td>
-                        <td>@s.Score</td>
-                        <td>@s.ChargeFee</td>
+                        <td>@s.Score.ToString("f2")</td>
+                        <td>@s.ChargeFee.ToString("f2")</td>
                         <td>@(s.Status == 1 ? "成功" : "待确认")</td>
-                        <td>@s.CreateTime.ToString("yyyy-MM-dd")</td>
+                        <td>@s.CreateTime</td>
                     </tr>
                 }
             }

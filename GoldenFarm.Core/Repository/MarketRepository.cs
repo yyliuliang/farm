@@ -97,7 +97,7 @@ namespace GoldenFarm.Repository
                 sql += " AND e.ProductId = @pid";
                 parameters.Add("pid", criteria.ProductId);
             }
-            if (criteria.IsBuy.HasValue && criteria.IsBuy.Value > -1)
+            if (criteria.IsBuy > -1)
             {
                 sql += " AND e.IsBuy = @buy";
                 parameters.Add("buy", criteria.IsBuy);

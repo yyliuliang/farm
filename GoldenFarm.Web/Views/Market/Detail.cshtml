@@ -157,15 +157,15 @@
 
 
             if (isNaN(Sale1) || Sale1 > LimitUpPrice || Sale1 < LimitDownPrice) {
-                $("#BuyPrice").val(LimitUpPrice.toFixed(intFormatFloat));
+        //        $("#BuyPrice").val(LimitUpPrice.toFixed(intFormatFloat));
             } else {
-                $("#BuyPrice").val(Sale1.toFixed(intFormatFloat));
+        //        $("#BuyPrice").val(Sale1.toFixed(intFormatFloat));
             }
 
             if (isNaN(Buy1) || Buy1 > LimitUpPrice || Buy1 < LimitDownPrice) {
-                $("#SalePrice").val(LimitDownPrice.toFixed(intFormatFloat));
+       //         $("#SalePrice").val(LimitDownPrice.toFixed(intFormatFloat));
             } else {
-                $("#SalePrice").val(Buy1.toFixed(intFormatFloat));
+      //          $("#SalePrice").val(Buy1.toFixed(intFormatFloat));
             }
 
         }
