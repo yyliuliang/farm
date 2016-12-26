@@ -34,7 +34,15 @@ namespace GoldenFarm.Util
 
         public static string Weixin(UserDeposit deposit)
         {
-            return string.Empty;
+            string param = "customerid={0}&sdcustomno={1}&orderAmount={2}&cardno=32&noticeurl={3}&backurl={4}";
+            string notifyUrl = LocalUrl + "/Payment/Weixin";
+            string backUrl = LocalUrl + "/User/PaymentSuccess";
+            //金额以分为单位
+            param = string.Format(param, CustId, deposit.FlowNum, (int)(deposit.Amount * 100), notifyUrl, backUrl);
+            string sign = StringHelper.MD5Hash(param + PaymentKey).ToUpper();
+
+            string url = string.Format("{0}?{1}&sign={2}&superid=101651&mark=charge", WeixinUrl, param, sign);
+            return url;
         }
     }
 }

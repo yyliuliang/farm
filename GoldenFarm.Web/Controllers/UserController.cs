@@ -20,6 +20,11 @@ namespace GoldenFarm.Web.Controllers
         private ProductRepository pr = new ProductRepository();
         private SmsRepository sr = new SmsRepository();
 
+
+        public ActionResult PaymentSuccess()
+        {
+            return View();
+        }
        
         [CheckLogin]
         public ActionResult Index()
