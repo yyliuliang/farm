@@ -388,6 +388,7 @@
     <Content Include="Areas\Admin\Views\Users\GiveHistory.cshtml" />
     <Content Include="Areas\Admin\Views\Admin\News.cshtml" />
     <Content Include="Areas\Admin\Views\Admin\NewsDetail.cshtml" />
+    <Content Include="Areas\Admin\Views\Users\WithdrawHistory.cshtml" />
     <None Include="Properties\PublishProfiles\local.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />

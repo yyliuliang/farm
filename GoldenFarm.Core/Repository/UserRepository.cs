@@ -17,6 +17,9 @@ namespace GoldenFarm.Repository
 
     public class UserDepositRepository : RepositoryBase<UserDeposit> { }
 
+    public class UserWithdrawRepository : RepositoryBase<UserWithdraw> { }
+
+
 
     public class UserRepository : RepositoryBase<User>
     {

@@ -42,7 +42,7 @@
             </dl>*@
 
         <div class="form-group">
-            <input type="submit" class="button button-color-1 button-stretch" value="确认充值">
+            <input type="button" onclick="PreSubmit()" class="button button-color-1 button-stretch" value="确认充值">
         </div>
         <span class="field-validation-valid" data-valmsg-for="Err" data-valmsg-replace="true"></span>
     }
@@ -83,7 +83,7 @@
                         <td>@d.FlowNum</td>
                         <td>@d.CreateTime</td>
                         <td>@d.Amount</td>
-                        <td>@d.Gateway</td>
+                        <td>@(d.Gateway=="alipay" ? "支付宝" : "微信")</td>
                         <td>@(d.Status == 1 ? "成功" : "待确认")</td>
                     </tr>
                 }
@@ -98,5 +98,14 @@
         $(this).addClass("select");
         $("#gateway").val($(this).attr("cid"))
     });
+
+    function PreSubmit()
+    {
+        if (!isNaN(parseInt($('#Amount').val()))) {
+            $('form').submit();
+        } else {
+            alert('请确认金额');
+        }
+    }
 </script>
 

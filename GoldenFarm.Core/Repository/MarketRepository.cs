@@ -83,7 +83,7 @@ namespace GoldenFarm.Repository
             DateTime date = DateTime.Today;
             DateTime start = DateTime.Parse(date.ToString("yyyy-MM-dd 0:0:0"));
             DateTime end = DateTime.Parse(date.ToString("yyyy-MM-dd 23:59:59"));
-            string sql = @"SELECT TOP 5 Price, SUM(Count) Number FROM Entrust 
+            string sql = @"SELECT TOP 5 Price, SUM(Count - DealedCount) Number FROM Entrust 
                            WHERE ProductId = @pid AND Cancelled = 0 AND CreateTime >= @start AND CreateTime <@end AND Status IN (0, 2) AND IsBuy = @buy
                            GROUP BY Price
                            ORDER BY Price DESC";
@@ -93,11 +93,15 @@ namespace GoldenFarm.Repository
         public IEnumerable<Entrust> GetEntrusts(MarketCriteria criteria)
         {
             string sql = @"SELECT * FROM Entrust e INNER JOIN Product p on e.ProductId = p.Id 
-                           WHERE e.UserId = @userId";
+                           WHERE 1 = 1";
 
             var parameters = new DynamicParameters();
-            parameters.Add("userId", criteria.UserId);
 
+            if (criteria.UserId > 0)
+            {
+                sql += " AND e.UserId = @userId";
+                parameters.Add("userId", criteria.UserId);
+            }
             if (criteria.StartDate.HasValue)
             {
                 sql += " AND e.CreateTime >= @start";

@@ -28,7 +28,7 @@ namespace GoldenFarm.Entity
 
         public override string ToString()
         {
-            return string.Format("{0} = {1} - {2}", Bank, AccountName, AccountNum);
+            return string.Format("{0} - {1} - {2}", Bank, AccountName, AccountNum);
         }
 
     }

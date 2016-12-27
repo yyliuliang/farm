@@ -1,6 +1,6 @@
 ﻿@{
     string[] ucactions = new string[] { "index", "detail", "news", "newsdetail", "createnews" };
-    string[] tradeactions = new string[] { "tradecenter", "entrust", "tradehistory", "rebirth", "rebirthhistory", "borrow", "borrowhistory", "give", "givehistory" };
+    string[] tradeactions = new string[] { "tradecenter", "entrust", "tradehistory", "rebirth", "rebirthhistory", "borrow", "borrowhistory", "give", "givehistory", "withdrawhistory" };
     string action = ViewContext.RouteData.Values["action"].ToString().ToLower();
 }
 <ul id="side-menu-toggle" class="side-menu-toggle">
@@ -19,6 +19,7 @@
         <ul class="side-menu-toggle-sub  @(tradeactions.Contains(action) ? "side-menu-toggle-sub-show" : string.Empty)">
             <li>@Html.ActionLink("用户委托", "Entrust", "Users")</li>
             <li>@Html.ActionLink("交易记录", "TradeHistory", "Users")</li>
+            <li>@Html.ActionLink("充值记录", "WithdrawHistory", "Users")</li>
             <li>@Html.ActionLink("重生记录", "RebirthHistory", "Markets")</li>
             <li>@Html.ActionLink("租借记录", "BorrowHistory", "Users")</li>
             <li>@Html.ActionLink("赠送记录", "GiveHistory", "Users")</li>

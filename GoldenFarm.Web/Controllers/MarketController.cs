@@ -78,11 +78,13 @@ namespace GoldenFarm.Web.Controllers
 
                         if (saleEntrusts != null && saleEntrusts.Any())
                         {
+                            bool dealed = false;
                             foreach (var e in saleEntrusts)
                             {
+                                if (dealed) break;
                                 decimal amount = 0M;
                                 Guid tid = Guid.NewGuid();
-                                int acutalCount = 0; 
+                                int acutalCount = 0;
                                 // 80,  100 - 30 or 0
                                 if ((e.Count - e.DealedCount) >= (entrust.Count - entrust.DealedCount)) //此笔交易可完成
                                 {
@@ -101,12 +103,11 @@ namespace GoldenFarm.Web.Controllers
                                     else
                                     {
                                         e.Status = 2;
-                                    }                                    
+                                    }
 
                                     mr.UpdateEntrust(e);
-                                    
-                                    
-                                    break;
+                                    dealed = true;
+                                   // break;
                                 }
                                 else //需更多笔交易
                                 {
@@ -133,7 +134,22 @@ namespace GoldenFarm.Web.Controllers
                                     uup.TotalCount -= acutalCount;
 
                                     ur.UpdateUserProduct(uup);
+
+                                    var score = new UserScore
+                                    {
+                                        TypeId = (int)ScoreType.出售,
+                                        UserId = user.Id,
+                                        ChargeFee = 0,
+                                        Score = amount,
+                                        CreateTime = DateTime.Now,
+                                        Status = 1,
+                                        UserPath = user.RefUserPath
+
+                                    };
+                                    new UserScoreRepository().Create(score);
                                 }
+                                
+
                                 var tbuy = new Transaction
                                 {
                                     Count = acutalCount,
@@ -172,7 +188,7 @@ namespace GoldenFarm.Web.Controllers
                             CurrentUser.FrozenScore -= dealedAmount;
                         }
                         var up = ur.GetProductByUser(entrust.ProductId, CurrentUser.Id);
-                        if(up == null)
+                        if (up == null)
                         {
                             up = new UserProduct
                             {
@@ -194,9 +210,23 @@ namespace GoldenFarm.Web.Controllers
                         #endregion
 
                         CurrentUser.TotalScore -= dealedAmount;
-
                         ur.Update(CurrentUser);
                         RefreshCurrentUser();
+
+                        if (dealedAmount > 0)
+                        {
+                            var score = new UserScore
+                            {
+                                TypeId = (int)ScoreType.购买,
+                                UserId = CurrentUser.Id,
+                                ChargeFee = 0,
+                                Score = dealedAmount,
+                                CreateTime = DateTime.Now,
+                                Status = 1,
+                                UserPath = CurrentUser.RefUserPath
+                            };
+                            new UserScoreRepository().Create(score);
+                        }
                     }
                     break;
                 case "SALE":
@@ -205,6 +235,7 @@ namespace GoldenFarm.Web.Controllers
                         int pid = int.Parse(Request.Form["pid"]);
                         decimal price = decimal.Parse(Request.Form["SalePrice"]);
                         int dealedCount = 0;
+                        decimal dealedAmount = 0M;
                         var entrust = new Entrust()
                         {
                             IsBuy = buy,
@@ -218,7 +249,7 @@ namespace GoldenFarm.Web.Controllers
                         //冻结用户委托产品
                         var up = ur.GetProductsByUser(CurrentUser.Id).First(p => p.Product.ProductCode == id);
                         up.FrozenCount += count;
-                        
+
                         int eid = mr.CreateEntrust(entrust);
 
                         #region 处理交易
@@ -228,8 +259,10 @@ namespace GoldenFarm.Web.Controllers
 
                         if (buyEntrusts != null && buyEntrusts.Any())
                         {
+                            bool dealed = false;
                             foreach (var e in buyEntrusts)
                             {
+                                if (dealed) break;
                                 decimal amount = 0M;
                                 Guid tid = Guid.NewGuid();
                                 int acutalCount = 0;
@@ -252,11 +285,10 @@ namespace GoldenFarm.Web.Controllers
                                     {
                                         e.Status = 2;
                                     }
-                                   
+                                    dealedAmount += amount;
                                     mr.UpdateEntrust(e);
-
-
-                                    break;
+                                    dealed = true;
+                                    //break;
                                 }
                                 else //需更多笔交易
                                 {
@@ -272,6 +304,7 @@ namespace GoldenFarm.Web.Controllers
                                     entrust.Status = 2;
 
                                     mr.UpdateEntrust(e);
+                                    dealedAmount += amount;
                                 }
                                 var user = ur.Get(e.UserId);
                                 if (user != null)
@@ -282,8 +315,20 @@ namespace GoldenFarm.Web.Controllers
                                     var uup = ur.GetProductByUser(e.ProductId, e.UserId);
                                     //uup.FrozenCount -= acutalCount;
                                     uup.TotalCount += acutalCount;
-
                                     ur.UpdateUserProduct(uup);
+
+                                    var score = new UserScore
+                                    {
+                                        TypeId = (int)ScoreType.购买,
+                                        UserId = user.Id,
+                                        ChargeFee = 0,
+                                        Score = amount,
+                                        CreateTime = DateTime.Now,
+                                        Status = 1,
+                                        UserPath = user.RefUserPath
+
+                                    };
+                                    new UserScoreRepository().Create(score);
                                 }
                                 var tbuy = new Transaction
                                 {
@@ -314,21 +359,28 @@ namespace GoldenFarm.Web.Controllers
                             }
                             mr.UpdateEntrust(entrust);
                         }
-                        if (entrust.Status == 1)
-                        {
-                            //CurrentUser.FrozenScore += (count * price);
-                        }
-                        else
-                        {
-                            //CurrentUser.FrozenScore += dealedAmount;
-                        }
                         
                         #endregion
+                        if (dealedCount > 0)
+                        {
+                            var score = new UserScore
+                            {
+                                TypeId = (int)ScoreType.出售,
+                                UserId = CurrentUser.Id,
+                                ChargeFee = 0,
+                                Score = dealedAmount,
+                                CreateTime = DateTime.Now,
+                                Status = 1,
+                                UserPath = CurrentUser.RefUserPath
 
-                        up.FrozenCount -= dealedCount;
-                        ur.UpdateUserProduct(up);
-                        ur.Update(CurrentUser);
-                        RefreshCurrentUser();
+                            };
+                            new UserScoreRepository().Create(score);
+                            up.FrozenCount -= dealedCount;
+                            up.TotalCount -= dealedCount;
+                            ur.UpdateUserProduct(up);
+                            ur.Update(CurrentUser);
+                            RefreshCurrentUser();
+                        }
                     }
                     break;
                 case "REVOKE":
@@ -350,7 +402,7 @@ namespace GoldenFarm.Web.Controllers
                             ur.UpdateUserProduct(up);
                         }
                         mr.CancelEntrust(e);
-                        if(Request.IsAjaxRequest())
+                        if (Request.IsAjaxRequest())
                         {
                             return Content("1");
                         }
@@ -500,7 +552,18 @@ namespace GoldenFarm.Web.Controllers
                 };
                 ur.CreateUserProduct(up);
             }
-            
+
+            var score = new UserScore
+            {
+                UserId = CurrentUser.Id,
+                Score = borrow.Bail,
+                Status = 1,
+                TypeId = (int)ScoreType.果实租借,
+                CreateTime = DateTime.Now,
+                ChargeFee = 0
+            };
+            new UserScoreRepository().Create(score);
+
             return RedirectToAction("BorrowHistory", "User");
         }
 
@@ -522,7 +585,7 @@ namespace GoldenFarm.Web.Controllers
                 ur.UpdateUserProduct(product);
 
                 var seed = ur.GetProductByUser(seedId, CurrentUser.Id);
-                if(seed == null || seed.Id != seedId)
+                if (seed == null || seed.Id != seedId)
                 {
                     seed = new UserProduct()
                     {
@@ -551,7 +614,18 @@ namespace GoldenFarm.Web.Controllers
                     CreateTime = DateTime.Now
                 };
                 new ProductRebirthRepository().Create(pr);
-            }            
+                var m = mr.GetTodayProductMarket(pid);
+                var score = new UserScore
+                {
+                    TypeId = (int)ScoreType.果实重生,
+                    UserId = CurrentUser.Id,
+                    Status = 1,
+                    ChargeFee = 0,
+                    CreateTime = DateTime.Now,
+                    Score = m.CurrentPrice * count
+                };
+                new UserScoreRepository().Create(score);
+            }
 
             return Content("1");
         }

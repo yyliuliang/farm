@@ -62,14 +62,49 @@ namespace GoldenFarm.Web.Areas.Admin.Controllers
         public ActionResult Detail(int id)
         {
             var user = ur.Get(id);
-            ViewBag.Products = ur.GetProductsByUser(id);
+            ViewBag.Products = pr.GetAll();
+            ViewBag.UserProducts = ur.GetProductsByUser(id);
             return View(user);
+        }
+
+        [HttpPost]
+        public ActionResult UpdateUP(int uid, int pid,  int tcount, int fcount)
+        {
+            var up = ur.GetProductByUser(pid, uid);
+            if (up != null)
+            {
+                up.TotalCount = tcount;
+                up.FrozenCount = fcount;
+                up.UpdateTime = DateTime.Now;
+                ur.UpdateUserProduct(up);
+            }
+            else
+            {
+                up = new UserProduct
+                {
+                    UserId = uid,
+                    TotalCount = tcount,
+                    FrozenCount = fcount,
+                    ProductId = pid,
+                    CreateTime = DateTime.Now,
+                    UpdateTime = DateTime.Now
+                };
+                ur.CreateUserProduct(up);
+            }
+            return Content("1");
         }
 
         [ValidateAntiForgeryToken]
         [HttpPost]
         public ActionResult Detail(User user)
         {
+            var orgin = ur.Get(user.Id);
+            orgin.IdNum = user.IdNum;
+            orgin.TotalScore = user.TotalScore;
+            orgin.Phone = user.Phone;
+            orgin.DisplayName = user.DisplayName;
+
+            ur.Update(orgin);
             return RedirectToAction("Index");
         }
 
@@ -235,6 +270,42 @@ namespace GoldenFarm.Web.Areas.Admin.Controllers
                 PageSize = PageSize
             };
             var model = new UserGiveRepository().GetPagedData<UserGive, Product, UserGive>(pc, (u, p) => { u.Product = p; return u; });
+            return View(model);
+        }
+
+
+        public ActionResult WithdrawHistory(UserCriteria criteria)
+        {
+            StringBuilder where = new StringBuilder();
+            DynamicParameters parameter = new DynamicParameters();
+            int uid = 0;
+            int.TryParse(criteria.UserId, out uid);
+            where.Append(" 1=1 ");
+            if (uid > 0)
+            {
+                where.Append(" AND UserId = @userId");
+                parameter.Add("userId", uid);
+            }
+            if (criteria.StartDate.HasValue)
+            {
+                where.Append(" AND CreateTime >= @start");
+                parameter.Add("start", criteria.StartDate.Value);
+            }
+            if (criteria.EndDate.HasValue)
+            {
+                where.Append(" AND CreateTime < @end");
+                parameter.Add("end", criteria.EndDate.Value);
+            }
+            var pc = new PageCriteria()
+            {
+                Table = "UserWithdraw",
+                Order = "Id DESC",
+                Where = where.ToString(),
+                Parameter = parameter,
+                PageIndex = CurrentPageIndex,
+                PageSize = PageSize
+            };
+            var model = new UserWithdrawRepository().GetPagedData(pc);
             return View(model);
         }
 

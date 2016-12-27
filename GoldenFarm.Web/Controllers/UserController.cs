@@ -322,6 +322,61 @@ namespace GoldenFarm.Web.Controllers
             return View(model);
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Withdraw(UserWithdraw withdraw, string mcode)
+        {
+            if(!new SmsRepository().CheckSms(CurrentUser.Phone, mcode, "WITHDRAW"))
+            {
+                ModelState.AddModelError("Withdraw", "请确认短信验证码");
+                var model = new UserWithdrawViewModel();
+                model.User = CurrentUser;
+                model.Withdraws = ur.GetWithdrawHistoryByUser(CurrentUser.Id);
+                return View(model);
+            }
+            decimal chargeFee = 0M;
+            if(withdraw.Amount >= 100 && withdraw.Amount < 200)
+            {
+                chargeFee = withdraw.Amount * 0.03M;
+            }
+            else if (withdraw.Amount >= 200 && withdraw.Amount < 500)
+            {
+                chargeFee = withdraw.Amount * 0.029M;
+            }
+            else if (withdraw.Amount >= 500 && withdraw.Amount < 1000)
+            {
+                chargeFee = withdraw.Amount * 0.025M;
+            }
+            else if (withdraw.Amount >= 1000)
+            {
+                chargeFee = withdraw.Amount * 0.02M;
+            }
+            withdraw.ChargeFee = chargeFee;
+            withdraw.UserId = CurrentUser.Id;
+            withdraw.Status = 0;
+            withdraw.CreateTime = DateTime.Now;
+            var bank = ur.GetBankAccount(CurrentUser.Id);
+            if(bank != null)
+            {
+                withdraw.Bank = bank.Bank;
+                withdraw.AccountName = bank.AccountName;
+                withdraw.AccountNum = bank.AccountNum;
+                new UserWithdrawRepository().Create(withdraw);
+
+                var score = new UserScore
+                {
+                    UserId = CurrentUser.Id,
+                    TypeId = (int)ScoreType.提现,
+                    Status = 0,
+                    ChargeFee = chargeFee,
+                    Score = withdraw.Amount,
+                    CreateTime = DateTime.Now
+                };
+                new UserScoreRepository().Create(score);
+            }
+            return RedirectToAction("Withdraw");
+        }
+
         public ActionResult FinanceDetail(UserScoreCriteria criteria)
         {
             IEnumerable<UserScore> scores = null;
@@ -367,12 +422,12 @@ namespace GoldenFarm.Web.Controllers
                 where.Append(" AND e.CreateTime < @end");
                 parameter.Add("end", criteria.EndDate.Value);
             }
-            if(criteria.ProductId > 0)
+            if (criteria.ProductId > 0)
             {
                 where.Append(" AND e.ProductId = @pid");
                 parameter.Add("pid", criteria.ProductId);
             }
-            if(criteria.IsBuy.HasValue && criteria.IsBuy >-1)
+            if (criteria.IsBuy.HasValue && criteria.IsBuy > -1)
             {
                 where.Append(" AND e.IsBuy = @buy");
                 parameter.Add("buy", criteria.IsBuy);
@@ -429,7 +484,7 @@ namespace GoldenFarm.Web.Controllers
                 Table = "[Transaction] e INNER JOIN Product p ON e.ProductId = p.Id",
                 Order = "e.Id DESC"
             };
-            
+
             var model = new TransactionRepository().GetPagedData<Transaction, Product, Transaction>(pc, (t, p) => { t.Product = p; return t; });
             ViewBag.Products = pr.GetAllProducts().Select(p => new SelectListItem { Text = p.ProductName, Value = p.Id.ToString() });
             return View(model);
@@ -446,10 +501,10 @@ namespace GoldenFarm.Web.Controllers
         {
             var ubr = new UserBorrowRepository();
             var borrow = ubr.Get(id);
-            if(borrow!=null)
+            if (borrow != null)
             {
                 var up = ur.GetProductByUser(borrow.ProductId, CurrentUser.Id);
-                if(up == null || (up.TotalCount - up.FrozenCount) < borrow.BorrowCount)
+                if (up == null || (up.TotalCount - up.FrozenCount) < borrow.BorrowCount)
                 {
                     return Content("没有足够的产品可供归还");
                 }
@@ -467,6 +522,17 @@ namespace GoldenFarm.Web.Controllers
                 up.TotalCount -= borrow.BorrowCount;
                 up.UpdateTime = DateTime.Now;
                 ur.UpdateUserProduct(up);
+
+                var score = new UserScore
+                {
+                    TypeId = (int)ScoreType.果实归还,
+                    UserId = borrow.UserId,
+                    ChargeFee = 0,
+                    Score = borrow.Bail,
+                    Status = 1,
+                    CreateTime = DateTime.Now
+                };
+                new UserScoreRepository().Create(score);
             }
 
             return Content("1");
@@ -484,23 +550,23 @@ namespace GoldenFarm.Web.Controllers
         public ActionResult Give(UserGive give, string mcode)
         {
             var user = ur.Get(give.ReceiverId);
-            if(user == null)
+            if (user == null)
             {
-                if(!ur.UserExists(Request.Form["ReceiverId"]))
+                if (!ur.UserExists(Request.Form["ReceiverId"]))
                 {
                     ModelState.AddModelError("give", "请确认接收对象");
                     return RedirectToAction("Give");
                 }
             }
 
-            if(!new SmsRepository().CheckSms(CurrentUser.Phone, mcode, "GIVE"))
+            if (!new SmsRepository().CheckSms(CurrentUser.Phone, mcode, "GIVE"))
             {
                 ModelState.AddModelError("give", "请确认短信验证码");
                 return RedirectToAction("Give");
             }
 
             var up = ur.GetProductByUser(give.ProductId, CurrentUser.Id);
-            if(up == null || (up.TotalCount - up.FrozenCount) < give.Count)
+            if (up == null || (up.TotalCount - up.FrozenCount) < give.Count)
             {
                 ModelState.AddModelError("give", "请确认赠送数量");
                 return RedirectToAction("Give");
@@ -511,7 +577,7 @@ namespace GoldenFarm.Web.Controllers
             ur.UpdateUserProduct(up);
 
             var upTo = ur.GetProductByUser(give.ProductId, give.ReceiverId);
-            if(upTo != null)
+            if (upTo != null)
             {
                 upTo.TotalCount += give.Count;
                 upTo.UpdateTime = DateTime.Now;
@@ -533,11 +599,25 @@ namespace GoldenFarm.Web.Controllers
             var m = mr.GetTodayProductMarket(give.ProductId);
             if (m != null)
             {
-                var fee = m.CurrentPrice * give.Count;
+                //赠送产品的总价的10%作为手续费
+                var fee = m.CurrentPrice * give.Count * 0.1M;
                 give.ChargeFee = fee;
                 user.TotalScore -= fee;
-                
+
                 ur.Update(user);
+
+                //记录金额明细
+                var score = new UserScore
+                {
+                    ChargeFee = 0,
+                    UserId = user.Id,
+                    UserPath = user.RefUserPath,
+                    Score = fee,
+                    Status = 1,
+                    TypeId = (int)ScoreType.赠送手续费,
+                    CreateTime = DateTime.Now
+                };
+                new UserScoreRepository().Create(score);
             }
             give.CreateTime = DateTime.Now;
             give.Status = 1;
