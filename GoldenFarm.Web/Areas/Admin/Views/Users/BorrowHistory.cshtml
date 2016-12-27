@@ -79,7 +79,7 @@
                         <td>@b.Bail</td>
                         <td>@b.DailyInterest</td>
                         <td>@b.Deadline.ToString("yyyy-MM-dd")</td>
-                        <td>@b.Status</td>
+                        <td>@(b.Status == 1 ? "已归还" : "未归还")</td>
                         <td>@(b.ReturnTime.HasValue ? b.ReturnTime.Value.ToString("yyyy-MM-dd") : string.Empty)</td>
                         @*<td>归还</td>*@
                     </tr>

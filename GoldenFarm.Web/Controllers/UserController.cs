@@ -33,7 +33,7 @@ namespace GoldenFarm.Web.Controllers
         {
             var model = new UserIndexViewModel();
             model.User = CurrentUser;
-            model.UserProducts = ur.GetProductsByUser(CurrentUser.Id);
+            model.UserProducts = ur.GetProductsByUser(CurrentUser.Id).Where(p => p.TotalCount > 0);
             return View(model);
         }
 
@@ -441,16 +441,109 @@ namespace GoldenFarm.Web.Controllers
             return View(history);
         }
 
+        [HttpPost]
+        public ActionResult ReturnBorrow(int id)
+        {
+            var ubr = new UserBorrowRepository();
+            var borrow = ubr.Get(id);
+            if(borrow!=null)
+            {
+                var up = ur.GetProductByUser(borrow.ProductId, CurrentUser.Id);
+                if(up == null || (up.TotalCount - up.FrozenCount) < borrow.BorrowCount)
+                {
+                    return Content("没有足够的产品可供归还");
+                }
+                borrow.Status = 1;
+                borrow.ReturnTime = DateTime.Now;
+                ubr.Update(borrow);
+                //利息
+                var interests = borrow.DailyInterest * borrow.BorrowCount * borrow.Price * (int)(DateTime.Today - borrow.CreateTime).TotalDays;
+
+                CurrentUser.FrozenScore -= borrow.Bail;
+                CurrentUser.TotalScore -= interests;
+                ur.Update(CurrentUser);
+                RefreshCurrentUser();
+
+                up.TotalCount -= borrow.BorrowCount;
+                up.UpdateTime = DateTime.Now;
+                ur.UpdateUserProduct(up);
+            }
+
+            return Content("1");
+        }
+
         public ActionResult Give()
         {
+            ViewBag.Products = ur.GetProductsByUser(CurrentUser.Id).Where(p => (p.TotalCount - p.FrozenCount) > 0);
             return View(CurrentUser);
         }
 
 
+        [ValidateAntiForgeryToken]
         [HttpPost]
-        public ActionResult Give(UserGive give)
+        public ActionResult Give(UserGive give, string mcode)
         {
-            return View(CurrentUser);
+            var user = ur.Get(give.ReceiverId);
+            if(user == null)
+            {
+                if(!ur.UserExists(Request.Form["ReceiverId"]))
+                {
+                    ModelState.AddModelError("give", "请确认接收对象");
+                    return RedirectToAction("Give");
+                }
+            }
+
+            if(!new SmsRepository().CheckSms(CurrentUser.Phone, mcode, "GIVE"))
+            {
+                ModelState.AddModelError("give", "请确认短信验证码");
+                return RedirectToAction("Give");
+            }
+
+            var up = ur.GetProductByUser(give.ProductId, CurrentUser.Id);
+            if(up == null || (up.TotalCount - up.FrozenCount) < give.Count)
+            {
+                ModelState.AddModelError("give", "请确认赠送数量");
+                return RedirectToAction("Give");
+            }
+
+            up.TotalCount -= give.Count;
+            up.UpdateTime = DateTime.Now;
+            ur.UpdateUserProduct(up);
+
+            var upTo = ur.GetProductByUser(give.ProductId, give.ReceiverId);
+            if(upTo != null)
+            {
+                upTo.TotalCount += give.Count;
+                upTo.UpdateTime = DateTime.Now;
+            }
+            else
+            {
+                upTo = new UserProduct
+                {
+                    ProductId = give.ProductId,
+                    FrozenCount = 0,
+                    TotalCount = give.Count,
+                    UpdateTime = DateTime.Now,
+                    CreateTime = DateTime.Now,
+                    UserId = give.ReceiverId
+                };
+                ur.CreateUserProduct(upTo);
+            }
+
+            var m = mr.GetTodayProductMarket(give.ProductId);
+            if (m != null)
+            {
+                var fee = m.CurrentPrice * give.Count;
+                give.ChargeFee = fee;
+                user.TotalScore -= fee;
+                
+                ur.Update(user);
+            }
+            give.CreateTime = DateTime.Now;
+            give.Status = 1;
+            give.UserId = CurrentUser.Id;
+            new UserGiveRepository().Create(give);
+            return RedirectToAction("GiveHistory");
         }
 
         public ActionResult GiveHistory()

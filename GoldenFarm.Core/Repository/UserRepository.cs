@@ -165,7 +165,7 @@ namespace GoldenFarm.Repository
             string sql = "SELECT * FROM UserBorrow r INNER JOIN Product p on r.ProductId = p.Id WHERE r.UserId = @userId";
             return Conn.Query<UserBorrow, Product, UserBorrow>(sql, (r, p) => { r.Product = p; return r; }, new { userId = userId });
         }
-
+        
 
         public IEnumerable<UserGive> GetGiveHistoryByUser(int userId)
         {

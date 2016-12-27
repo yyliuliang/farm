@@ -19,13 +19,15 @@ namespace GoldenFarm.Entity
         public virtual Product Product { get; set; }
                 
         public int BorrowCount { get; set; }
+
+        public decimal Price { get; set; }
         
         public decimal DailyInterest { get; set; }
 
         public decimal Bail { get; set; }
 
         public int Status { get; set; }
-
+        
         public DateTime? ReturnTime { get; set; }
 
         public DateTime Deadline { get; set; }

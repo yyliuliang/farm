@@ -2,67 +2,81 @@
 @{
     ViewBag.Title = "用户中心";
     Layout = "~/Views/Shared/_UserCenterLayout.cshtml";
+    var markets = (IEnumerable<Market>)ViewBag.Products;
+    bool has = markets != null && markets.Any();
+    var first = markets.FirstOrDefault();
 }
 @model User
 
 <div class="uc-head uc-head-border">果实租借</div>
 <!-- uc-form start -->
-<div class="uc-form">
-    <div class="form-group">
-        <div class="form-group-addon">　借入果实</div>
-        <div class="form-group-addon no-left-border form-group-addon-disabled stretch productinputshow clear" id="ProductNameText"><img src="/Content/images/800005.png"><span>西瓜　<b class="color-1">0.1743</b>金币/个</span></div>
 
-        <div class="form-group-input">
-            <button class="no-left-border" onclick="return false;" toggle="#productstogglebox">选择 <i class="icon"></i></button>
-            <div class="togglebox togglebox-top togglebox-right productstogglebox" id="productstogglebox" style="display: none;">
-                <dl>
-                    <dd class="clear" onclick="$('#ProductNameText').html($(this).html()); $('#ProductCode').val($(this).attr('code')); FlushMoney($(this).attr('price'));" code="800002" price="0.0151"><img src="/Content/images/800002.png"><span>萝卜　<b class="color-1">0.0151</b>金币/个</span></dd>
-                    <dd class="clear" onclick="$('#ProductNameText').html($(this).html()); $('#ProductCode').val($(this).attr('code')); FlushMoney($(this).attr('price'));" code="800003" price="0.0187"><img src="/Content/images/800003.png"><span>苹果　<b class="color-1">0.0187</b>金币/个</span></dd>
-                    <dd class="clear" onclick="$('#ProductNameText').html($(this).html()); $('#ProductCode').val($(this).attr('code')); FlushMoney($(this).attr('price'));" code="800004" price="0.0307"><img src="/Content/images/800004.png"><span>辣椒　<b class="color-1">0.0307</b>金币/个</span></dd>
-                    <dd class="clear" onclick="$('#ProductNameText').html($(this).html()); $('#ProductCode').val($(this).attr('code')); FlushMoney($(this).attr('price'));" code="800005" price="0.1743"><img src="/Content/images/800005.png"><span>西瓜　<b class="color-1">0.1743</b>金币/个</span></dd>
-                    <dd class="clear" onclick="$('#ProductNameText').html($(this).html()); $('#ProductCode').val($(this).attr('code')); FlushMoney($(this).attr('price'));" code="800006" price="0.1238"><img src="/Content/images/800006.png"><span>南瓜　<b class="color-1">0.1238</b>金币/个</span></dd>
-                    <dd class="clear" onclick="$('#ProductNameText').html($(this).html()); $('#ProductCode').val($(this).attr('code')); FlushMoney($(this).attr('price'));" code="800007" price="0.6700"><img src="/Content/images/800007.png"><span>草莓　<b class="color-1">0.6700</b>金币/个</span></dd>
-                    <dd class="clear" onclick="$('#ProductNameText').html($(this).html()); $('#ProductCode').val($(this).attr('code')); FlushMoney($(this).attr('price'));" code="800008" price="96.0000"><img src="/Content/images/800008.png"><span>玫瑰　<b class="color-1">96.0000</b>金币/个</span></dd>
-                </dl>
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <div class="uc-form">
+        <div class="form-group">
+            <div class="form-group-addon">　借入果实</div>
+            <div class="form-group-addon no-left-border form-group-addon-disabled stretch productinputshow clear" id="ProductNameText">
+                @if (has && first != null)
+                {
+                    <img src="@first.Product.ImageUrl"><span>西瓜　<b class="color-1">@first.CurrentPrice</b>金币/个</span>
+                }
+            </div>
+            <input type="hidden" id="ProductId" name="ProductId" value="@first.ProductId" />
+            <input type="hidden" id="Price" name="Price" value="@first.CurrentPrice" />
+            <div class="form-group-input">
+                <button class="no-left-border" onclick="return false;" toggle="#productstogglebox">选择 <i class="icon"></i></button>
+                <div class="togglebox togglebox-top togglebox-right productstogglebox" id="productstogglebox" style="display: none;">
+                    <dl>
+                        @if (has)
+                        {
+                            foreach (var m in markets)
+                            {
+                                <dd class="clear" onclick="$('#ProductNameText').html($(this).html()); $('#ProductId').val($(this).attr('_id')); FlushMoney($(this).attr('price'));" _id="@m.ProductId" code="@m.Product.ProductCode" price="@m.CurrentPrice"><img src="@m.Product.ImageUrl"><span>@m.Product.ProductName　<b class="color-1">@m.CurrentPrice</b>金币/个</span></dd>
+                            }
+                        }
+
+                    </dl>
+                </div>
             </div>
         </div>
-    </div>
 
-    <div class="form-group">
-        <div class="form-group-addon">　可用金币</div>
-        <div class="form-group-addon no-left-border form-group-addon-disabled stretch" id="balance" style="color: rgb(136, 136, 136);">0.0000</div>
-    </div>
-
-    <div class="form-group">
-        <div class="form-group-addon">　　借入量</div>
-        <div class="form-group-input stretch">
-            <input class="stretch no-right-border no-left-border" data-val="true" data-val-number="字段 BorrowCount 必须是一个数字。" data-val-required="BorrowCount 字段是必需的。" id="BorrowCount" name="BorrowCount" placeholder="请输入借入量" type="text" value="0" style="color: rgb(255, 0, 0);">
+        <div class="form-group">
+            <div class="form-group-addon">　可用金币</div>
+            <div class="form-group-addon no-left-border form-group-addon-disabled stretch" id="balance" style="color: rgb(136, 136, 136);">@(Model.TotalScore - Model.FrozenScore)</div>
         </div>
-        <div class="form-group-addon form-group-addon-white no-left-border"><em class="remarks color-1">借入数量必须为1000的整倍</em></div>
-    </div>
 
-    <div class="form-group">
-        <div class="form-group-addon">　　保证金</div>
-        <div class="form-group-addon no-left-border form-group-addon-disabled stretch" id="FreezeMoney">0.000</div>
-    </div>
+        <div class="form-group">
+            <div class="form-group-addon">　　借入量</div>
+            <div class="form-group-input stretch">
+                <input class="stretch no-right-border no-left-border" data-val="true" data-val-number="字段 BorrowCount 必须是一个数字。" data-val-required="BorrowCount 字段是必需的。" id="BorrowCount" name="BorrowCount" placeholder="请输入借入量" type="text" value="0" style="color: rgb(255, 0, 0);">
+            </div>
+            <div class="form-group-addon form-group-addon-white no-left-border"><em class="remarks color-1">借入数量必须为1000的整倍</em></div>
+        </div>
 
-    <div class="form-group">
-        <div class="form-group-addon">　　　日息</div>
-        <div class="form-group-addon no-left-border form-group-addon-disabled stretch" id="FreezeMoney">0.002</div>
-    </div>
+        <div class="form-group">
+            <div class="form-group-addon">　　保证金</div>
+            <div class="form-group-addon no-left-border form-group-addon-disabled stretch" id="FreezeMoney">0.000</div>
+        </div>
 
-    <div class="form-group">
-        <div class="form-group-addon no-right-border">最后归还期</div>
-        <div class="form-group-addon form-group-addon-disabled stretch" id="datetime">2017-1-7</div>
-    </div>
+        <div class="form-group">
+            <div class="form-group-addon">　　　日息</div>
+            <div class="form-group-addon no-left-border form-group-addon-disabled stretch" id="FreezeMoney">0.002</div>
+        </div>
 
-    <div class="form-group">
-        <input type="button" class="button-color-1 button-stretch" value="我已阅读并接受借入协议" onclick="Borrow()">
-    </div>
-    <span class="field-validation-error"></span>
-</div>
-<!-- uc-form end -->
+        <div class="form-group">
+            <div class="form-group-addon no-right-border">最后归还期</div>
+            <div class="form-group-addon form-group-addon-disabled stretch" id="datetime">2017-1-7</div>
+        </div>
 
+        <div class="form-group">
+            <input type="button" class="button-color-1 button-stretch" value="我已阅读并接受借入协议" onclick="Borrow()">
+        </div>
+        <span class="field-validation-error"></span>
+    </div>
+    <!-- uc-form end -->
+}
 
 
 <div class="message message-help">
@@ -70,7 +84,98 @@
     1. 果实租借数量只能是1000的整数倍。<br>
     2. 保证金=果实价格*租借数量*2，归还果实时全额退还。<br>
     3. 果实租借将收取手续费，按天计算，手续费=初始保证金币（不含追加）/2*日息*租借天数，归还果实时收取。<br>
-    4. 单次租借最长期限1个月，逾期未归还系统将强制平仓（用保证金从市场自动购买租借的果实并归还），退还剩余保证金。<br>
-    5. 借出成功后，系统开始计算浮动盈亏，浮亏损超50%，将短信警告，提醒补充保证金。<br>
-    6. 如果浮亏超过70%系统将自动平仓（用保证金从市场自动购买租借的果实并归还），退还剩余保证金。
+    @*4. 单次租借最长期限1个月，逾期未归还系统将强制平仓（用保证金从市场自动购买租借的果实并归还），退还剩余保证金。<br>
+        5. 借出成功后，系统开始计算浮动盈亏，浮亏损超50%，将短信警告，提醒补充保证金。<br>
+        6. 如果浮亏超过70%系统将自动平仓（用保证金从市场自动购买租借的果实并归还），退还剩余保证金。*@
 </div>
+<script type="text/javascript">
+
+    //升值币精度4
+    var intFormatFloat = 4;
+    if ($("#ProductCode").val() == '900001') {
+        intFormatFloat = 4;
+    }
+
+
+    $(function () {
+        var datetime = new Date().setMonth((new Date().getMonth() + 1));
+        datetime = new Date(datetime);
+        $("#datetime").html(datetime.getFullYear() + "-" + (datetime.getMonth() + 1) + "-" + datetime.getDate());
+
+        $("#BorrowCount").val("");
+    })
+
+    function FormatIntValue(value) {
+        value = value.replace(/[^\d]/g, "");
+        return value;
+    }
+
+    function FlushMoney(price) {
+        //debugger;
+        $('#Price').val(price);
+        if ($("#BorrowCount").val() != "" && $("#BorrowCount").val() > 0) {
+            var count = $("#BorrowCount").val();
+            $("#FreezeMoney").html(count + "×" + price + "×2 = <font color='#FF6600'>" + (count * price * 2).toFixed(intFormatFloat) + "</font> 金币");
+        } else {
+            $("#FreezeMoney").html("0.000");
+        }
+
+        $("#balance").css("color", "#888");
+        if (count * price > $("#balance").html()) {
+            $("#balance").css("color", "#FF0000");
+
+            var maxnumber = parseInt($("#balance").html() / price / 1000 / 2) * 1000;
+            $("#BorrowCount").css('color', '#FF0000');
+            $("#BorrowCount").val(maxnumber);
+            FlushMoney(price)
+        }
+    }
+
+    $("#BorrowCount").keyup(function () {
+        $(this).val(FormatIntValue($(this).val()));
+
+        var price = $("#ProductNameText b").html();
+        if (typeof (price) != 'undefined') {
+
+            //超出最大量
+            if ($(this).val() * price * 2 - $("#balance").html() > 0) {
+                $(this).css('color', '#FF0000');
+                var maxnumber = parseInt($("#balance").html() / price / 1000 / 2) * 1000;
+                $(this).val(maxnumber);
+            }
+
+            FlushMoney(price)
+        }
+    });
+
+
+
+    function Borrow() {
+
+        if (typeof ($("#ProductNameText b").html()) == 'undefined') {
+            alert("请选择租借果实.");
+            return false;
+        }
+
+        if ($("#BorrowCount").val() == "" || $("#BorrowCount").val() == "0") {
+            alert("请输入果实租借数量.");
+            return false;
+        }
+
+        if ($("#BorrowCount").val() % 1000 != 0) {
+            alert("果实租借数量只能是1000的倍数.");
+            return false;
+        }
+
+        if ($("#BorrowCount").val() * $("#ProductNameText b").html() * 2 > $("#balance").html()) {
+            alert("您的保证金币不足.");
+            return false;
+        }
+
+        if (confirm("确认租借?")) {
+
+            $("form").submit();
+        }
+    }
+
+</script>

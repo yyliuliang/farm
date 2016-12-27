@@ -2,81 +2,103 @@
 @{
     ViewBag.Title = "用户中心";
     Layout = "~/Views/Shared/_UserCenterLayout.cshtml";
+    var ups = (IEnumerable<UserProduct>)ViewBag.Products;
 }
 @model User
 <div class="uc-head uc-head-border">果实赠送</div>
 <!-- uc-form start -->
 <div class="uc-form">
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        <input type="hidden" id="ProductId" name="ProductId" />
+        <input type="hidden" id="Price" name="Price" />
+        <input type="hidden" id="ProductName" name="ProductName" />
+        <div class="form-group">
+            <div class="form-group-addon">赠送果实</div>
+            <div class="form-group-addon no-left-border form-group-addon-disabled stretch productinputshow clear" id="ProductNameText">请选择</div>
 
-    <div class="form-group">
-        <div class="form-group-addon">赠送果实</div>
-        <div class="form-group-addon no-left-border form-group-addon-disabled stretch productinputshow clear" id="ProductNameText">请选择</div>
+            <div class="form-group-input">
+                <button class="no-left-border" onclick="return false;" toggle="#productstogglebox">选择 <i class="icon"></i></button>
+                <div class="togglebox togglebox-top togglebox-right productstogglebox" style="min-width: 220px; display: none;" id="productstogglebox">
 
-        <div class="form-group-input">
-            <button class="no-left-border" onclick="return false;" toggle="#productstogglebox">选择 <i class="icon"></i></button>
-            <div class="togglebox togglebox-top togglebox-right productstogglebox" style="min-width: 220px; display: none;" id="productstogglebox">
-                <dl></dl>
+                    <dl>
+                        @if (ups == null || !ups.Any())
+                        {
+                            <dd>暂无果实</dd>
+                        }
+                        else
+                        {
+                            foreach (var up in ups)
+                            {
+                                <dd class="clear" onclick="$('#ProductNameText').html($(this).find('b').html()); $('#ProductId').val($(this).attr('_id'));" _id="@up.ProductId" code="@up.Product.ProductCode"><b>@up.Product.ProductName</b>@(up.TotalCount - up.FrozenCount)个 </dd>
+                            }
+                        }
+
+                    </dl>
+
+                </div>
             </div>
         </div>
-    </div>
 
 
 
-    <div class="form-group">
-        <div class="form-group-addon">接收对象</div>
-        <div class="form-group-input stretch">
-            <input class="stretch no-left-border" data-val="true" data-val-regex="请输入正确的接收人编号或手机号" data-val-regex-pattern="\d{5,}" data-val-required="请输入接收人编号或手机号" id="To" name="To" placeholder="请输入接收人ID或手机号" type="text" value="">
+        <div class="form-group">
+            <div class="form-group-addon">接收对象</div>
+            <div class="form-group-input stretch">
+                <input class="stretch no-left-border" data-val="true" data-val-regex="请输入正确的接收人编号或手机号" data-val-regex-pattern="\d{5,}" data-val-required="请输入接收人编号或手机号" id="To" name="ReceiverId" placeholder="请输入接收人ID或手机号" type="text" value="">
+            </div>
         </div>
-    </div>
-    <span class="field-validation-valid" data-valmsg-for="To" data-valmsg-replace="true"></span>
+        <span class="field-validation-valid" data-valmsg-for="To" data-valmsg-replace="true"></span>
 
 
 
-    <div class="form-group">
-        <div class="form-group-addon">赠送数量</div>
-        <div class="form-group-input stretch">
-            <input class="stretch no-left-border" data-val="true" data-val-number="字段 Number 必须是一个数字。" data-val-required="Number 字段是必需的。" id="Number" name="Number" placeholder="请输入赠送数量" type="text" value="">
+        <div class="form-group">
+            <div class="form-group-addon">赠送数量</div>
+            <div class="form-group-input stretch">
+                <input class="stretch no-left-border" data-val="true" data-val-number="字段 Number 必须是一个数字。" data-val-required="Number 字段是必需的。" id="Number" name="Count" placeholder="请输入赠送数量" type="text" value="">
+            </div>
         </div>
-    </div>
-    <span class="field-validation-valid" data-valmsg-for="Number" data-valmsg-replace="true"></span>
+        <span class="field-validation-valid" data-valmsg-for="Number" data-valmsg-replace="true"></span>
 
 
 
-    <div class="form-group hide charge">
-        <div class="form-group-addon">手续费用</div>
-        <div class="form-group-addon no-left-border form-group-addon-disabled stretch clear" id="charge"></div>
-    </div>
-
-
-
-
-
-
-    <div class="form-group smscheck">
-        <div class="form-group-addon no-right-border">图片验证</div>
-        <div class="form-group-input stretch">
-            <input class="stretch" id="VCode" maxlength="4" name="VCode" type="text" value="">
+        <div class="form-group hide charge">
+            <div class="form-group-addon">手续费用</div>
+            <div class="form-group-addon no-left-border form-group-addon-disabled stretch clear" id="charge"></div>
         </div>
-        <div class="form-group-addon no-left-border code">
-            <img src="/common/VerificationImgForm" title="点击图片换一张" onclick="this.src = '/common/VerificationImgForm?flag=' + Math.random()">
-        </div>
-    </div>
-    <div class="form-group smscheck">
-        <div class="form-group-addon no-right-border">短信验证</div>
-        <div class="form-group-input stretch">
-            <input class="stretch" id="MobileVCode" maxlength="6" name="MobileVCode" placeholder="" type="text" value="">
-        </div>
-        <div class="form-group-input">
-            <button class="no-left-border button-color-1" type="button" onclick="GetSMS()" id="Sms">获取手机验证码</button>
-        </div>
-    </div>
 
 
 
-    <div class="form-group">
-        <input type="button" class="button-color-1 button-stretch" value="提交" onclick="return Give();">
-    </div>
-    <span class="field-validation-valid" data-valmsg-for="Err" data-valmsg-replace="true"></span>
+
+
+
+        <div class="form-group smscheck">
+            <div class="form-group-addon no-right-border">图片验证</div>
+            <div class="form-group-input stretch">
+                <input class="stretch" id="VCode" maxlength="4" name="vcode" type="text" value="">
+            </div>
+            <div class="form-group-addon no-left-border code">
+                <img src="/common/VerificationImgForm" title="点击图片换一张" onclick="this.src = '/common/VerificationImgForm?flag=' + Math.random()">
+            </div>
+        </div>
+        <div class="form-group smscheck">
+            <div class="form-group-addon no-right-border">短信验证</div>
+            <div class="form-group-input stretch">
+                <input class="stretch" id="MobileVCode" maxlength="6" name="mcode" placeholder="" type="text" value="">
+            </div>
+            <div class="form-group-input">
+                <button class="no-left-border button-color-1" type="button" onclick="GetSMS()" id="Sms">获取手机验证码</button>
+            </div>
+        </div>
+
+
+        @Html.ValidationMessage("give")
+        <div class="form-group">
+            <input type="button" class="button-color-1 button-stretch" value="提交" onclick="return Give();">
+        </div>
+        <span class="field-validation-valid" data-valmsg-for="Err" data-valmsg-replace="true"></span>
+    }
 </div>
 <!-- uc-form end -->
 
@@ -90,8 +112,8 @@
     2. 接收对象可以是对方的ID或者手机号码。<br>
     3. 赠送果实的数量必须是10的整倍。<br>
     4. 接收方将支付赠送果实总额(按当前价格计算)10%的手续费。<br>
-    5. 如果接收方在次日0点前没有接受您的赠送，本次赠送将自动取消，果实将自动返回到您的账户上。<br>
-    6. 领取过大礼包的玩家，4级之前无法赠送。
+      @*  5. 如果接收方在次日0点前没有接受您的赠送，本次赠送将自动取消，果实将自动返回到您的账户上。<br>
+        6. 领取过大礼包的玩家，4级之前无法赠送。*@
 </div>
 
 <script type="text/javascript">
@@ -187,7 +209,7 @@
     function Give() {
 
 
-        if (typeof ($("#ProductNameText b").html()) == 'undefined') {
+        if (typeof ($("#ProductNameText").html()) == 'undefined') {
             alert("请选择赠送果实.");
             return false;
         }
@@ -253,4 +275,38 @@
             $("form").submit();
         }
     }
+
+    function GetSMS() {
+
+
+        $.post("/Common/GetSMS/GIVE", { phone: @Model.Phone, vcode: $("#VCode").val() }, function (data, textStatus) {
+            if (data.result) {
+                showTime(180);
+            }
+            else
+                alert(data.msg);
+        });
+    }
+
+
+
+
+    function showTime(s) {
+        $("#Sec").val(s);
+        $("#Sms").text(s + "秒后重新获取");
+        $("#Sms").addClass("progress");
+        $("#Sms").attr("disabled", "disabled");
+
+        $("#Sec").val(s);
+        if (s != 0) {
+            s = s - 1;
+            setTimeout("showTime(" + s + ")", 1000);
+        }
+        else {
+            $("#Sec").val("");
+            $("#Sms").removeClass("progress");
+            $("#Sms").removeAttr("disabled");
+            $("#Sms").text("获取手机验证码");
+        }
+    }
 </script>

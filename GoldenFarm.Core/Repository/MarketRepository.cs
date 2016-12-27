@@ -30,6 +30,17 @@ namespace GoldenFarm.Repository
 
 
         #region 今日数据
+
+        public IEnumerable<Market> GetLatestMarkets()
+        {
+            string sql = "SELECT TOP 1 Date FROM Market ORDER BY Date DESC";
+            DateTime date = DateTime.Today;
+            date = Conn.QuerySingleOrDefault<DateTime>(sql);
+            sql = "SELECT * FROM Market m INNER JOIN Product p ON m.ProductId = p.Id WHERE Date=@date";
+            return Conn.Query<Market, Product, Market>(sql, mpMapper, new { date = date });
+        }
+
+
         public IEnumerable<Market> GeTodayMarkets()
         {
             DateTime date = DateTime.Today;
@@ -42,6 +53,13 @@ namespace GoldenFarm.Repository
             DateTime date = DateTime.Today;
             string sql = "SELECT TOP 1 * FROM Market m INNER JOIN Product p ON m.ProductId = p.Id WHERE p.productcode=@code AND Date=@date";
             return Conn.Query<Market, Product, Market>(sql, mpMapper, new { code = productCode, date = date }).FirstOrDefault();
+        }
+
+        public Market GetTodayProductMarket(int productId)
+        {
+            DateTime date = DateTime.Today;
+            string sql = "SELECT TOP 1 * FROM Market m INNER JOIN Product p ON m.ProductId = p.Id WHERE p.Id=@pid AND Date=@date";
+            return Conn.Query<Market, Product, Market>(sql, mpMapper, new { pid = productId, date = date }).FirstOrDefault();
         }
 
         public IEnumerable<Transaction> GetTodayTransactions(string productCode)

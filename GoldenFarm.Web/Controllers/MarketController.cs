@@ -457,7 +457,51 @@ namespace GoldenFarm.Web.Controllers
 
         public ActionResult Borrow()
         {
+            ViewBag.Products = mr.GetLatestMarkets().Where(m => m.ProductId != 800001);
             return View(CurrentUser);
+        }
+
+        [ValidateAntiForgeryToken]
+        [HttpPost]
+        public ActionResult Borrow(UserBorrow borrow)
+        {
+            borrow.UserId = CurrentUser.Id;
+            borrow.CreateTime = DateTime.Now;
+            borrow.Bail = borrow.BorrowCount * borrow.Price * 2;
+            borrow.DailyInterest = 0.02M;
+            borrow.Deadline = DateTime.Today.AddMonths(1);
+
+            //创建租借记录
+            new UserBorrowRepository().Create(borrow);
+
+            //修改当前用户的冻结金额
+            CurrentUser.FrozenScore += borrow.Bail;
+            ur.Update(CurrentUser);
+            RefreshCurrentUser();
+
+            //修改用户的产品数量
+            var up = ur.GetProductByUser(borrow.ProductId, CurrentUser.Id);
+            if (up != null)
+            {
+                up.TotalCount += borrow.BorrowCount;
+                up.UpdateTime = DateTime.Now;
+                ur.UpdateUserProduct(up);
+            }
+            else
+            {
+                up = new UserProduct
+                {
+                    ProductId = borrow.ProductId,
+                    UserId = CurrentUser.Id,
+                    TotalCount = borrow.BorrowCount,
+                    FrozenCount = 0,
+                    CreateTime = DateTime.Now,
+                    UpdateTime = DateTime.Now
+                };
+                ur.CreateUserProduct(up);
+            }
+            
+            return RedirectToAction("BorrowHistory", "User");
         }
 
         public ActionResult Rebirth()

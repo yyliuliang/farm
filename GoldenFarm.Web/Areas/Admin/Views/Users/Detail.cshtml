@@ -72,17 +72,17 @@
         <thead>
             <tr>
                 <th></th>
-                <th>名称</th>
+                <th>产品编码</th>
+                <th>产品名称</th>
                 <th>持有量</th>
                 <th>冻结量</th>
-                <th>市值</th>
             </tr>
         </thead>
         <tbody>
             @if (products == null || !products.Any())
             {
                 <tr>
-                    <td class="algin" colspan="5">没有持有任何产品</td>
+                    <td class="algin" colspan="6">没有持有任何产品</td>
                 </tr>
             }
             else
@@ -91,10 +91,10 @@
                 {
                     <tr>
                         <td></td>
+                        <td>@p.Product.ProductCode</td>
                         <td>@p.Product.ProductName</td>
                         <td>@p.TotalCount</td>
                         <td>@p.FrozenCount</td>
-                        <td>@p.TotalCount</td>
                     </tr>
                 }
 

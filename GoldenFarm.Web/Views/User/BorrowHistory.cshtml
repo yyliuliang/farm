@@ -44,9 +44,9 @@
                         <td>@b.Bail</td>
                         <td>@b.DailyInterest</td>
                         <td>@b.Deadline.ToString("yyyy-MM-dd")</td>
-                        <td>@b.Status</td>
+                        <td>@(b.Status == 0 ? "未归还" : "已归还")</td>
                         <td>@(b.ReturnTime.HasValue ? b.ReturnTime.Value.ToString("yyyy-MM-dd") : string.Empty)</td>
-                        <td>归还</td>
+                        <td>@Html.Raw((b.Status == 0 ? "<a href='javascript:void(0);' onclick='Return("+b.Id+");'>归还</a>" : string.Empty))</td>
                     </tr>
                 }
             }
@@ -59,3 +59,15 @@
     1.补充的保证金不收取手续费，不计算日息。<br>
     2.如果超过最后归还日期仍未归还，系统将强制平仓（用保证金从市场自动购买租借的果实并归还）。<br>
 </div>
+<script type="text/javascript">
+    function Return(bid) {
+        if (confirm("确认归还?")) {
+            $.post("/User/ReturnBorrow", { id: bid }, function (r) {
+                if (r == "1") {
+                    location.reload();
+                }
+                else alert(r);
+            });
+        }
+    }
+</script>

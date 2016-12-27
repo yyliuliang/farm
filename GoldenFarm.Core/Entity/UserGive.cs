@@ -28,6 +28,9 @@ namespace GoldenFarm.Entity
 
 
         public int Count { get; set; }
+
+
+        public int Status { get; set; }
         
 
         public decimal ChargeFee { get; set; }
