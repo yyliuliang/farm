@@ -2,6 +2,7 @@
 @{
     ViewBag.Title = "用户中心";
     Layout = "~/Views/Shared/_UserCenterLayout.cshtml";
+    var url = System.Web.Configuration.WebConfigurationManager.AppSettings["LocalUrl"];
 }
 @model GoldenFarm.Entity.User
 
@@ -28,7 +29,7 @@
         <span class="color-1">果园推广链接</span>
         <div id="qrcode-gy" class="qrcode"></div>
         <cite>
-            <b class="color-1">http://www.guoyuan.com/ref/@Model.Id</b>
+            <b class="color-1">@(url + "?ref="+ Model.Id)</b>
         </cite>
     </div>
 
@@ -70,8 +71,8 @@
 <script src="/Content/js/jquery.qrcode.min.js"></script>
 <script type="text/javascript">
     $(function () {
-        $('#qrcode-gy').qrcode("http://www.guoyuan.com/ref/@Model.Id");
-        jQuery('#qrcode-nc').qrcode("http://www.taojinnc.com/ref/id");
-        jQuery('#qrcode-wx').qrcode("http://www.taojinnc.com/share/id");
+        $('#qrcode-gy').qrcode("@(url + "?ref="+ Model.Id)");
+        //jQuery('#qrcode-nc').qrcode("http://www.taojinnc.com/ref/id");
+        //jQuery('#qrcode-wx').qrcode("http://www.taojinnc.com/share/id");
     })
 </script>

@@ -10,6 +10,10 @@ namespace GoldenFarm.Web.Controllers
     {
         public ActionResult Index()
         {
+            if(!string.IsNullOrEmpty(Request["ref"]))
+            {
+                Session["ref"] = Request["ref"];
+            }
             return View();
         }
         

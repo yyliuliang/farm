@@ -74,7 +74,7 @@
                 <div class="form-group hide" id="friend">
                     <div class="form-group-addon no-right-border">　推荐码</div>
                     <div class="form-group-input stretch">
-                        <input class="stretch" id="RefCode" name="RefCode" placeholder="请输入推荐码" type="text" value="">
+                        <input class="stretch" id="RefCode" name="RefCode" placeholder="请输入推荐码" type="text" value="@Session["ref"]">
                     </div>
                 </div>
                 @Html.ValidationMessage("reg", new { @class = "field-validation-valid" })
