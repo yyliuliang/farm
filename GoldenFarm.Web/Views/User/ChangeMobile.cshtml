@@ -6,6 +6,9 @@
 
 @model GoldenFarm.Entity.User
 
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
     <div class="uc-head uc-head-border">修改手机号码</div>
 
     <div class="uc-form">
@@ -32,7 +35,7 @@
         <div class="form-group">
             <div class="form-group-addon no-right-border">短信验证码</div>
             <div class="form-group-input stretch">
-                <input class="stretch" data-val="true" data-val-regex="短信验证码错误" data-val-regex-pattern="\d{6}" data-val-required="请填写短信验证码" id="MobileVCode" maxlength="6" name="vcode" placeholder="" type="text" value="">
+                <input class="stretch" data-val="true" data-val-regex="短信验证码错误" data-val-regex-pattern="\d{6}" data-val-required="请填写短信验证码" id="MobileVCode" maxlength="6" name="mcode" placeholder="" type="text" value="">
             </div>
             <div class="form-group-input">
                 <button class="no-left-border button-color-2" type="button" onclick="GetSMS()" id="Sms">获取手机验证码</button>
@@ -47,4 +50,37 @@
 
 
     </div>
+}
 
+<script type="text/javascript">
+    function GetSMS() {
+
+        $.post("/Common/GetSMS/Common", { phone: $('#Phone').val(), vcode: $("#VCode").val() }, function (data, textStatus) {
+            if (data.result) {
+                showTime(180);
+            }
+            else
+                alert(data.msg);
+        });
+    }
+
+    function showTime(s) {
+        $("#Sec").val(s);
+        $("#Sms").text(s + "秒后重新获取");
+        $("#Sms").addClass("progress");
+        $("#Sms").attr("disabled", "disabled");
+
+        $("#Sec").val(s);
+        if (s != 0) {
+            s = s - 1;
+            setTimeout("showTime(" + s + ")", 1000);
+        }
+        else {
+            $("#Sec").val("");
+            $("#Sms").removeClass("progress");
+            $("#Sms").removeAttr("disabled");
+            $("#Sms").text("获取手机验证码");
+        }
+    }
+
+</script>

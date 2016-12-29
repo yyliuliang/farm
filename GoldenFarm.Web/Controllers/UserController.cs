@@ -227,15 +227,20 @@ namespace GoldenFarm.Web.Controllers
 
         [ValidateAntiForgeryToken]
         [HttpPost]
-        public ActionResult VerifyMobile(string phone, string vcode, string mcode)
+        public ActionResult VerifyMobile(string vcode, string mcode)
         {
-            string code = (string)TempData[CommonController.CaptchaImageText];
-            if (string.Compare(vcode, code, StringComparison.InvariantCultureIgnoreCase) != 0)
+           // string code = (string)TempData[CommonController.CaptchaImageText];
+            //if (string.Compare(vcode, code, StringComparison.InvariantCultureIgnoreCase) != 0)
+            //{
+            //    ModelState.AddModelError("vm", "验证码错误");
+            //    return View(CurrentUser);
+            //}
+            if(!new SmsRepository().CheckSms(CurrentUser.Phone, mcode))
             {
-                ModelState.AddModelError("vm", "验证码错误");
-                return View();
+                ModelState.AddModelError("vm", "短信验证码错误");
+                return View(CurrentUser);
             }
-            return View();
+            return RedirectToAction("ChangeMobile");
         }
 
 
@@ -249,7 +254,15 @@ namespace GoldenFarm.Web.Controllers
         [HttpPost]
         public ActionResult ChangeMobile(string phone, string vcode, string mcode)
         {
-            return View();
+            if (!new SmsRepository().CheckSms(phone, mcode))
+            {
+                ModelState.AddModelError("vm", "短信验证码错误");
+                return View(CurrentUser);
+            }
+            CurrentUser.Phone = phone;
+            ur.Update(CurrentUser);
+            RefreshCurrentUser();
+            return RedirectToAction("Safe");
         }
 
 

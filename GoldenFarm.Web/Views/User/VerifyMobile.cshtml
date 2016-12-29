@@ -7,6 +7,7 @@
 
 @using (Html.BeginForm())
 {
+    @Html.AntiForgeryToken()
     <div class="uc-head uc-head-border">修改手机号码</div>
 
     <div class="uc-form">
@@ -50,7 +51,7 @@
 <script type="text/javascript">
     function GetSMS() {
 
-        $.post("/Common/GetSMS_VerifyMobile", { PhoneNo: '18618477035', VCode: $("#VCode").val() }, function (data, textStatus) {
+        $.post("/Common/GetSMS/Common", { phone: '18618477035', vcode: $("#VCode").val() }, function (data, textStatus) {
             if (data.result) {
                 showTime(180);
             }
